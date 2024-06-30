@@ -1,7 +1,6 @@
 from flask_caching import Cache
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_login import LoginManager
-from flask_assets import Environment
 
 from appname.models import User
 
@@ -9,7 +8,6 @@ from appname.models import User
 cache = Cache()
 
 # init flask assets
-assets_env = Environment()
 
 debug_toolbar = DebugToolbarExtension()
 
