@@ -18,30 +18,42 @@ import { OptionChainData } from "../types";
 
 interface OrderEntryProps {
   selectedOption: OptionChainData | null;
+  selectedOptionAction: "Call" | "Put" | null;
 }
 
-const OrderEntry: React.FC<OrderEntryProps> = ({ selectedOption }) => {
+const OrderEntry: React.FC<OrderEntryProps> = ({
+  selectedOption,
+  selectedOptionAction,
+}) => {
   const [strikePrice, setStrikePrice] = React.useState<number>(0);
+  const [quantity, setQuantity] = React.useState<number>(1000);
   const [type, setType] = React.useState<string>("");
-  const [symbol, setSymbol] = React.useState<string>("BTC/JPY");
+  const [symbol, setSymbol] = React.useState<string>("");
   const [expirationDate, setExpirationDate] = React.useState<string>("");
 
   React.useEffect(() => {
-    if (selectedOption) {
+    if (selectedOption && selectedOptionAction) {
       setStrikePrice(selectedOption.strike);
-      setType(selectedOption.callDelta > 0 ? "Call" : "Put");
-      // Assuming you have a method to get symbol and expiration date from the option chain data
-      setSymbol("BTC/JPY"); // Replace with actual data
-      setExpirationDate("2024-08-30"); // Replace with actual data
+      setType(selectedOptionAction);
+      setSymbol(selectedOption.symbol);
+      setExpirationDate(selectedOption.dte);
     }
-  }, [selectedOption]);
+  }, [selectedOption, selectedOptionAction]);
 
-  const handleIncrement = () => {
+  const handleIncrementStrikePrice = () => {
     setStrikePrice((prev) => prev + 1);
   };
 
-  const handleDecrement = () => {
+  const handleDecrementStrikePrice = () => {
     setStrikePrice((prev) => prev - 1);
+  };
+
+  const handleIncrementQuantity = () => {
+    setQuantity((prev) => prev + 1);
+  };
+
+  const handleDecrementQuantity = () => {
+    setQuantity((prev) => (prev > 0 ? prev - 1 : 0));
   };
 
   const handleTypeChange = (event: SelectChangeEvent) => {
@@ -70,13 +82,15 @@ const OrderEntry: React.FC<OrderEntryProps> = ({ selectedOption }) => {
           onChange={handleSymbolChange}
           className="select-input"
         >
-          <MenuItem value="BTC/JPY">BTC/JPY</MenuItem>
+          <MenuItem value="AAPL">AAPL</MenuItem>
+          <MenuItem value="GOOGL">GOOGL</MenuItem>
+          <MenuItem value="TSLA">TSLA</MenuItem>
           {/* Add other options here */}
         </Select>
       </FormControl>
       <FormControl fullWidth margin="normal">
-        <InputLabel className="input-label">Expiration Date</InputLabel>
         <TextField
+          label="Expiration Date"
           type="date"
           value={expirationDate}
           onChange={handleExpirationChange}
@@ -88,21 +102,57 @@ const OrderEntry: React.FC<OrderEntryProps> = ({ selectedOption }) => {
         />
       </FormControl>
       <FormControl fullWidth margin="normal">
-        <InputLabel className="input-label">Strike Price</InputLabel>
-        <Box className="number-input">
-          <IconButton className="icon-button" onClick={handleDecrement}>
-            <Remove />
-          </IconButton>
-          <TextField
-            type="number"
-            value={strikePrice}
-            onChange={(e) => setStrikePrice(Number(e.target.value))}
-            className="number-textfield"
-            inputProps={{ style: { textAlign: "center" } }}
-          />
-          <IconButton className="icon-button" onClick={handleIncrement}>
-            <Add />
-          </IconButton>
+        <Box>
+          <div className="strike-title">Strike Price</div>
+          <div className="number-input">
+            <IconButton
+              className="icon-button"
+              onClick={handleDecrementStrikePrice}
+            >
+              <Remove />
+            </IconButton>
+            <TextField
+              type="number"
+              value={strikePrice}
+              onChange={(e) =>
+                setStrikePrice(Math.max(Number(e.target.value), 0))
+              }
+              className="number-textfield"
+              inputProps={{ style: { textAlign: "center" } }}
+            />
+            <IconButton
+              className="icon-button"
+              onClick={handleIncrementStrikePrice}
+            >
+              <Add />
+            </IconButton>
+          </div>
+        </Box>
+      </FormControl>
+      <FormControl fullWidth margin="normal">
+        <Box>
+          <div className="strike-title">Quantity</div>
+          <div className="number-input">
+            <IconButton
+              className="icon-button"
+              onClick={handleDecrementQuantity}
+            >
+              <Remove />
+            </IconButton>
+            <TextField
+              type="number"
+              value={quantity}
+              onChange={(e) => setQuantity(Math.max(Number(e.target.value), 0))}
+              className="number-textfield"
+              inputProps={{ style: { textAlign: "center" }, min: 0 }}
+            />
+            <IconButton
+              className="icon-button"
+              onClick={handleIncrementQuantity}
+            >
+              <Add />
+            </IconButton>
+          </div>
         </Box>
       </FormControl>
       <FormControl fullWidth margin="normal">

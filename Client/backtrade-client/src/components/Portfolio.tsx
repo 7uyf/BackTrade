@@ -35,7 +35,6 @@ interface PortfolioData {
   vega: number;
   avgPrice: number;
   last: number;
-  changePercent: number;
 }
 
 interface DteData {
@@ -62,7 +61,6 @@ const mockData: DteData[] = [
         vega: 0.2,
         avgPrice: 145,
         last: 150,
-        changePercent: 3.5,
       },
       {
         dailyPnl: -50,
@@ -79,7 +77,6 @@ const mockData: DteData[] = [
         vega: 0.15,
         avgPrice: 2550,
         last: 2500,
-        changePercent: -2.0,
       },
       {
         dailyPnl: 200,
@@ -96,7 +93,6 @@ const mockData: DteData[] = [
         vega: 0.25,
         avgPrice: 690,
         last: 700,
-        changePercent: 1.5,
       },
     ],
   },
@@ -118,7 +114,6 @@ const mockData: DteData[] = [
         vega: 0.22,
         avgPrice: 290,
         last: 300,
-        changePercent: 3.0,
       },
       {
         dailyPnl: -30,
@@ -135,7 +130,6 @@ const mockData: DteData[] = [
         vega: 0.18,
         avgPrice: 520,
         last: 500,
-        changePercent: -1.5,
       },
       {
         dailyPnl: 180,
@@ -152,7 +146,6 @@ const mockData: DteData[] = [
         vega: 0.3,
         avgPrice: 3450,
         last: 3500,
-        changePercent: 1.8,
       },
     ],
   },
@@ -174,7 +167,6 @@ const mockData: DteData[] = [
         vega: 0.2,
         avgPrice: 340,
         last: 350,
-        changePercent: 2.9,
       },
       {
         dailyPnl: -10,
@@ -191,7 +183,6 @@ const mockData: DteData[] = [
         vega: 0.25,
         avgPrice: 610,
         last: 600,
-        changePercent: -0.8,
       },
       {
         dailyPnl: 250,
@@ -208,7 +199,6 @@ const mockData: DteData[] = [
         vega: 0.35,
         avgPrice: 190,
         last: 200,
-        changePercent: 5.2,
       },
     ],
   },
@@ -306,7 +296,6 @@ class Portfolio extends React.Component<{}, PortfolioState> {
                 <TableCell>Vega</TableCell>
                 <TableCell>Avg Price</TableCell>
                 <TableCell>Last</TableCell>
-                <TableCell>Change %</TableCell>
               </TableRow>
             </TableHead>
             <TableBody className="table-body">
@@ -366,12 +355,6 @@ class Portfolio extends React.Component<{}, PortfolioState> {
                                   <TableCell>{row.vega}</TableCell>
                                   <TableCell>{row.avgPrice}</TableCell>
                                   <TableCell>{row.last}</TableCell>
-                                  <TableCell>
-                                    {this.sytleProperty(row.changePercent, [
-                                      "addPlus",
-                                    ])}
-                                    %
-                                  </TableCell>
                                 </TableRow>
                               ))}
                             </TableBody>

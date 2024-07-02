@@ -40,59 +40,7 @@ const optionChainTitles: TitleRow[] = [
   { title: "Ask Size", property: "putAskSize" },
 ];
 
-const optionChainMock: OptionChainData[] = [
-  {
-    callDelta: 0.981,
-    callOptionOpenInterest: 11400,
-    callVolume: 26,
-    callBidSize: "XX",
-    callBid: 6.7,
-    callAsk: 7.7,
-    callAskSize: "XX",
-    strike: 165,
-    putDelta: -0.019,
-    putOptionOpenInterest: 30400,
-    putVolume: 27,
-    putBidSize: "XX",
-    putBid: 5.7,
-    putAsk: 8.7,
-    putAskSize: "XX",
-  },
-  {
-    callDelta: 0.981,
-    callOptionOpenInterest: 11400,
-    callVolume: 26,
-    callBidSize: "XX",
-    callBid: 6.7,
-    callAsk: 7.7,
-    callAskSize: "XX",
-    strike: 165,
-    putDelta: -0.019,
-    putOptionOpenInterest: 30400,
-    putVolume: 27,
-    putBidSize: "XX",
-    putBid: 5.7,
-    putAsk: 8.7,
-    putAskSize: "XX",
-  },
-  {
-    callDelta: 0.981,
-    callOptionOpenInterest: 11400,
-    callVolume: 26,
-    callBidSize: "XX",
-    callBid: 6.7,
-    callAsk: 7.7,
-    callAskSize: "XX",
-    strike: 165,
-    putDelta: -0.019,
-    putOptionOpenInterest: 30400,
-    putVolume: 27,
-    putBidSize: "XX",
-    putBid: 5.7,
-    putAsk: 8.7,
-    putAskSize: "XX",
-  },
-];
+const optionChainMock: OptionChainData[] = [];
 
 const portfolioTitles: TitlePortfolio[] = [
   {
@@ -167,6 +115,9 @@ const Simulator: React.FC = () => {
   const [selectedOption, setSelectedOption] = useState<OptionChainData | null>(
     null
   );
+  const [selectedOptionAction, setSelectedOptionAction] = useState<
+    "Call" | "Put" | null
+  >(null);
 
   useEffect(() => {
     handleClickOpen();
@@ -184,8 +135,12 @@ const Simulator: React.FC = () => {
     setOpen(false); // Close the dialog when simulation starts
   };
 
-  const handleOptionSelect = (option: OptionChainData) => {
+  const handleOptionSelect = (
+    option: OptionChainData,
+    actionType: "Call" | "Put"
+  ) => {
     setSelectedOption(option);
+    setSelectedOptionAction(actionType);
   };
 
   return (
@@ -194,15 +149,18 @@ const Simulator: React.FC = () => {
       <OptionChain
         title="Option Chain"
         values={optionChainMock}
-        onClickCall={(event) => handleOptionSelect(event)}
-        onClickPut={(event) => handleOptionSelect(event)}
+        onClickCall={(event) => handleOptionSelect(event, "Call")}
+        onClickPut={(event) => handleOptionSelect(event, "Put")}
       />
       <div className="horizontal-container">
         <div>
           <Portfolio />
           <UnderlyingIndex />
         </div>
-        <OrderEntry selectedOption={selectedOption} />
+        <OrderEntry
+          selectedOption={selectedOption}
+          selectedOptionAction={selectedOptionAction}
+        />
       </div>
       <Dialog
         open={open}

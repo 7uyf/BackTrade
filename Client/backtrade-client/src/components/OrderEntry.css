@@ -1,19 +1,15 @@
-.box-background {
+.order-entry {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  max-width: 300px;
+  margin: auto;
+  align-items: center;
   background-color: #1e1e1e;
   padding: 1rem !important;
   margin: 10px;
   border-radius: 10px;
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
-}
-
-.order-entry {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  color: white;
-  max-width: 300px;
-  margin: auto;
-  align-items: center;
 }
 
 .header-text {
@@ -35,16 +31,19 @@
 
 .select-input,
 .date-input {
-  background-color: #333333;
+  background-color: rgb(10, 10, 50);
   color: white;
   border-radius: 5px;
 }
 
+.select-input div {
+  border: none !important;
+}
 .number-input {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #333333;
+  background-color: rgb(10, 10, 50);
   border-radius: 5px;
   padding: 0.5rem;
   width: 100%;
@@ -88,4 +87,8 @@ label {
 
 input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(1);
+}
+
+.strike-title {
+  color: white !important;
 }

@@ -22,3 +22,8 @@
   background-color: rgb(9, 6, 91);
   color: white;
 }
+
+.symbol-select {
+  color: white !important;
+  font-weight: bold !important;
+}
