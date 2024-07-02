@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from data_fetcher import fetch_historical_data, list_available_data, stream_historical_data
 from dotenv import load_dotenv
+from flask_cors import CORS
 
 import pandas as pd
 from io import StringIO
@@ -8,7 +9,7 @@ from io import StringIO
 load_dotenv()
 
 app = Flask(__name__)
-
+CORS(app) 
 
 @app.route('/data', methods=['GET'])
 def get_data():
