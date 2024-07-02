@@ -6,9 +6,12 @@ from pydantic import BaseModel
 from typing import List, Literal
 
 
-class OptionChainRow(BaseModel):
+class Option(BaseModel):
     t_date: datetime.datetime
+    stock_symbol: str
+    expiration_date: datetime.datetime
     strike: float
+    underlying_price: float
     call_put: Literal['C', 'P']
     price_bid: float
     price_ask: float
@@ -22,11 +25,24 @@ class OptionChainRow(BaseModel):
     vega: float
     rho: float
 
+    def __eq__(self, other):
+        if isinstance(other, Option):
+            return (
+                    self.stock_symbol == other.stock_symbol and
+                    self.expiration_date == other.expiration_date and
+                    self.strike == other.strike and
+                    self.call_put == other.call_put
+            )
+        return False
+
     @classmethod
     def from_csv_row(cls, row: dict):
         return cls(
             t_date=datetime.datetime.strptime(row['t_date'], "%Y-%m-%d %H:%M:%S"),
+            stock_symbol=row['stock_symbol'],
+            expiration_date=datetime.datetime.strptime(row['expiration_date'], "%Y-%m-%d"),
             strike=float(row['strike']),
+            underlying_price=float(row['price_opt']) if row['price_opt'] else 0.0,
             call_put=row['call_put'],
             price_bid=float(row['price_bid']) if row['price_bid'] else 0.0,
             price_ask=float(row['price_ask']) if row['price_ask'] else 0.0,
@@ -43,8 +59,7 @@ class OptionChainRow(BaseModel):
 
 
 class OptionChainSnapshot(BaseModel):
-    t_date: datetime.datetime  # exact time of the snapshot
-    dte_file: DteFile  # includes the stock symbol, expiration date, and dte
-    option_chain: List[OptionChainRow]
+    dte_file: DteFile
+    options: List[Option]  # replace with df?
 
-
+    # validate all options rows have the same t_date

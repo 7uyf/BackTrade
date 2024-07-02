@@ -4,7 +4,7 @@ from pandas import DataFrame
 from datetime import datetime, timezone
 from pydantic import BaseModel,Field
 from typing import List, Literal
-from typing_extensions  import Annotated, Any, Optional
+from typing_extensions import Annotated, Any, Optional
 from beanie import Document, Indexed
 from enum import Enum
 
