@@ -3,9 +3,8 @@ import datetime
 from pandas import DataFrame
 from pydantic import BaseModel
 from typing import List, Literal
-from typing_extensions  import Annotated, Any, Optional
+from typing_extensions import Annotated, Any, Optional
 from beanie import Document, Indexed
-
 
 
 class DteFile(BaseModel):

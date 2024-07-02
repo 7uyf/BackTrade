@@ -32,7 +32,7 @@ const SimulationBuilder: React.FC<SimulationBuilderProps> = ({ onSimulationStart
                 <ToggleButtonGroup
                     color="primary"
                     exclusive
-                    aria-label="Simulation Type"
+                    aria-label="MarketDataGenerator Type"
                     defaultValue="Test"
                     value={'Test'}
                 >
@@ -66,7 +66,7 @@ const SimulationBuilder: React.FC<SimulationBuilderProps> = ({ onSimulationStart
             <FormControl component="fieldset" fullWidth margin="normal">
                 <InputLabel sx={{fontSize: '1vw'}}>Start Date</InputLabel>
                 <TextField
-                    aria-label="Simulation Start"
+                    aria-label="MarketDataGenerator Start"
                     type="text"
                     fullWidth
                     margin="normal"
