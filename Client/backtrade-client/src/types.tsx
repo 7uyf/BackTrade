@@ -31,15 +31,23 @@ export type OptionChainData = {
 };
 
 export type PortfolioData = {
-  drillDownPnL: number;
-  finInstr: string;
+  dailyPnl: number;
+  instrument: {
+    symbol: string;
+    expirationDate: string;
+    strike: number;
+    right: string;
+  };
   position: number;
-  marketVal: number;
-  avgPrice: number;
-  last: number;
-  change: number;
-  netLiqPercent: number;
-  pnLPercent: number;
+  marketValue: number;
   delta: number;
   gamma: number;
+  vega: number;
+  avgPrice: number;
+  last: number;
+};
+
+export type DtePortfolioData = {
+  dte: string;
+  values: PortfolioData[];
 };

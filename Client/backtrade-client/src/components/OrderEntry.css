@@ -32,7 +32,7 @@
 .select-input,
 .date-input {
   background-color: rgb(10, 10, 50);
-  color: white;
+  color: white !important;
   border-radius: 5px;
 }
 
