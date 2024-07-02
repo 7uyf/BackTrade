@@ -19,7 +19,7 @@ class MarketDataGenerator(IMarketDataSubject):
     def __init__(self, simulation_config: SimulationConfig):
         super().__init__()
         self.simulation_config = simulation_config
-        self.timeframes = defaultdict(OptionChainSnapshot)
+        self.timeframes: "dict[str,OptionChainSnapshot]"= {}
         self.tasks = []
         self.pause_requested = False
         self.pause_condition = asyncio.Condition()

@@ -1,3 +1,4 @@
+import asyncio
 from beanie import PydanticObjectId
 from fastapi import APIRouter, Response, WebSocket, WebSocketDisconnect
 from  models.simulation import  SimulationInset,SimulationConfig
@@ -27,7 +28,7 @@ async def simulation_ws(websocket: WebSocket, simulation_id:PydanticObjectId):
     if simulation is None:
          simulation = Simulation(simulation_config)
          await simulation.market_data_generator.init()
-         simulation.market_data_generator.run()
+         asyncio.create_task(simulation.market_data_generator.run())
 
 
     await websocket.accept()
@@ -47,4 +48,5 @@ class SimulationWebsocket(IMarketDataObserver):
         self.websocket: WebSocket = websocket
 
     async def on_market_data_update(self, snapshot: OptionChainSnapshot):
+         print(snapshot)
          await self.websocket.send_json(snapshot.model_dump_json())
