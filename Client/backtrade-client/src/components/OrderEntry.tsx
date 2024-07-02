@@ -144,7 +144,7 @@ const OrderEntry: React.FC<OrderEntryProps> = ({
               value={quantity}
               onChange={(e) => setQuantity(Math.max(Number(e.target.value), 0))}
               className="number-textfield"
-              inputProps={{ style: { textAlign: "center" }, min: 0 }}
+              inputProps={{ style: { textAlign: "center" }, min: 1 }}
             />
             <IconButton
               className="icon-button"

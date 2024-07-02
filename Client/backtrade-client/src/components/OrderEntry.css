@@ -39,6 +39,10 @@
 .select-input div {
   border: none !important;
 }
+
+.date-input div {
+  color: white !important;
+}
 .number-input {
   display: flex;
   align-items: center;
@@ -50,14 +54,19 @@
 }
 
 .number-textfield {
-  width: 80px;
-  background-color: white;
+  width: 100px;
+  border: white solid 2px !important;
   border-radius: 5px;
-  color: black;
+}
+
+.number-textfield input {
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
 }
 
 .icon-button {
-  color: white;
+  color: white !important;
 }
 
 .order-buttons {
