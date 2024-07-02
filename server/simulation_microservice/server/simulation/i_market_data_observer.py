@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from server.simulation_microservice.server.models.options import OptionChainSnapshot
+from models.options import OptionChainSnapshot
 
 
 class IMarketDataObserver(ABC):

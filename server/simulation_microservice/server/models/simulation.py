@@ -28,6 +28,8 @@ class SimulationInset(BaseModel):
     start_date_time: datetime = Field(default_factory=datetime_now)
     initial_capital: float 
     universe_selection: List[DteFile]
+    end_date_time: Optional[datetime]  = None
+
 
 class SimulationConfig(Document, SimulationInset):
     user_id: str

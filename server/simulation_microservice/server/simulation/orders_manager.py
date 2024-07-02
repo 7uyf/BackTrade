@@ -1,7 +1,7 @@
-from server.simulation_microservice.server.models.options import OptionChainSnapshot
-from server.simulation_microservice.server.models.orders import Order, OrderPriorityQueue
-from server.simulation_microservice.server.simulation.i_market_data_observer import IMarketDataObserver
-from server.simulation_microservice.server.simulation.portfolio_manager import PortfolioManager
+from models.options import OptionChainSnapshot
+from models.orders import Order, OrderPriorityQueue
+from simulation.i_market_data_observer import IMarketDataObserver
+from simulation.portfolio_manager import PortfolioManager
 
 
 class OrdersManager(IMarketDataObserver):

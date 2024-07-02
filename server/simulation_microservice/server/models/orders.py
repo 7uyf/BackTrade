@@ -2,8 +2,8 @@ import datetime
 import queue
 from abc import ABC, abstractmethod
 from typing import List
-from server.simulation_microservice.server.models.options import Option, OptionChainSnapshot
-from server.simulation_microservice.server.simulation.utils import get_dict_key
+from models.options import Option, OptionChainSnapshot
+from simulation.utils import get_dict_key
 
 
 class OrderItem:
@@ -22,7 +22,7 @@ class Order(ABC):
     """
     This class represents an order.
     an order is made of a dictionary of option order items which contain the option and quantity data.
-    an order can be a market order or a limit order, if it's a limit order, the market conditions should be met, but if it's a market order, it should get executed immediately.
+    an order can be a market order or a limit order, if it's a limit  order, the market conditions should be met, but if it's a market order, it should get executed immediately.
     """
 
     def __init__(self, option_order_list: List[OrderItem]):

@@ -1,10 +1,10 @@
 from typing import List
 
-from server.simulation_microservice.server.models.options import OptionChainSnapshot
-from server.simulation_microservice.server.models.orders import Order
-from server.simulation_microservice.server.models.positions import Position, Positions
-from server.simulation_microservice.server.simulation.i_market_data_observer import IMarketDataObserver
-from server.simulation_microservice.server.simulation.utils import get_dict_key
+from models.options import OptionChainSnapshot
+from models.orders import Order
+from models.positions import Position, Positions
+from simulation.i_market_data_observer import IMarketDataObserver
+from simulation.utils import get_dict_key
 
 
 # TODO: # Implement margin requirement check logic

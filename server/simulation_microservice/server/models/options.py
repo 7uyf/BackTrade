@@ -1,6 +1,6 @@
 import datetime
 
-from simulation import DteFile
+from models.simulation import DteFile
 from pandas import DataFrame
 from pydantic import BaseModel
 from typing import List, Literal
