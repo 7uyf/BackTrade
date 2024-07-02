@@ -1,25 +1,31 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { FaChartLine, FaCogs, FaPlay, FaPlaystation, FaSignOutAlt, FaSimplybuilt, FaSmileBeam } from 'react-icons/fa';
+import { Link, useNavigate } from 'react-router-dom';
+import { FaChartLine, FaCogs, FaPlay, FaSignOutAlt } from 'react-icons/fa';
 import './Sidebar.css';
 
 const Sidebar: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleLogoutClick = () => {
+    navigate('/Login');
+  }
+
   return (
     <div className="Sidebar-container">
-      <Link to="/dashboard" className="Sidebar-logo">
+      <Link to="/main/dashboard" className="Sidebar-logo">
         <img className="Sidebar-logo-image" src={require('../assets/logo.png')} />
       </Link>
       <div className="Sidebar-header">Quick Access</div>
-      <Link to="/dashboard" className="Sidebar-item">
+      <Link to="/main/dashboard" className="Sidebar-item">
         <FaChartLine /> Dashboard
       </Link>
-      <Link to="/simulator" className="Sidebar-item">
+      <Link to="/main/simulator" className="Sidebar-item">
         <FaPlay /> Simulator
       </Link>
-      <Link to="/configuration" className="Sidebar-item">
+      <Link to="/main/configuration" className="Sidebar-item">
         <FaCogs /> Configuration
       </Link>
-      <div className="Sidebar-item">
+      <div className="Sidebar-item" onClick={handleLogoutClick}>
         <FaSignOutAlt /> Log Out
       </div>
     </div>

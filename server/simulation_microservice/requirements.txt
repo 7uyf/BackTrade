@@ -1,0 +1,9 @@
+FastAPI
+python-decouple
+jwt
+beanie
+fastapi_jwt
+bcrypt
+authlib
+uvicorn 
+pandas

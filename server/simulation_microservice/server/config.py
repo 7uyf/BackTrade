@@ -11,10 +11,6 @@ class Settings(BaseModel):
     mongo_uri: str = config("MONGO_URI")
     mongo_db_name: str = config("DB_NAME", default="backtrade")
 
-    # Security settings
-    authjwt_secret_key: str = config("SECRET_KEY")
-    salt: bytes = config("SALT").encode()
-
     testing: bool = config("TESTING", default=False, cast=bool)
 
 

@@ -1,8 +1,8 @@
 import asyncio
 from datetime import datetime
 
-from server.simulation_microservice.models import SimulationConfig, DteFile
-from server.simulation_microservice.simulation import Simulation
+from models import SimulationConfig, DteFile
+from simulation import Simulation
 
 
 async def main():
@@ -30,14 +30,14 @@ async def main():
     simulation = Simulation(simulation_config)
     await simulation.init()
 
-    print(f"Simulation initialized with {len(simulation.timeframes)} timeframes.")
+    print(f"MarketDataGenerator initialized with {len(simulation.timeframes)} timeframes.")
     if simulation.timeframes:
         print(f"First timeframe: {min(simulation.timeframes.keys())}")
         print(f"Last timeframe: {max(simulation.timeframes.keys())}")
 
     await simulation.run()
 
-    print("Simulation completed.")
+    print("MarketDataGenerator completed.")
 
 if __name__ == "__main__":
     asyncio.run(main())

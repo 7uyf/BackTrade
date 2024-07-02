@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Dashboard from './screens/Dashboard';
 import Configuration from './screens/Configuration';
@@ -8,7 +8,6 @@ import './Main.css';
 
 const Main: React.FC = () => {
   return (
-    <Router>
       <div className="App-container">
         <Sidebar />
         <div className="Main-content">
@@ -20,7 +19,6 @@ const Main: React.FC = () => {
           </Routes>
         </div>
       </div>
-    </Router>
   );
 }
 

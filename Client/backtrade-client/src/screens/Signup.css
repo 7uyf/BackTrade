@@ -1,0 +1,102 @@
+.signupContainer {
+  /* the main div */
+  background: url("../assets/back-ground.jpeg") no-repeat center center fixed;
+  background-size: cover;
+  height: 100vh;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+.signupForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  border-radius: 8px;
+  text-align: center;
+  margin-left: 7%;
+}
+
+.logo-imageS {
+  /* the logo */
+  width: 80%;
+  margin-top: 7%;
+  object-fit: contain;
+}
+
+.signupForm h1 {
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.signupForm h3 {
+  /* title "unlimited strategy" */
+  color: #e9e2e2;
+  margin-bottom: 1rem;
+  font-weight: 300;
+  font-size: large;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.shortinputContainer {
+  display: flex;
+  margin-left: 16%;
+  gap: 0.5rem;
+}
+
+.shortinputField {
+  /* the inputs  firstname/ lastname */
+  width: 37.5%;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  background: rgba(27, 29, 59, 0.85); /* clear */
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 5px;
+  color: #fff;
+}
+
+.longinputField {
+  /* the inputs  email/password */
+  width: 70%;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  margin-left: 16%;
+  background: rgba(27, 29, 59, 0.85); /* clear */
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 5px;
+  color: #fff;
+}
+
+.signUpButton {
+  width: 20%;
+  max-width: 300px;
+  padding: 0.5rem;
+  margin: 0.75rem 0;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.signInRedirect p {
+  color: #fff;
+}
+
+.signInButton {
+  width: 40%;
+  max-width: 300px;
+  padding: 0.5rem;
+  margin-top: 5%;
+  background: rgba(27, 29, 59, 0.85);
+  color: #007bff;
+  border: 1px solid #007bff;
+  border-radius: 4px;
+  cursor: pointer;
+}

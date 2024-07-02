@@ -6,7 +6,6 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from starlette.middleware.cors import CORSMiddleware
 
 from config import CONFIG
-from models.user import User
 
 
 DESCRIPTION = """
@@ -17,7 +16,6 @@ It supports:
 - Account sign-up and management
 - Something really cool that will blow your socks off
 """
-
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):  # type: ignore
