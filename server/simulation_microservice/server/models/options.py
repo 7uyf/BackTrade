@@ -1,6 +1,6 @@
 import datetime
 
-from simulation import DteFile
+from models.simulation import DteFile
 from pandas import DataFrame
 from pydantic import BaseModel
 from typing import List, Literal
@@ -40,7 +40,7 @@ class Option(BaseModel):
         return cls(
             t_date=datetime.datetime.strptime(row['t_date'], "%Y-%m-%d %H:%M:%S"),
             stock_symbol=row['stock_symbol'],
-            expiration_date=datetime.datetime.strptime(row['expiration_date'], "%Y-%m-%d"),
+            expiration_date=datetime.datetime.strptime(row['expiration_date'], "%Y-%m-%d %H:%M:%S"),
             strike=float(row['strike']),
             underlying_price=float(row['price_opt']) if row['price_opt'] else 0.0,
             call_put=row['call_put'],
@@ -60,7 +60,7 @@ class Option(BaseModel):
 
 class OptionChainSnapshot(BaseModel):
     dte_file: DteFile
-    options: List[Option]  # replace with df?
+    options: List[Option]   = []# replace with df?
 
     def get_option(self, option: Option) -> Option | None:
         for o in self.options:

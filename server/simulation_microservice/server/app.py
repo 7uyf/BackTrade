@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
 from starlette.middleware.cors import CORSMiddleware
+from  models.simulation import SimulationConfig
 
 from config import CONFIG
 
@@ -21,7 +22,7 @@ It supports:
 async def lifespan(app: FastAPI):  # type: ignore
     """Initialize application services."""
     app.db = AsyncIOMotorClient(CONFIG.mongo_uri)[CONFIG.mongo_db_name]  # type: ignore[attr-defined]
-    await init_beanie(app.db, document_models=[User])  # type: ignore[arg-type,attr-defined]
+    await init_beanie(app.db, document_models=[SimulationConfig])  # type: ignore[arg-type,attr-defined]
     print("Startup complete")
     yield
     print("Shutdown complete")

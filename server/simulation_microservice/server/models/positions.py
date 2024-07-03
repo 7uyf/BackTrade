@@ -1,8 +1,8 @@
 from typing import Dict
 
-from server.simulation_microservice.server.models.options import Option, OptionChainSnapshot
-from server.simulation_microservice.server.models.orders import OrderItem, Order
-from server.simulation_microservice.server.simulation.utils import get_dict_key
+from models.options import Option, OptionChainSnapshot
+from models.orders import OrderItem, Order
+from simulation.utils import get_dict_key
 
 
 class Position:

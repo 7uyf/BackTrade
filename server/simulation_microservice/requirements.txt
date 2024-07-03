@@ -7,3 +7,4 @@ bcrypt
 authlib
 uvicorn 
 pandas
+websockets
