@@ -39,7 +39,7 @@ class SimulationConfig(Document, SimulationInset):
     end_date_time: Optional[datetime]  = None
     universe_selection: List[DteFile]
     indicator_type_selection: List[str]
-    playback_speed: float = 1
+    playback_speed: float = 60
     status: Literal['RUNNING', 'FINISHED', 'PAUSED']= "PAUSED"
 
 # validate the simulation config:

@@ -349,9 +349,10 @@ const portfolioMock: DtePortfolioData[] = [
 
 const Simulator: React.FC = () => {
   const [open, setOpen] = useState(false);
+  const [isSimulationRunning, setIsSimulationRunning] = useState<boolean>(true);
   const [optionChain, setOptionChain] = useState<OptionChainData[]>([]);
   const [websocketUrl, setWebsocketUrl] = useState<string | null>(null);
-  const { sendMessage, lastMessage, readyState } = useWebSocket(websocketUrl);
+  const { sendJsonMessage, lastMessage, readyState } = useWebSocket(websocketUrl);
   const [selectedOption, setSelectedOption] = useState<OptionChainData | null>(
     null
   );
@@ -380,6 +381,8 @@ const Simulator: React.FC = () => {
     if (lastMessage === null) {
       setOptionChain([])
       return
+    } else if (lastMessage?.data.complete !== null) {
+      return
     }
     setOptionChain(JSON.parse(JSON.parse(lastMessage?.data)).options)
   }, [lastMessage])
@@ -392,9 +395,20 @@ const Simulator: React.FC = () => {
     setSelectedOptionAction(actionType);
   };
 
+  const onSimulationFlipState = () => {
+    if (isSimulationRunning) {
+      sendJsonMessage({ id: 1, command: 'pauseSimulation' })
+      setIsSimulationRunning(false)
+    } else {
+      sendJsonMessage({ id: 2, command: 'startsimulation' })
+      setIsSimulationRunning(true)
+
+    }
+  }
+
   return (
     <div>
-      <SimulationControls />
+      <SimulationControls onSimulationStateFlip={onSimulationFlipState} />
       <OptionChain
         title="Option Chain"
         values={optionChain}

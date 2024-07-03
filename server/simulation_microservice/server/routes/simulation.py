@@ -9,7 +9,7 @@ from simulation.simulation import Simulation, Simulations_Dict
 router = APIRouter(prefix="/simulation", tags=["Simulation"])
 
 
-@router.post("/")
+@router.post("")
 async def createSimulation(simulationInset: SimulationInset) -> SimulationConfig:
     """Create a simulation"""
     simulationConfig =  SimulationConfig(user_id= simulationInset.user_id, simulation_type= simulationInset.simulation_type,start_date_time = simulationInset.start_date_time,initial_capital = simulationInset.initial_capital,universe_selection = simulationInset.universe_selection,indicator_type_selection = [""] )
@@ -32,17 +32,30 @@ async def simulation_ws(websocket: WebSocket, simulation_id:PydanticObjectId):
 
 
     await websocket.accept()
-    simulation.market_data_generator.register_observer(SimulationWebsocket(websocket))
+    simulationWebsocket = SimulationWebsocket(websocket)
+    simulationWebsocket['on_market_data_update']
+    simulation.market_data_generator.register_observer(simulationWebsocket)
     try:
         while True: 
-            data = await websocket.receive_text()
+            data = await websocket.receive_json()
+
             print(data)
-            await websocket.send_text(data)
+            if (data.get("command") == "pauseSimulation"):
+                await simulation.market_data_generator.pause()
+            elif  (data.get("command") == "startsimulation"): 
+                  await simulation.market_data_generator.resume()
+                  await simulation.market_data_generator.()
+
+            await websocket.send_json({"complete": data.get('id')})
     except WebSocketDisconnect:
+        simulation.market_data_generator.unRegister_observer(simulationWebsocket)
         # disconnect  simulation, even closeit if it has no listeners
         print("closed connection")
 
-    
+
+
+
+
 class SimulationWebsocket(IMarketDataObserver):
     def __init__(self, websocket: WebSocket):
         self.websocket: WebSocket = websocket
