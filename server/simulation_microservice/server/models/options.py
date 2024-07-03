@@ -62,4 +62,10 @@ class OptionChainSnapshot(BaseModel):
     dte_file: DteFile
     options: List[Option]  # replace with df?
 
+    def get_option(self, option: Option) -> Option | None:
+        for o in self.options:
+            if o == option:
+                return o
+        return None
+
     # validate all options rows have the same t_date

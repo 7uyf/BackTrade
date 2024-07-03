@@ -6,14 +6,6 @@ from server.simulation_microservice.server.simulation.utils import get_dict_key
 
 
 class Position:
-    """
-    this object is used to represent a position in the portfolio.
-    option is the option object that the position is based on, it's data should be updated on every market data update. that data includes the bid/ask prices, greeks, etc.
-    quantity is the number of contracts in the position, negative quantity means short position.
-    premium is the total premium paid/received for the position. the premium is calculated as the average price of the contracts in the position.
-    market_value is the current market value of the position.
-    daily_pnl is the daily profit/loss of the position. it is calculated as the difference between the market value and the premium.
-    """
 
     def __init__(self, option_order_item: OrderItem):
         self.option = option_order_item.option
