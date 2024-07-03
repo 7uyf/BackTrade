@@ -12,7 +12,7 @@ export type TitlePortfolio = {
 
 export type OptionChainData = {
   dte: string;
-  symbol: string;
+  stock_symbol: string;
   callDelta: number;
   callOptionOpenInterest: number;
   callVolume: number;

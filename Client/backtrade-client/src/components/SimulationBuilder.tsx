@@ -4,7 +4,7 @@ import axios from 'axios';
 import './SimulationBuilder.css';
 
 interface SimulationBuilderProps {
-    onSimulationStart: () => void; // Define prop for handling simulation start
+    onSimulationStart: (simulationId: string) => void; // Define prop for handling simulation start
 }
 
 const pattern = /\/(-?\d+)dte\//;
@@ -38,7 +38,7 @@ const SimulationBuilder: React.FC<SimulationBuilderProps> = ({ onSimulationStart
                 ]
             });
             console.log('Simulation created:', response.data);
-            onSimulationStart()
+            onSimulationStart(response.data['_id'])
         } catch (error) {
             console.error('Error creating simulation:', error);
         }
