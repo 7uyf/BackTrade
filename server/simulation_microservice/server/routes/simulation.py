@@ -44,7 +44,6 @@ async def simulation_ws(websocket: WebSocket, simulation_id:PydanticObjectId):
                 await simulation.market_data_generator.pause()
             elif  (data.get("command") == "startsimulation"): 
                   await simulation.market_data_generator.resume()
-                  await simulation.market_data_generator.()
 
             await websocket.send_json({"complete": data.get('id')})
     except WebSocketDisconnect:
