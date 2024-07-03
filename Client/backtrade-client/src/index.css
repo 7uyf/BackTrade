@@ -1,13 +1,13 @@
 body {
   margin: 0;
-  font-family: 'Calibri';
+  font-family: "Calibri";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   height: 100%;
 }
 
 code {
-  font-family: 'Calibri'
+  font-family: "Calibri";
 }
 
 html {
@@ -18,4 +18,18 @@ html {
 #root {
   height: 100%;
   width: 100%;
+}
+
+/* Global css between multiple components */
+.even-margin {
+  margin: 0.5rem 1rem !important;
+}
+
+.box-background {
+  background-image: linear-gradient(
+    to bottom left,
+    rgb(0, 0, 0),
+    rgb(15, 16, 55)
+  ) !important;
+  border: 1px lightgray solid;
 }
