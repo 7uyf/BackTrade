@@ -1,4 +1,4 @@
-from server.simulation_microservice.server.models.options import Option
+from models.options import Option
 
 
 def get_dict_key(option: Option) -> str:

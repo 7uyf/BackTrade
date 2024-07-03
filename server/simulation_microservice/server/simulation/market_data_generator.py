@@ -3,12 +3,14 @@ import csv
 from asyncio import create_task
 from collections import defaultdict
 from datetime import timedelta, datetime
+from os import path
+from pathlib import Path
 
 import pandas as pd
 
-from server.simulation_microservice.server.models.options import OptionChainSnapshot, Option
-from server.simulation_microservice.server.models.simulation import SimulationConfig, DteFile
-from server.simulation_microservice.server.simulation.i_market_data_observer import IMarketDataSubject
+from models.options import OptionChainSnapshot, Option
+from models.simulation import SimulationConfig, DteFile
+from simulation.i_market_data_observer import IMarketDataSubject
 
 
 # TODO: Support multiple symbols and dte's
@@ -17,7 +19,7 @@ class MarketDataGenerator(IMarketDataSubject):
     def __init__(self, simulation_config: SimulationConfig):
         super().__init__()
         self.simulation_config = simulation_config
-        self.timeframes = defaultdict(OptionChainSnapshot)
+        self.timeframes: "dict[str,OptionChainSnapshot]"= {}
         self.tasks = []
         self.pause_requested = False
         self.pause_condition = asyncio.Condition()
@@ -57,7 +59,7 @@ class MarketDataGenerator(IMarketDataSubject):
                                  expiration_date=datetime(2016, 1, 22),
                                  dte=15)
 
-        csv_file = '2016-01-12.csv'
+        csv_file = Path(Path(__file__).parent,'2016-01-12.csv')
         with open(csv_file, 'r') as file:
             csv_reader = csv.reader(file)
             headers = next(csv_reader)  # Read the header row
