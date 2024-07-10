@@ -15,9 +15,33 @@ const SimulationBuilder: React.FC<SimulationBuilderProps> = ({ onSimulationStart
     const [selectedStartDate, setSelectedStartDate] = useState<string>('')
     const [selectedDte, setSelectedDte] = useState<string>('')
     const [dtesOptions, setDtesOptions] = useState<string[]>([]);
+    const [initialCapital, setInitialCapital] = useState(10000);
+    /* const [universeSelection, setUniverseSelection] = useState('BTC/JPY'); */
+    const [includeIndicator, setIncludeIndicator] = useState(false);
+    const [simulationType, setSimulationType] = useState('Test');
 
-    const handleStartSimulating = () => {
-        onSimulationStart(); // Close the dialog
+    const handleStartSimulating = async () => {
+        try {
+            const response = await axios.post('http://localhost:8000/simulation', {
+                user_id: 'user123',
+                simulation_type: 'Practice',
+                start_date_time: new Date(2016, 1, 12, 9, 30).toISOString(),
+                initial_capital: 100000.0,
+                universe_selection: [
+                    {
+                        file_url: 'ivol/all_dte_raw_data/0dte/2016-01-12.csv',
+                        today_date: new Date(2016, 1, 12).toISOString(),
+                        stock_symbol: 'SPX',
+                        expiration_date: new Date(2016, 1, 22).toISOString(),
+                        dte: 10
+                    }
+                ]
+            });
+            console.log('Simulation created:', response.data);
+            onSimulationStart()
+        } catch (error) {
+            console.error('Error creating simulation:', error);
+        }
     };
 
     const extractDates = (filePaths: string[]): string[] => {
