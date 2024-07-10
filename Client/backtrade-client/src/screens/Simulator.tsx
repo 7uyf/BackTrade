@@ -348,15 +348,107 @@ const portfolioMock: DtePortfolioData[] = [
 
 const Simulator: React.FC = () => {
   const [open, setOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<OptionChainData | null>(
-    null
-  );
-  const [selectedOptionAction, setSelectedOptionAction] = useState<
-    "Call" | "Put" | null
-  >(null);
+  const [optionChain, setOptionChain] = useState<any[]>([]);
+  const [selectedOption, setSelectedOption] = useState<any | null>(null);
+  const [selectedOptionAction, setSelectedOptionAction] = useState<"Call" | "Put" | null>(null);
 
   useEffect(() => {
     handleClickOpen();
+
+    let ws: WebSocket;
+    let reconnectTimeout: number;
+
+    const connectWebSocket = () => {
+      ws = new WebSocket("ws://localhost:8765");
+
+      ws.onopen = () => {
+        console.log("WebSocket connection established.");
+        setInterval(() => ws.send("keepalive"), 30000);
+      };
+
+      ws.onmessage = (event) => {
+        console.log("WebSocket message received:", event.data);
+        const data = JSON.parse(event.data);
+      
+        if (data.options && data.dte_file) {
+          const groupedOptions = data.options.reduce((acc: Record<string, any>, option: any) => {
+            const dte = new Date(data.dte_file.expiration_date).toISOString().split("T")[0];
+            const symbol = option.stock_symbol;
+            const strike = option.strike;
+      
+            const key = `${dte}-${symbol}-${strike}`;
+      
+            if (!acc[key]) {
+              acc[key] = {
+                dte,
+                symbol,
+                strike,
+                callDelta: null,
+                callOptionOpenInterest: null,
+                callVolume: null,
+                callBidSize: null,
+                callBid: null,
+                callAsk: null,
+                callAskSize: null,
+                putDelta: null,
+                putOptionOpenInterest: null,
+                putVolume: null,
+                putBidSize: null,
+                putBid: null,
+                putAsk: null,
+                putAskSize: null,
+              };
+            }
+      
+            const isCall = option.call_put === 'C';
+      
+            if (isCall) {
+              acc[key].callDelta = option.delta;
+              acc[key].callOptionOpenInterest = 1;
+              acc[key].callVolume = option.volume;
+              acc[key].callBidSize = option.size_bid.toString();
+              acc[key].callBid = option.price_bid;
+              acc[key].callAsk = option.price_ask;
+              acc[key].callAskSize = option.size_ask.toString();
+            } else {
+              acc[key].putDelta = option.delta;
+              acc[key].putOptionOpenInterest = 1;
+              acc[key].putVolume = option.volume;
+              acc[key].putBidSize = option.size_bid.toString();
+              acc[key].putBid = option.price_bid;
+              acc[key].putAsk = option.price_ask;
+              acc[key].putAskSize = option.size_ask.toString();
+            }
+      
+            return acc;
+          }, {});
+      
+          const newOptions = Object.values(groupedOptions);
+          console.log('New options:', newOptions);
+          setOptionChain(newOptions);
+        } else {
+          console.error("Unexpected data format:", data);
+        }
+      };
+
+      ws.onclose = () => {
+        console.log("WebSocket connection closed. Attempting to reconnect...");
+        clearTimeout(reconnectTimeout);
+        reconnectTimeout = window.setTimeout(connectWebSocket, 5000); // Reconnect after 5 seconds
+      };
+
+      ws.onerror = (error) => {
+        console.error("WebSocket error:", error);
+        ws.close();
+      };
+    };
+
+    connectWebSocket();
+
+    return () => {
+      ws.close();
+      clearTimeout(reconnectTimeout);
+    };
   }, []);
 
   const handleClickOpen = () => {
@@ -372,7 +464,7 @@ const Simulator: React.FC = () => {
   };
 
   const handleOptionSelect = (
-    option: OptionChainData,
+    option: any,
     actionType: "Call" | "Put"
   ) => {
     setSelectedOption(option);
@@ -384,7 +476,7 @@ const Simulator: React.FC = () => {
       <SimulationControls />
       <OptionChain
         title="Option Chain"
-        values={optionChainMock}
+        values={optionChain}
         onClickCall={(event) => handleOptionSelect(event, "Call")}
         onClickPut={(event) => handleOptionSelect(event, "Put")}
       />

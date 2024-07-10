@@ -1,9 +1,9 @@
 import datetime
-
-from models.simulation import DteFile
-from pandas import DataFrame
-from pydantic import BaseModel
 from typing import List, Literal
+
+from pydantic import BaseModel
+
+from server.simulation_microservice.server.models.simulation import DteFile
 
 
 class Option(BaseModel):
@@ -15,15 +15,11 @@ class Option(BaseModel):
     call_put: Literal['C', 'P']
     price_bid: float
     price_ask: float
-    size_bid: int
-    size_ask: int
-    volume: int
     iv: float
     delta: float
     gamma: float
     theta: float
     vega: float
-    rho: float
 
     def __eq__(self, other):
         if isinstance(other, Option):
@@ -34,6 +30,23 @@ class Option(BaseModel):
                     self.call_put == other.call_put
             )
         return False
+
+    def to_dict(self):
+        return {
+            "t_date": self.t_date.isoformat(),
+            "stock_symbol": self.stock_symbol,
+            "expiration_date": self.expiration_date.isoformat(),
+            "strike": self.strike,
+            "underlying_price": self.underlying_price,
+            "call_put": self.call_put,
+            "price_bid": self.price_bid,
+            "price_ask": self.price_ask,
+            "iv": self.iv,
+            "delta": self.delta,
+            "gamma": self.gamma,
+            "theta": self.theta,
+            "vega": self.vega,
+        }
 
     @classmethod
     def from_csv_row(cls, row: dict):
@@ -46,21 +59,17 @@ class Option(BaseModel):
             call_put=row['call_put'],
             price_bid=float(row['price_bid']) if row['price_bid'] else 0.0,
             price_ask=float(row['price_ask']) if row['price_ask'] else 0.0,
-            size_bid=int(row['size_bid']) if row['size_bid'] else 0,
-            size_ask=int(row['size_ask']) if row['size_ask'] else 0,
-            volume=int(row['volume']) if row['volume'] else 0,
             iv=float(row['iv']) if row['iv'] else 0.0,
             delta=float(row['delta']) if row['delta'] else 0.0,
             gamma=float(row['gamma']) if row['gamma'] else 0.0,
             theta=float(row['theta']) if row['theta'] else 0.0,
             vega=float(row['vega']) if row['vega'] else 0.0,
-            rho=float(row['rho']) if row['rho'] else 0.0
         )
 
 
 class OptionChainSnapshot(BaseModel):
     dte_file: DteFile
-    options: List[Option]   = []# replace with df?
+    options: List[Option] = []  # replace with df?
 
     def get_option(self, option: Option) -> Option | None:
         for o in self.options:
@@ -68,4 +77,15 @@ class OptionChainSnapshot(BaseModel):
                 return o
         return None
 
+    def to_dict(self):
+        return {
+            "dte_file": {
+                "file_url": self.dte_file.file_url,
+                "today_date": self.dte_file.today_date.isoformat(),
+                "stock_symbol": self.dte_file.stock_symbol,
+                "expiration_date": self.dte_file.expiration_date.isoformat(),
+                "dte": self.dte_file.dte,
+            },
+            "options": [option.to_dict() for option in self.options],
+        }
     # validate all options rows have the same t_date
