@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from server.simulation_microservice.server.models.option import OptionChainSnapshot
+from models.options import OptionChainSnapshot
 
 
 class IMarketDataObserver(ABC):
@@ -19,3 +19,5 @@ class IMarketDataSubject(ABC):
     async def notify_observers(self, snapshot: OptionChainSnapshot):
         for observer in self.observers:
             await observer.on_market_data_update(snapshot)
+
+

@@ -1,9 +1,13 @@
 import datetime
-from datetime import datetime, timezone
-from typing import List, Literal
 
-from pydantic import BaseModel, Field
-from typing_extensions import Optional
+from pandas import DataFrame
+from datetime import datetime, timezone
+from pydantic import BaseModel,Field
+from typing import List, Literal
+from typing_extensions import Annotated, Any, Optional
+from beanie import Document, Indexed
+from enum import Enum
+
 
 
 def datetime_now() -> datetime:
@@ -24,19 +28,19 @@ class SimulationInset(BaseModel):
     start_date_time: datetime = Field(default_factory=datetime_now)
     initial_capital: float
     universe_selection: List[DteFile]
-    end_date_time: Optional[datetime] = None
+    end_date_time: Optional[datetime]  = None
 
 
-class SimulationConfig(SimulationInset):
+class SimulationConfig(Document, SimulationInset):
     user_id: str
     simulation_type: Literal['Test', 'Practice']
     start_date_time: datetime
     initial_capital: float
-    end_date_time: Optional[datetime] = None
+    end_date_time: Optional[datetime]  = None
     universe_selection: List[DteFile]
     indicator_type_selection: List[str]
     playback_speed: float = 1
-    status: Literal['RUNNING', 'FINISHED', 'PAUSED'] = "PAUSED"
+    status: Literal['RUNNING', 'FINISHED', 'PAUSED']= "PAUSED"
 
 # validate the simulation config:
 # 1. start_date_time < end_date_time
