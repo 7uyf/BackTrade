@@ -60,3 +60,7 @@
     border: 1px white solid;
     
 }
+
+.MuiAutocomplete-hasPopupIcon.css-ka7ti6-MuiAutocomplete-root .MuiOutlinedInput-root {
+    border: 1px solid white;
+}

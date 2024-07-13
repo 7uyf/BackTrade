@@ -1,0 +1,29 @@
+.table-head {
+  background: rgb(56, 58, 90) !important;
+  color: white !important;
+}
+
+.table-head th {
+  color: white !important;
+  padding: 10px;
+  background-color: rgb(56, 58, 90);
+}
+
+.table-body tr td {
+  color: white;
+  padding: 10px;
+}
+
+.strike-header {
+  background-color: rgb(103, 102, 132) !important;
+  color: white;
+}
+.strike-cell {
+  background-color: rgb(9, 6, 91);
+  color: white;
+}
+
+.symbol-select {
+  color: white !important;
+  font-weight: bold !important;
+}

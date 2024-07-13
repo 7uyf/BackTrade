@@ -1,0 +1,23 @@
+.dte-row {
+  background-color: rgba(255, 255, 255, 0.1); /* Slight white tint */
+}
+
+.dte-row td {
+  padding: 0 !important;
+}
+
+.table-container {
+  max-height: 25vh;
+  overflow-y: auto;
+}
+.total-pnl {
+  position: sticky;
+  color: white !important;
+  bottom: 0;
+  background-color: transparent !important;
+  z-index: 1;
+}
+
+.total-pnl > p {
+  padding: 3px !important;
+}

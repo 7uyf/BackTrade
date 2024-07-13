@@ -1,0 +1,41 @@
+.controls-card {
+  background: rgb(0, 1, 46) !important;
+  border: 1px lightgray solid;
+}
+
+.panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.slider-container {
+  width: 33%;
+}
+
+.time-slider {
+  width: 95%;
+  margin: auto;
+}
+
+.speed-control-button {
+  margin: 0 !important;
+}
+.speed-control-icon {
+  color: rgb(0, 67, 255) !important;
+}
+
+button.finish-button,
+button.restart-button {
+  margin: 0.5rem !important;
+  color: black !important;
+  font-weight: bold !important;
+}
+
+.finish-button {
+  background: rgb(98, 255, 123) !important;
+}
+
+.restart-button {
+  background: rgb(0, 67, 255) !important;
+}
