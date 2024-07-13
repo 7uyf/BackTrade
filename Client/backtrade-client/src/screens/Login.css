@@ -10,18 +10,18 @@
 
 .loginForm {
   display: flex;
-  margin-top: 2.5%;
+  margin-top: 2.4%;
   flex-direction: column;
   align-items: center;
   padding: 2rem;
   border-radius: 8px;
   text-align: center;
-  margin-left: 7.2%;
+  margin-left: 7.3%;
 }
 
 .logo-imageL {
   /* the logo */
-  width: 81%;
+  width: 81.7%;
   object-fit: contain;
 }
 
