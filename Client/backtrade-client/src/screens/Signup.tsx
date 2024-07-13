@@ -12,6 +12,7 @@ const Signup: React.FC = () => {
     last_name: "",
     password: "",
   });
+  
   const navigate = useNavigate();
 
   // const handleSubmit = async (e: React.FormEvent) => {
