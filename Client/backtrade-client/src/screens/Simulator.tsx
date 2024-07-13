@@ -379,9 +379,34 @@ const Simulator: React.FC = () => {
     setSelectedOptionAction(actionType);
   };
 
+  const handleSpeedChange = (speed: number) => {
+    console.log("handleSpeedChange", speed);
+    // TODO: Connect to backend to change the simulation speed
+  };
+
+  const handleTimeChange = (timeIndex: number) => {
+    console.log("handleTimeChange", timeIndex);
+    // TODO: Connect to backend to change the current simulation time
+  };
+
+  const handleFinish = () => {
+    console.log("handleFinish");
+    // TODO: Connect to backend to finish the simulation
+  };
+
+  const handleRestart = () => {
+    console.log("handleRestart");
+    // TODO: Connect to backend to restart the simulation
+  };
+
   return (
     <div>
-      <SimulationControls />
+      <SimulationControls
+        onSpeedChange={handleSpeedChange}
+        onTimeChange={handleTimeChange}
+        onFinish={handleFinish}
+        onRestart={handleRestart}
+      />
       <OptionChain
         title="Option Chain"
         values={optionChainMock}
