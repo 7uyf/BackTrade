@@ -1,5 +1,17 @@
+.portfolio {
+  background-image: linear-gradient(
+    to bottom left,
+    rgb(0, 0, 0),
+    rgb(15, 16, 55)
+  ) !important;
+  border: 1.34px lightgray solid;
+  margin-top: -190px;
+  margin-left: -355px;
+  width: 1480px;
+}
+
 .dte-row {
-  background-color: rgba(255, 255, 255, 0.1); /* Slight white tint */
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .dte-row td {
@@ -11,7 +23,6 @@
   overflow-y: auto;
 }
 .total-pnl {
-  position: sticky;
   color: white !important;
   bottom: 0;
   background-color: transparent !important;
@@ -20,4 +31,20 @@
 
 .total-pnl > p {
   padding: 3px !important;
+}
+
+.text {
+  font-size: 18px;
+  color: white;
+  font-weight: bold;
+}
+
+/* .table-container table {
+  table-layout: fixed;
+} */
+
+.table-container th,
+.table-container td {
+  padding: 8px;
+  word-wrap: break-word;
 }

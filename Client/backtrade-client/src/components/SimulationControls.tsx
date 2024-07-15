@@ -8,9 +8,10 @@ import {
 import { Button, IconButton, Paper, Slider } from "@mui/material";
 import React from "react";
 import "./SimulationControls.css";
-import "../index.css";
+import IconText from "./IconText";
 
 interface SimulationControlsProps {
+  scale?: number;
   onSpeedChange: (speed: number) => void;
   onTimeChange: (timeIndex: number) => void;
   onFinish: () => void;
@@ -86,6 +87,7 @@ class SimulationControls extends React.Component<
   };
 
   render(): React.ReactNode {
+    const { scale = 1 } = this.props;
     const { times, currentTimeIndex, speed } = this.state;
     const speedMarks = [
       { value: 1, label: "1x" },
@@ -97,8 +99,11 @@ class SimulationControls extends React.Component<
     ];
 
     return (
-      <Paper className="controls-card even-margin">
-        <div style={{ color: "white" }}>Simulation Controls</div>
+      <Paper
+        className="simulator-controls"
+        style={{ transform: `scale(${scale})`, transformOrigin: "top left" }}
+      >
+        <IconText text="Simulation Controls" iconSize="20px" textSize="18px" />
         <div>
           <div className="panel">
             <div>

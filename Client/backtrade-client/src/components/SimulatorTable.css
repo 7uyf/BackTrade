@@ -1,29 +1,30 @@
-.table-head {
+.table-head { /* the center between call to puts */
   background: rgb(56, 58, 90) !important;
   color: white !important;
 }
 
-.table-head th {
+.table-head th { /* all the titles in the tables */
   color: white !important;
   padding: 10px;
   background-color: rgb(56, 58, 90);
 }
 
-.table-body tr td {
+.table-body tr td { /* the table */
   color: white;
-  padding: 10px;
+  padding: 5px;
 }
 
-.strike-header {
+.strike-header { /* the text strike in the table */
   background-color: rgb(103, 102, 132) !important;
   color: white;
 }
-.strike-cell {
+
+.strike-cell { /* the col of strike */
   background-color: rgb(9, 6, 91);
   color: white;
 }
 
-.symbol-select {
+.symbol-select { /* when you select the symbol */
   color: white !important;
-  font-weight: bold !important;
+  font-weight: 600 !important;
 }

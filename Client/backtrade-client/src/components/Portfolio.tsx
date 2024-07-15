@@ -20,9 +20,11 @@ import "./SimulatorTable.css";
 import "../index.css";
 import "./Portfolio.css";
 import { DtePortfolioData } from "../types";
+import IconText from "./IconText";
 
 interface PortfolioProps {
   data: DtePortfolioData[];
+  scale?: number;
 }
 
 interface PortfolioState {
@@ -88,6 +90,7 @@ class Portfolio extends React.Component<PortfolioProps, PortfolioState> {
 
   render() {
     const { expandedDte } = this.state;
+    const { scale = 1 } = this.props;
     const totalPnl = this.props.data.reduce(
       (acc, data) =>
         acc + data.values.reduce((acc2, item) => acc2 + item.dailyPnl, 0),
@@ -95,7 +98,8 @@ class Portfolio extends React.Component<PortfolioProps, PortfolioState> {
     );
 
     return (
-      <Paper className="box-background even-margin">
+      <Paper className="portfolio" style={{ transform: `scale(${scale})` }}>
+        <IconText text="Portfolio" iconSize="27px" textSize="25px" />
         <TableContainer
           className="table-container"
           sx={{ background: "transparent !important", maxHeight: "25vh" }} // Max height for scroll

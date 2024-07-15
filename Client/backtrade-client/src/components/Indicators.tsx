@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Paper } from "@mui/material";
 import { LineChart } from "@mui/x-charts";
+import IconText from "./IconText";
+import "./Indicators.css";
 
 // Extended mock data points (every 5 minutes)
 const generateMockData = (start: number, length: number): number[] =>
@@ -51,7 +53,11 @@ const pct90Line: number[] = generateStraightLine(6300, 4800, xLabels.length);
 
 const minValue = Math.min(...pct10Line, ...pct50Line, ...pct90Line);
 
-const UnderlyingIndex: React.FC = () => {
+interface IndicatorsProps {
+  scale?: number;
+}
+
+const Indicators: React.FC<IndicatorsProps> = ({ scale = 1 }) => {
   const [uData, setUData] = useState<number[]>([]);
   const [pData, setPData] = useState<number[]>([]);
   const [dataIndex, setDataIndex] = useState<number>(0);
@@ -86,7 +92,11 @@ const UnderlyingIndex: React.FC = () => {
   }, [dataIndex]);
 
   return (
-    <Paper className="box-background even-margin">
+    <Paper
+      className="indicators"
+      style={{ transform: `scale(${scale})`, transformOrigin: "top left" }}
+    >
+      <IconText text="Indicators" iconSize="27px" textSize="25px" />
       <LineChart
         sx={{
           // Change left yAxis label styles
@@ -117,7 +127,7 @@ const UnderlyingIndex: React.FC = () => {
             fill: "white",
           },
         }}
-        width={1000}
+        width={1520}
         height={300}
         series={[
           {
@@ -156,4 +166,4 @@ const UnderlyingIndex: React.FC = () => {
   );
 };
 
-export default UnderlyingIndex;
+export default Indicators;
