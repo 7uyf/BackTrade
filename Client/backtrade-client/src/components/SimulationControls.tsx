@@ -1,71 +1,3 @@
-// import {
-//   KeyboardArrowLeft,
-//   KeyboardArrowRight,
-//   KeyboardDoubleArrowLeft,
-//   KeyboardDoubleArrowRight,
-//   PlayCircleFilled,
-// } from "@mui/icons-material";
-// import { Button, IconButton, Paper, Slider } from "@mui/material";
-// import React from "react";
-// import "./SimulationControls.css";
-// import IconText from "./IconText";
-
-// class SimulationControls extends React.Component {
-//   render(): React.ReactNode {
-//     return (
-//       <Paper className="simulator-controls">
-//         <IconText text="Simulation Controls" />
-//         <div>
-//           <div className="panel">
-//             <div>
-//               <IconButton className="speed-control-button">
-//                 <KeyboardDoubleArrowLeft className="speed-control-icon" />
-//               </IconButton>
-//               <IconButton className="speed-control-button">
-//                 <KeyboardArrowLeft className="speed-control-icon" />
-//               </IconButton>
-//               <IconButton className="speed-control-button">
-//                 <PlayCircleFilled className="speed-control-icon" />
-//               </IconButton>
-//               <IconButton className="speed-control-button">
-//                 <KeyboardArrowRight className="speed-control-icon" />
-//               </IconButton>
-//               <IconButton className="speed-control-button">
-//                 <KeyboardDoubleArrowRight className="speed-control-icon" />
-//               </IconButton>
-//             </div>
-//             <div className="slider-container">
-//               <Slider
-//                 defaultValue={50}
-//                 track={false}
-//                 aria-label="Default"
-//                 valueLabelDisplay="auto"
-//               />
-//             </div>
-//             <div>
-//               <Button className="finish-button" variant="contained">
-//                 Finish
-//               </Button>
-//               <Button className="restart-button" variant="contained">
-//                 Restart
-//               </Button>
-//             </div>
-//           </div>
-//           <div className="time-slider">
-//             <Slider
-//               defaultValue={0}
-//               aria-label="Default"
-//               valueLabelDisplay="auto"
-//             />
-//           </div>
-//         </div>
-//       </Paper>
-//     );
-//   }
-// }
-
-// export default SimulationControls;
-
 import {
   KeyboardArrowLeft,
   KeyboardArrowRight,
@@ -80,11 +12,91 @@ import IconText from "./IconText";
 
 interface SimulationControlsProps {
   scale?: number;
+  onSpeedChange: (speed: number) => void;
+  onTimeChange: (timeIndex: number) => void;
+  onFinish: () => void;
+  onRestart: () => void;
 }
 
-class SimulationControls extends React.Component<SimulationControlsProps> {
+interface SimulationControlsState {
+  times: string[];
+  currentTimeIndex: number;
+  speed: number;
+  isPlaying: boolean;
+}
+
+class SimulationControls extends React.Component<
+  SimulationControlsProps,
+  SimulationControlsState
+> {
+  state: SimulationControlsState = {
+    times: [],
+    currentTimeIndex: 0,
+    speed: 1,
+    isPlaying: true,
+  };
+
+  componentDidMount() {
+    const times = this.generateNYSEOpenTimes();
+    this.setState({ times });
+  }
+
+  generateNYSEOpenTimes = (): string[] => {
+    const nyseOpenTimeUTC = new Date(Date.UTC(1970, 0, 1, 14, 30)); // NYSE opens at 14:30 UTC
+    const nyseCloseTimeUTC = new Date(Date.UTC(1970, 0, 1, 21, 0)); // NYSE closes at 21:00 UTC
+
+    const result: string[] = [];
+    let currentTime = nyseOpenTimeUTC;
+
+    while (currentTime <= nyseCloseTimeUTC) {
+      const localTime = new Date(currentTime.getTime());
+      const formattedTime = localTime.toTimeString().split(" ")[0];
+      result.push(formattedTime);
+      currentTime.setMinutes(currentTime.getMinutes() + 1);
+    }
+
+    return result;
+  };
+
+  handleSliderChange = (event: Event, newValue: number | number[]): void => {
+    const timeIndex = newValue as number;
+    this.setState({ currentTimeIndex: timeIndex });
+    this.props.onTimeChange(timeIndex);
+  };
+
+  handleSpeedChange = (event: Event, newValue: number | number[]): void => {
+    const speed = newValue as number;
+    this.setState({ speed });
+    const isPlaying = this.state.isPlaying ? 1 : 0;
+    this.props.onSpeedChange(speed * isPlaying);
+  };
+
+  handleSkip = (minutes: number) => {
+    const newIndex = Math.min(
+      Math.max(this.state.currentTimeIndex + minutes, 0),
+      this.state.times.length - 1
+    );
+    this.setState({ currentTimeIndex: newIndex });
+    this.props.onTimeChange(newIndex);
+  };
+
+  handlePlayPause = () => {
+    const isPlaying = !this.state.isPlaying;
+    this.setState({ isPlaying });
+    this.props.onSpeedChange(isPlaying ? this.state.speed : 0);
+  };
+
   render(): React.ReactNode {
-    const { scale = 1 } = this.props; // שימוש בפרופ `scale` עם ערך ברירת מחדל של 1
+    const { scale = 1 } = this.props;
+    const { times, currentTimeIndex, speed } = this.state;
+    const speedMarks = [
+      { value: 1, label: "1x" },
+      { value: 2, label: "2x" },
+      { value: 3, label: "3x" },
+      { value: 4, label: "4x" },
+      { value: 5, label: "5x" },
+      { value: 10, label: "10x" },
+    ];
 
     return (
       <Paper
@@ -95,35 +107,63 @@ class SimulationControls extends React.Component<SimulationControlsProps> {
         <div>
           <div className="panel">
             <div>
-              <IconButton className="speed-control-button">
+              <IconButton
+                className="speed-control-button"
+                onClick={() => this.handleSkip(-60)}
+              >
                 <KeyboardDoubleArrowLeft className="speed-control-icon" />
               </IconButton>
-              <IconButton className="speed-control-button">
+              <IconButton
+                className="speed-control-button"
+                onClick={() => this.handleSkip(-5)}
+              >
                 <KeyboardArrowLeft className="speed-control-icon" />
               </IconButton>
-              <IconButton className="speed-control-button">
+              <IconButton
+                className="speed-control-button"
+                onClick={this.handlePlayPause}
+              >
                 <PlayCircleFilled className="speed-control-icon" />
               </IconButton>
-              <IconButton className="speed-control-button">
+              <IconButton
+                className="speed-control-button"
+                onClick={() => this.handleSkip(5)}
+              >
                 <KeyboardArrowRight className="speed-control-icon" />
               </IconButton>
-              <IconButton className="speed-control-button">
+              <IconButton
+                className="speed-control-button"
+                onClick={() => this.handleSkip(60)}
+              >
                 <KeyboardDoubleArrowRight className="speed-control-icon" />
               </IconButton>
             </div>
             <div className="slider-container">
               <Slider
-                defaultValue={50}
-                track={false}
-                aria-label="Default"
+                defaultValue={1}
+                value={speed}
+                onChange={this.handleSpeedChange}
+                step={null}
+                marks={speedMarks}
+                min={1}
+                max={10}
+                aria-label="Speed Slider"
                 valueLabelDisplay="auto"
               />
             </div>
             <div>
-              <Button className="finish-button" variant="contained">
+              <Button
+                className="finish-button"
+                variant="contained"
+                onClick={this.props.onFinish}
+              >
                 Finish
               </Button>
-              <Button className="restart-button" variant="contained">
+              <Button
+                className="restart-button"
+                variant="contained"
+                onClick={this.props.onRestart}
+              >
                 Restart
               </Button>
             </div>
@@ -131,8 +171,12 @@ class SimulationControls extends React.Component<SimulationControlsProps> {
           <div className="time-slider">
             <Slider
               defaultValue={0}
-              aria-label="Default"
+              value={currentTimeIndex}
+              onChange={this.handleSliderChange}
+              max={times.length - 1}
+              aria-label="Time Slider"
               valueLabelDisplay="auto"
+              valueLabelFormat={(value) => times[value] || ""}
             />
           </div>
         </div>

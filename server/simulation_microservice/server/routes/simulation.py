@@ -2,7 +2,7 @@ import asyncio
 from beanie import PydanticObjectId
 from fastapi import APIRouter, Response, WebSocket, WebSocketDisconnect
 from  models.simulation import  SimulationInset,SimulationConfig
-from models.options import OptionChainSnapshot
+from models.option import OptionChainSnapshot
 from simulation.i_market_data_observer import IMarketDataObserver
 from simulation.simulation import Simulation, Simulations_Dict
 
@@ -32,7 +32,8 @@ async def simulation_ws(websocket: WebSocket, simulation_id:PydanticObjectId):
 
 
     await websocket.accept()
-    simulation.market_data_generator.register_observer(SimulationWebsocket(websocket))
+    simulationWebSocket = SimulationWebsocket(websocket)
+    simulation.market_data_generator.register_observer(simulationWebSocket)
     try:
         while True:
             data = await websocket.receive_text()
@@ -40,6 +41,7 @@ async def simulation_ws(websocket: WebSocket, simulation_id:PydanticObjectId):
             await websocket.send_text(data)
     except WebSocketDisconnect:
         # disconnect  simulation, even closeit if it has no listeners
+        simulation.market_data_generator.remove_observer(simulationWebSocket)
         print("closed connection")
 
 
