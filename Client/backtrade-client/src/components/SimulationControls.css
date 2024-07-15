@@ -13,6 +13,10 @@
   width: 33%;
 }
 
+.slider-container span.MuiSlider-markLabel {
+  color: white !important;
+}
+
 .time-slider {
   width: 95%;
   margin: auto;

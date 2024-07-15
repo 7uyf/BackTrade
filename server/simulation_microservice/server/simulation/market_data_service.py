@@ -13,9 +13,7 @@ from models.simulation import SimulationConfig, DteFile
 from simulation.i_market_data_observer import IMarketDataSubject
 
 
-# TODO: Support multiple symbols and dte's
-
-class MarketDataGenerator(IMarketDataSubject):
+class MarketDataService(IMarketDataSubject):
     def __init__(self, simulation_config: SimulationConfig):
         super().__init__()
         self.simulation_config = simulation_config

@@ -26,7 +26,7 @@ class SimulationInset(BaseModel):
     user_id: str
     simulation_type: Literal['Test', 'Practice']
     start_date_time: datetime = Field(default_factory=datetime_now)
-    initial_capital: float 
+    initial_capital: float
     universe_selection: List[DteFile]
     end_date_time: Optional[datetime]  = None
 

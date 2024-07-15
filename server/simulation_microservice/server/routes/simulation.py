@@ -2,7 +2,7 @@ import asyncio
 from beanie import PydanticObjectId
 from fastapi import APIRouter, Response, WebSocket, WebSocketDisconnect
 from  models.simulation import  SimulationInset,SimulationConfig
-from models.options import OptionChainSnapshot
+from models.option import OptionChainSnapshot
 from simulation.i_market_data_observer import IMarketDataObserver
 from simulation.simulation import Simulation, Simulations_Dict
 
@@ -14,7 +14,7 @@ async def createSimulation(simulationInset: SimulationInset) -> SimulationConfig
     """Create a simulation"""
     simulationConfig =  SimulationConfig(user_id= simulationInset.user_id, simulation_type= simulationInset.simulation_type,start_date_time = simulationInset.start_date_time,initial_capital = simulationInset.initial_capital,universe_selection = simulationInset.universe_selection,indicator_type_selection = [""] )
     await simulationConfig.insert()
-    
+
     return simulationConfig
 
 @router.websocket('/{simulation_id}/ws')
@@ -32,27 +32,22 @@ async def simulation_ws(websocket: WebSocket, simulation_id:PydanticObjectId):
 
 
     await websocket.accept()
-    simulationWebsocket = SimulationWebsocket(websocket)
-    simulationWebsocket['on_market_data_update']
-    simulation.market_data_generator.register_observer(simulationWebsocket)
+    simulationWebSocket = SimulationWebsocket(websocket)
+    simulation.market_data_generator.register_observer(simulationWebSocket)
     try:
-        while True: 
-            data = await websocket.receive_json()
-
+        while True:
+            data = await websocket.receive_text()
             print(data)
             if (data.get("command") == "pauseSimulation"):
                 await simulation.market_data_generator.pause()
-            elif  (data.get("command") == "startsimulation"): 
+            elif  (data.get("command") == "resumeSimulation"): 
                   await simulation.market_data_generator.resume()
 
             await websocket.send_json({"complete": data.get('id')})
     except WebSocketDisconnect:
-        simulation.market_data_generator.unRegister_observer(simulationWebsocket)
         # disconnect  simulation, even closeit if it has no listeners
+        simulation.market_data_generator.remove_observer(simulationWebSocket)
         print("closed connection")
-
-
-
 
 
 class SimulationWebsocket(IMarketDataObserver):

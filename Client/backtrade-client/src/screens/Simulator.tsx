@@ -349,9 +349,9 @@ const portfolioMock: DtePortfolioData[] = [
 
 const Simulator: React.FC = () => {
   const [open, setOpen] = useState(false);
-  const [isSimulationRunning, setIsSimulationRunning] = useState<boolean>(true);
   const [optionChain, setOptionChain] = useState<OptionChainData[]>([]);
   const [websocketUrl, setWebsocketUrl] = useState<string | null>(null);
+  const [wsMsgId, setWsMsgId] = useState<number>(1);
   const { sendJsonMessage, lastMessage, readyState } = useWebSocket(websocketUrl);
   const [selectedOption, setSelectedOption] = useState<OptionChainData | null>(
     null
@@ -395,20 +395,45 @@ const Simulator: React.FC = () => {
     setSelectedOptionAction(actionType);
   };
 
-  const onSimulationFlipState = () => {
-    if (isSimulationRunning) {
-      sendJsonMessage({ id: 1, command: 'pauseSimulation' })
-      setIsSimulationRunning(false)
-    } else {
-      sendJsonMessage({ id: 2, command: 'startsimulation' })
-      setIsSimulationRunning(true)
+  const handleSpeedChange = (speed: number) => {
+    console.log("handleSpeedChange", speed);
+    // TODO: Connect to backend to change the simulation speed
+  };
 
-    }
+  const handleTimeChange = (timeIndex: number) => {
+    console.log("handleTimeChange", timeIndex);
+    // TODO: Connect to backend to change the current simulation time
+  };
+
+  const handleFinish = () => {
+    console.log("handleFinish");
+    // TODO: Connect to backend to finish the simulation
+  };
+
+  const handleRestart = () => {
+    console.log("handleRestart");
+    // TODO: Connect to backend to restart the simulation
+  };
+
+  const handleResume = () => {
+    sendJsonMessage({ command: 'resumeSimulation', id: wsMsgId })
+    setWsMsgId((id) => id + 1)
   }
 
+  const handlePause = () => {
+    sendJsonMessage({ command: 'pauseSimulation', id: wsMsgId })
+    setWsMsgId((id) => id + 1)
+  }
   return (
     <div>
-      <SimulationControls onSimulationStateFlip={onSimulationFlipState} />
+      <SimulationControls
+        onSpeedChange={handleSpeedChange}
+        onTimeChange={handleTimeChange}
+        onFinish={handleFinish}
+        onRestart={handleRestart}
+        onResume={handleResume}
+        onPause={handlePause}
+      />
       <OptionChain
         title="Option Chain"
         values={optionChain}
