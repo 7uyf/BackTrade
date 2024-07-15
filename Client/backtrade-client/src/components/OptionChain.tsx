@@ -37,7 +37,7 @@ class OptionChain extends React.Component<OptionChainProps, OptionChainState> {
   state: OptionChainState = {
     selectedTab: 0,
     selectedSymbol: "AAPL",
-    symbols: ["AAPL", "GOOGL", "TSLA", "SPX"], // Add your symbols here
+    symbols: ["AAPL", "GOOGL", "TSLA"], // Add your symbols here
   };
 
   handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -92,7 +92,7 @@ class OptionChain extends React.Component<OptionChainProps, OptionChainState> {
     const { selectedTab, selectedSymbol, symbols } = this.state;
     const { onClickCall, onClickPut } = this.props;
     const filteredData = this.props.values.filter(
-      (option) => option.stock_symbol === selectedSymbol
+      (option) => option.symbol === selectedSymbol
     );
     const currentDtes = Array.from(
       new Set(filteredData.map((data) => data.dte))
