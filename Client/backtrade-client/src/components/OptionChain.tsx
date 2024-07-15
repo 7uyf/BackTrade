@@ -17,14 +17,16 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import "./SimulatorTable.css";
-import "../index.css";
+import "./OptionChain.css";
 import { OptionChainData } from "../types";
+import IconText from "./IconText";
 
 interface OptionChainProps {
   title: string;
   values: OptionChainData[];
   onClickCall: (option: OptionChainData) => void;
   onClickPut: (option: OptionChainData) => void;
+  scale: number;
 }
 
 interface OptionChainState {
@@ -37,7 +39,7 @@ class OptionChain extends React.Component<OptionChainProps, OptionChainState> {
   state: OptionChainState = {
     selectedTab: 0,
     selectedSymbol: "AAPL",
-    symbols: ["AAPL", "GOOGL", "TSLA"], // Add your symbols here
+    symbols: ["AAPL", "GOOGL", "TSLA", "BABA"], // Add your symbols here
   };
 
   handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -90,7 +92,7 @@ class OptionChain extends React.Component<OptionChainProps, OptionChainState> {
 
   render(): React.ReactNode {
     const { selectedTab, selectedSymbol, symbols } = this.state;
-    const { onClickCall, onClickPut } = this.props;
+    const { onClickCall, onClickPut, scale = 1 } = this.props;
     const filteredData = this.props.values.filter(
       (option) => option.symbol === selectedSymbol
     );
@@ -102,8 +104,17 @@ class OptionChain extends React.Component<OptionChainProps, OptionChainState> {
     );
 
     return (
-      <Paper className="box-background even-margin">
-        <Box display="flex" justifyContent="space-between" alignItems="center">
+      <Paper
+        className="option-chain"
+        style={{ transform: `scale(${scale})`, transformOrigin: "top left" }}
+      >
+        <IconText text="Option Chain" iconSize="23px" textSize="21px" />
+        <Box
+          className="uprow"
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+        >
           <Tabs
             value={selectedTab}
             onChange={this.handleChange}
@@ -120,7 +131,7 @@ class OptionChain extends React.Component<OptionChainProps, OptionChainState> {
             ))}
           </Tabs>
           <FormControl sx={{ minWidth: 120, marginRight: 2 }}>
-            <InputLabel>Symbol</InputLabel>
+            <InputLabel className="inputlabel">Symbol</InputLabel>
             <Select
               className="symbol-select"
               value={selectedSymbol}
@@ -154,25 +165,21 @@ class OptionChain extends React.Component<OptionChainProps, OptionChainState> {
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableCell className="header-cell">Delta</TableCell>
-                <TableCell className="header-cell">
-                  Option Open Interest
-                </TableCell>
-                <TableCell className="header-cell">Volume</TableCell>
-                <TableCell className="header-cell">BID Size</TableCell>
-                <TableCell className="header-cell">BID</TableCell>
+                <TableCell className="header-cell">Bid</TableCell>
                 <TableCell className="header-cell">Ask</TableCell>
-                <TableCell className="header-cell">Ask Size</TableCell>
+                <TableCell className="header-cell">Vega</TableCell>
+                <TableCell className="header-cell">Delta</TableCell>
+                <TableCell className="header-cell">Gamma</TableCell>
+                <TableCell className="header-cell">Theta</TableCell>
+                <TableCell className="header-cell">IV</TableCell>
                 <TableCell className="strike-header">Strike</TableCell>
-                <TableCell className="header-cell">Delta</TableCell>
-                <TableCell className="header-cell">
-                  Option Open Interest
-                </TableCell>
-                <TableCell className="header-cell">Volume</TableCell>
-                <TableCell className="header-cell">BID Size</TableCell>
-                <TableCell className="header-cell">BID</TableCell>
+                <TableCell className="header-cell">Bid</TableCell>
                 <TableCell className="header-cell">Ask</TableCell>
-                <TableCell className="header-cell">Ask Size</TableCell>
+                <TableCell className="header-cell">Vega</TableCell>
+                <TableCell className="header-cell">Delta</TableCell>
+                <TableCell className="header-cell">Gamma</TableCell>
+                <TableCell className="header-cell">Theta</TableCell>
+                <TableCell className="header-cell">IV</TableCell>
               </TableRow>
             </TableHead>
             <TableBody className="table-body">
