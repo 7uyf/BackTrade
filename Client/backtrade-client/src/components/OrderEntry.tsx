@@ -35,7 +35,7 @@ const OrderEntry: React.FC<OrderEntryProps> = ({
     if (selectedOption && selectedOptionAction) {
       setStrikePrice(selectedOption.strike);
       setType(selectedOptionAction);
-      setSymbol(selectedOption.stock_symbol);
+      setSymbol(selectedOption.symbol);
       setExpirationDate(selectedOption.dte);
     }
   }, [selectedOption, selectedOptionAction]);
