@@ -127,7 +127,7 @@ const Indicators: React.FC<IndicatorsProps> = ({ scale = 1 }) => {
             fill: "white",
           },
         }}
-        width={1000}
+        width={1520}
         height={300}
         series={[
           {
