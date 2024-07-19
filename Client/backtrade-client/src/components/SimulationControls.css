@@ -1,16 +1,29 @@
-.controls-card {
-  background: rgb(0, 1, 46) !important;
+.simulator-controls {
+  /* the pattern of Simulation Controls */
+  background-image: linear-gradient(
+    to bottom left,
+    rgb(0, 0, 0),
+    rgb(15, 16, 55)
+  ) !important;
   border: 1px lightgray solid;
+  margin-top: 5px;
+  margin-left: 15px;
+  width: 1490px;
 }
 
 .panel {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
+  height: 35px;
 }
 
 .slider-container {
   width: 33%;
+}
+
+.slider-container span.MuiSlider-markLabel {
+  color: white !important;
 }
 
 .time-slider {
@@ -25,11 +38,22 @@
   color: rgb(0, 67, 255) !important;
 }
 
+.slider-container {
+  width: 33%;
+}
+
 button.finish-button,
 button.restart-button {
   margin: 0.5rem !important;
+  height: 20px;
+  width: 40%;
   color: black !important;
   font-weight: bold !important;
+}
+
+.time-slider {
+  width: 95%;
+  margin: auto;
 }
 
 .finish-button {

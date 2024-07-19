@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from models.options import OptionChainSnapshot
+from models.option import OptionChainSnapshot
 
 
 class IMarketDataObserver(ABC):
@@ -15,6 +15,9 @@ class IMarketDataSubject(ABC):
 
     def register_observer(self, observer: IMarketDataObserver):
         self.observers.append(observer)
+
+    def remove_observer(self, observer: IMarketDataObserver):
+        self.observers.remove(observer)
 
     async def notify_observers(self, snapshot: OptionChainSnapshot):
         for observer in self.observers:

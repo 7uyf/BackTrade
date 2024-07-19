@@ -1,0 +1,31 @@
+.option-chain {
+  background-image: linear-gradient(
+    to bottom left,
+    rgb(0, 0, 0),
+    rgb(15, 16, 55)
+  ) !important;
+  border: 1px lightgray solid;
+  height: 350px;
+  width: 1737px;
+  margin-top: -25px;
+  margin-left: 15px;
+}
+
+.uprow {
+  /* the upstairs row down of the dates */
+  margin-top: 50;
+}
+
+.inputlabel {
+  margin-top: -10px;
+}
+
+.symbol-select {
+  height: 50%;
+}
+
+.header-cell {
+  height: -500px;
+  font-size: 10;
+  justify-content: center;
+}

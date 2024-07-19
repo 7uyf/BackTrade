@@ -1,54 +1,67 @@
 /* src/components/Sidebar.css */
 .Sidebar-container {
-    width: 15%;
-    height: 100%;
-    background-color: #1F263E;
-    color: white;
-    display: flex;
-    flex-direction: column;
+  width: 15%;
+  height: 100%;
+  background-color: #1f263e;
+  color: white;
+  display: flex;
+  flex-direction: column;
 }
 
 .Sidebar-logo {
-    width: 100%;
-    height: 10%;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
+  width: 100%;
+  height: 10%;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
 }
 
 .Sidebar-logo-image {
-    width: 70%;
-    object-fit: contain;
-    margin-left: 5%;
+  width: 70%;
+  object-fit: contain;
+  margin-left: 5%;
 }
 
 .Sidebar-header {
-    font-size: 0.9em;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    color: white;
-    text-decoration: none;
-    height: 10%;
-    margin-left: 10%;
+  font-size: 0.9em;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  color: white;
+  text-decoration: none;
+  height: 10%;
+  margin-left: 10%;
 }
 
 .Sidebar-item {
-    font-size: 1.1em;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    color: white;
-    text-decoration: none;
-    height: 6%;
+  font-size: 1.1em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: white;
+  text-decoration: none;
+  height: 6%;
+}
+
+.Sidebar-itemlog {
+  font-size: 1.1em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: white;
+  text-decoration: none;
+  height: 6%;
+  margin-right: 4%;
+  margin-left: 10%;
+  margin-top: 150%;
 }
 
 .Sidebar-item:hover {
-    background-color: #131829;
-    cursor: pointer;
+  background-color: #131829;
+  cursor: pointer;
 }
 
-.Sidebar-item>svg {
-    margin-right: 4%;
-    margin-left: 10%;
+.Sidebar-item > svg {
+  margin-right: 4%;
+  margin-left: 10%;
 }

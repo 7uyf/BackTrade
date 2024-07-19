@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import "./Simulator.css";
 import SimulationControls from "../components/SimulationControls";
-import UnderlyingIndex from "../components/UnderlyingIndex";
+import Indicators from "../components/Indicators";
 import OrderEntry from "../components/OrderEntry";
 import SimulationBuilder from "../components/SimulationBuilder";
 import OptionChain from "../components/OptionChain";
@@ -379,25 +379,49 @@ const Simulator: React.FC = () => {
     setSelectedOptionAction(actionType);
   };
 
+  const handleSpeedChange = (speed: number) => {
+    console.log("handleSpeedChange", speed);
+    // TODO: Connect to backend to change the simulation speed
+  };
+
+  const handleTimeChange = (timeIndex: number) => {
+    console.log("handleTimeChange", timeIndex);
+    // TODO: Connect to backend to change the current simulation time
+  };
+
+  const handleFinish = () => {
+    console.log("handleFinish");
+    // TODO: Connect to backend to finish the simulation
+  };
+
+  const handleRestart = () => {
+    console.log("handleRestart");
+    // TODO: Connect to backend to restart the simulation
+  };
+
   return (
-    <div>
-      <SimulationControls />
+    <div className="mainDiv">
+      <SimulationControls
+        scale={0.7}
+        onSpeedChange={handleSpeedChange}
+        onTimeChange={handleTimeChange}
+        onFinish={handleFinish}
+        onRestart={handleRestart}
+      />
       <OptionChain
         title="Option Chain"
         values={optionChainMock}
         onClickCall={(event) => handleOptionSelect(event, "Call")}
         onClickPut={(event) => handleOptionSelect(event, "Put")}
+        scale={0.6}
       />
-      <div className="horizontal-container">
-        <div>
-          <Portfolio data={portfolioMock} />
-          <UnderlyingIndex />
-        </div>
-        <OrderEntry
-          selectedOption={selectedOption}
-          selectedOptionAction={selectedOptionAction}
-        />
-      </div>
+      <Portfolio data={portfolioMock} scale={0.5} />
+      <Indicators scale={0.5} />
+      <OrderEntry
+        selectedOption={selectedOption}
+        selectedOptionAction={selectedOptionAction}
+        scale={0.6}
+      />
       <Dialog
         open={open}
         onClose={handleClose}
