@@ -63,3 +63,45 @@ button.restart-button {
 .restart-button {
   background: rgb(0, 67, 255) !important;
 }
+
+.clock-display {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+
+.clock-display:hover {
+  opacity: 0.7;
+}
+
+.clock-time {
+  font-size: 24px;
+  color: white;
+  font-weight: bold;
+}
+
+.popover-content {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
+.popover-content span {
+  margin: 0 5px;
+}
+
+.popover-content .colon {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.popover-content .invalid-input fieldset {
+  border-color: red;
+}
+
+.popover-content .change-button {
+  background-color: transparent;
+}
