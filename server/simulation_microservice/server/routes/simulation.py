@@ -1,10 +1,11 @@
 import asyncio
 from beanie import PydanticObjectId
 from fastapi import APIRouter, Response, WebSocket, WebSocketDisconnect
-from  models.simulation import  SimulationInset,SimulationConfig
-from models.option import OptionChainSnapshot
-from simulation.i_market_data_observer import IMarketDataObserver
-from simulation.simulation import Simulation, Simulations_Dict
+
+from server.models.option import OptionChainSnapshot
+from server.models.simulation import SimulationInset, SimulationConfig
+from server.simulation.i_market_data_observer import IMarketDataObserver
+from server.simulation.simulation import Simulations_Dict, Simulation
 
 router = APIRouter(prefix="/simulation", tags=["Simulation"])
 
