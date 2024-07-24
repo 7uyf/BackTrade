@@ -1,11 +1,19 @@
-/* src/components/Sidebar.css */
 .Sidebar-container {
   width: 15%;
-  height: 100%;
   background-color: #1f263e;
   color: white;
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.Sidebar-container a:hover {
+  background-color: #1f263e;
+}
+
+.class-container {
+  height: 100%;
+  margin: 1rem;
 }
 
 .Sidebar-logo {
@@ -17,20 +25,17 @@
 }
 
 .Sidebar-logo-image {
-  width: 70%;
+  width: 100%;
   object-fit: contain;
-  margin-left: 5%;
 }
 
 .Sidebar-header {
-  font-size: 0.9em;
+  font-size: 1.1em;
   font-weight: 600;
   display: flex;
   align-items: center;
-  color: white;
-  text-decoration: none;
-  height: 10%;
-  margin-left: 10%;
+  height: 6%;
+  padding: 0.5rem;
 }
 
 .Sidebar-item {
@@ -41,6 +46,8 @@
   color: white;
   text-decoration: none;
   height: 6%;
+  padding: 0.5rem;
+  outline: none;
 }
 
 .Sidebar-itemlog {
@@ -50,10 +57,19 @@
   align-items: center;
   color: white;
   text-decoration: none;
-  height: 6%;
-  margin-right: 4%;
-  margin-left: 10%;
-  margin-top: 150%;
+  margin-left: 10px;
+}
+
+@media (min-width: 600px) {
+  .Sidebar-itemlog-margin {
+    margin-top: 16rem;
+  }
+}
+
+@media (min-width: 1281px) {
+  .Sidebar-itemlog-margin {
+    margin-top: 32rem;
+  }
 }
 
 .Sidebar-item:hover {
@@ -63,5 +79,4 @@
 
 .Sidebar-item > svg {
   margin-right: 4%;
-  margin-left: 10%;
 }

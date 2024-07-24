@@ -10,7 +10,6 @@ const Login: React.FC = () => {
     password: "",
   });
   const navigate = useNavigate();
-  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,10 +30,19 @@ const Login: React.FC = () => {
     navigate("/signup");
   };
 
+  const handleForgotPasswordClick = () => {
+    // Add logic to handle forgot password action
+    console.log("Forgot password clicked");
+  };
+
   return (
     <div className="loginContainer">
       <div className="loginForm">
-        <img className="logo-imageL" src={require("../assets/logo.png")} />
+        <img
+          className="logo-imageL"
+          src={require("../assets/logo.png")}
+          alt="Company Logo"
+        />
         <h3>UNLIMITED STRATEGIES</h3>
         <form onSubmit={handleSubmit}>
           <div className="inputsDiv">
@@ -57,7 +65,13 @@ const Login: React.FC = () => {
             />
           </div>
           <div className="forgotPassword">
-            <a href="#">forgot password?</a>
+            <button
+              type="button"
+              className="linkButton"
+              onClick={handleForgotPasswordClick}
+            >
+              forgot password?
+            </button>
           </div>
           <button type="submit" className="signInB">
             Sign In

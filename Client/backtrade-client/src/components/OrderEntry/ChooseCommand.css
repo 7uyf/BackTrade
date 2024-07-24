@@ -1,0 +1,38 @@
+.dialog-content {
+    background-color: rgb(12, 12, 44);
+    color: white;
+  }
+  
+  .dialog-title { 
+    background-color: rgb(12, 12, 44);
+    color: white;
+    width: 50vh;
+  }
+  
+  .text-field {
+    margin-left: 16px;
+    width: 12vh;
+  }
+  
+  .text-field .MuiInputBase-input {
+    color: white;
+  }
+  
+  .text-field .MuiInputLabel-root {
+    color: white;
+  }
+  
+  .text-field .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+    border-color: white;
+  }
+  
+  .text-field .MuiInputBase-input::placeholder {
+    color: white;
+  }
+
+  .char {
+    color: white;
+  }
+
+  
+

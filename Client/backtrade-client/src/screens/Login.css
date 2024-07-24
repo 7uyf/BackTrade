@@ -87,3 +87,12 @@
   border-radius: 4px;
   cursor: pointer;
 }
+
+.linkButton {
+  background: none;
+  color: blue;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+}

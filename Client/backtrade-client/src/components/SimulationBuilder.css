@@ -32,10 +32,19 @@
   background-color: #ffffffbc;
 }
 
-.css-bghv3y-MuiToggleButtonGroup-root .MuiToggleButtonGroup-grouped {
+.simulation-builder .MuiToggleButton-root {
   background-color: #000000be;
   color: #ffffff8c;
   border: 1px solid white;
+}
+
+.simulation-builder .MuiToggleButton-root.Mui-selected {
+  background-color: rgb(15, 16, 63) !important;
+  color: #ffffff !important;
+}
+
+.simulation-builder .MuiToggleButton-root:hover {
+  background-color: rgb(15, 16, 63);
 }
 
 .MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.css-1h5i6c5-MuiInputBase-root-MuiOutlinedInput-root {
@@ -61,4 +70,9 @@
 .MuiAutocomplete-hasPopupIcon.css-ka7ti6-MuiAutocomplete-root
   .MuiOutlinedInput-root {
   border: 1px solid white;
+}
+
+.select-label {
+  margin-top: -2vh;
+  margin-left: -2vh;
 }

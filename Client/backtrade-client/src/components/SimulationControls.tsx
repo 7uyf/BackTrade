@@ -11,7 +11,6 @@ import "./SimulationControls.css";
 import IconText from "./IconText";
 
 interface SimulationControlsProps {
-  scale?: number;
   onSpeedChange: (speed: number) => void;
   onTimeChange: (timeIndex: number) => void;
   onFinish: () => void;
@@ -87,7 +86,6 @@ class SimulationControls extends React.Component<
   };
 
   render(): React.ReactNode {
-    const { scale = 1 } = this.props;
     const { times, currentTimeIndex, speed } = this.state;
     const speedMarks = [
       { value: 1, label: "1x" },
@@ -99,11 +97,8 @@ class SimulationControls extends React.Component<
     ];
 
     return (
-      <Paper
-        className="simulator-controls"
-        style={{ transform: `scale(${scale})`, transformOrigin: "top left" }}
-      >
-        <IconText text="Simulation Controls" iconSize="20px" textSize="18px" />
+      <Paper className="simulator-controls">
+        <IconText text="Simulation Controls" />
         <div>
           <div className="panel">
             <div>
