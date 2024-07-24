@@ -1,8 +1,8 @@
 
-from server.simulation_microservice.server.models.simulation import SimulationConfig
-from server.simulation_microservice.server.simulation.margin_account_service import MarginAccountService
-from server.simulation_microservice.server.simulation.market_data_service import MarketDataService
-from server.simulation_microservice.server.simulation.order_management_service import OrderManagementService
+from server.models.simulation import SimulationConfig
+from server.simulation.margin_account_service import MarginAccountService
+from server.simulation.market_data_service import MarketDataService
+from server.simulation.order_management_service import OrderManagementService
 
 
 class Simulation:
@@ -15,7 +15,6 @@ class Simulation:
 
         self.market_data_service.register_observer(self.order_management_service)
         self.market_data_service.register_observer(self.account_service)
-        self.market_data_service.init()
 
 
 Simulations_Dict: "dict[str, MarketDataService]" = {}

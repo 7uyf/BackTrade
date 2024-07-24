@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from models.option import OptionChainSnapshot
+from server.models.option import OptionChainSnapshot
 
 
 class IMarketDataObserver(ABC):

@@ -1,12 +1,14 @@
 from typing import List, Tuple
 
-from server.simulation_microservice.server.models.option import Option
-from server.simulation_microservice.server.models.order import Order, OrderItem, LimitOrder, MarketOrder
+from logs.logger_config import get_class_logger
+from server.models.option import Option
+from server.models.order import Order, LimitOrder, OrderItem, MarketOrder
 
 
 class OrderBook:
     def __init__(self):
         self._collection = []
+        self.logger = get_class_logger(self)
 
     def create_order(self, orders: List[Tuple[int, Option]], limit=None) -> Order:
         order_items = []
@@ -16,13 +18,13 @@ class OrderBook:
         if limit is not None:
             limit_order = LimitOrder(order_items, limit)
             self._collection.append(limit_order)
-
+            self.logger.debug(f"Created order: {limit_order}")
             return limit_order
         else:
             market_order = MarketOrder(order_items)
             self._collection.append(market_order)
+            self.logger.debug(f"Created order: {market_order}")
             return market_order
 
     def export_order_history(self):
-        # this function will be used to export the order history to a file or database
-        return self._collection
+        return [order.to_dict() for order in self._collection]

@@ -8,9 +8,9 @@ from pathlib import Path
 
 import pandas as pd
 
-from models.options import OptionChainSnapshot, Option
-from models.simulation import SimulationConfig, DteFile
-from simulation.i_market_data_observer import IMarketDataSubject
+from server.models.option import OptionChainSnapshot, Option
+from server.models.simulation import SimulationConfig, DteFile
+from server.simulation.i_market_data_observer import IMarketDataSubject
 
 
 class MarketDataService(IMarketDataSubject):
@@ -45,6 +45,7 @@ class MarketDataService(IMarketDataSubject):
                     await self.pause_condition.wait()
 
             snapshot = self.timeframes[target_datetime]
+            print("snapshot")
             await self.notify_observers(snapshot)
             await asyncio.sleep(60 / self.simulation_config.playback_speed)
 
@@ -57,7 +58,7 @@ class MarketDataService(IMarketDataSubject):
                                  expiration_date=datetime(2016, 1, 22),
                                  dte=15)
 
-        csv_file = Path(Path(__file__).parent,'2016-01-12.csv')
+        csv_file = Path(Path(__file__).parent, '2016-01-12.csv')
         with open(csv_file, 'r') as file:
             csv_reader = csv.reader(file)
             headers = next(csv_reader)  # Read the header row
