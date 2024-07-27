@@ -1,5 +1,4 @@
 .simulator-controls {
-  /* the pattern of Simulation Controls */
   background-image: linear-gradient(
     to bottom left,
     rgb(0, 0, 0),
@@ -43,7 +42,7 @@ button.finish-button,
 button.restart-button {
   margin: 0.5rem !important;
   height: 15%;
-  width: 40%;
+  width: 36%;
   color: white !important;
   font-weight: 500 !important;
 }

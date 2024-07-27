@@ -9,7 +9,7 @@
 
 @media (min-width: 600px) {
   .order-entry {
-    transform: scaleY(0.863);
+    transform: scaleY(0.882);
     transform-origin: top;
   }
 }
