@@ -17,7 +17,7 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import "./OptionChain.css";
-import { OptionChainData } from "../types";
+import { OptionChainData, OrderEntryData } from "../types";
 import IconText from "./IconText";
 
 interface OptionChainProps {
@@ -29,6 +29,9 @@ interface OptionChainProps {
   ) => void;
   scale: number;
   resetHighlightedRows: number;
+  selectedOptions: OrderEntryData[];
+  onOptionsChange: (updatedOptions: OrderEntryData[]) => void;
+  removeHighlight: (key: string) => void;
 }
 
 const OptionChain: React.FC<OptionChainProps> = ({
@@ -37,6 +40,9 @@ const OptionChain: React.FC<OptionChainProps> = ({
   onOptionSelect,
   scale,
   resetHighlightedRows,
+  selectedOptions,
+  onOptionsChange,
+  removeHighlight,
 }) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [selectedSymbol, setSelectedSymbol] = useState("AAPL");
@@ -57,6 +63,7 @@ const OptionChain: React.FC<OptionChainProps> = ({
     setSelectedSymbol(event.target.value as string);
     onOptionSelect(null, null); // Reset selections on symbol change
     setHighlightedRows({});
+    onOptionsChange([]); // Reset selected options in OrderEntry
   };
 
   const handleRowClick = (option: OptionChainData, type: "Call" | "Put") => {
@@ -68,6 +75,7 @@ const OptionChain: React.FC<OptionChainProps> = ({
         delete updated[key];
         return updated;
       });
+      removeHighlight(key); // Call removeHighlight here
     } else {
       setHighlightedRows((prev) => ({ ...prev, [key]: true }));
     }
@@ -139,11 +147,11 @@ const OptionChain: React.FC<OptionChainProps> = ({
         >
           <TableHead className="table-head">
             <TableRow>
-              <TableCell colSpan={7} align="center">
+              <TableCell colSpan={8} align="center">
                 Calls
               </TableCell>
               <TableCell className="table-head" align="center"></TableCell>
-              <TableCell colSpan={7} align="center">
+              <TableCell colSpan={8} align="center">
                 Puts
               </TableCell>
             </TableRow>
@@ -155,6 +163,7 @@ const OptionChain: React.FC<OptionChainProps> = ({
               <TableCell className="header-cell">Gamma</TableCell>
               <TableCell className="header-cell">Theta</TableCell>
               <TableCell className="header-cell">IV</TableCell>
+              <TableCell className="header-cell">Quantity</TableCell>
               <TableCell className="strike-header">Strike</TableCell>
               <TableCell className="header-cell">Bid</TableCell>
               <TableCell className="header-cell">Ask</TableCell>
@@ -163,6 +172,7 @@ const OptionChain: React.FC<OptionChainProps> = ({
               <TableCell className="header-cell">Gamma</TableCell>
               <TableCell className="header-cell">Theta</TableCell>
               <TableCell className="header-cell">IV</TableCell>
+              <TableCell className="header-cell">Quantity</TableCell>
             </TableRow>
           </TableHead>
           <TableBody className="table-body">
@@ -228,6 +238,9 @@ const OptionChain: React.FC<OptionChainProps> = ({
                   >
                     {row.callIv}
                   </TableCell>
+                  <TableCell className="value-cell quantity-cell">
+                    {row.callQuantity || ""}
+                  </TableCell>
                   <TableCell className="strike-cell">{row.strike}</TableCell>
                   <TableCell
                     className={`value-cell ${
@@ -284,6 +297,9 @@ const OptionChain: React.FC<OptionChainProps> = ({
                     onClick={() => handleRowClick(row, "Put")}
                   >
                     {row.putIv}
+                  </TableCell>
+                  <TableCell className="value-cell quantity-cell">
+                    {row.putQuantity || ""}
                   </TableCell>
                 </TableRow>
               );

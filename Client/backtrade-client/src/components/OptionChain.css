@@ -69,3 +69,8 @@
 .value-cell {
   cursor: pointer;
 }
+
+.quantity-cell {
+  width: 50px;
+  text-align: center;
+}

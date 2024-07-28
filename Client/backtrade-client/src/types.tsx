@@ -20,6 +20,7 @@ export type OptionChainData = {
   callGamma: number;
   callTheta: number;
   callIv: number;
+  callQuantity?: number;
   strike: number;
   putBid: number;
   putAsk: number;
@@ -28,6 +29,7 @@ export type OptionChainData = {
   putGamma: number;
   putTheta: number;
   putIv: number;
+  putQuantity?: number;
 };
 
 export type OrderEntryData = {

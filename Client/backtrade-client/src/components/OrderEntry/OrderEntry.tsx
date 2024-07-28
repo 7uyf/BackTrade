@@ -18,7 +18,7 @@ import {
   SelectChangeEvent,
   Typography,
 } from "@mui/material";
-import { Add, Remove, Delete } from "@mui/icons-material";
+import { Delete } from "@mui/icons-material";
 import "./OrderEntry.css";
 import ChooseCommand from "./ChooseCommand";
 import IconText from "../IconText";
@@ -35,6 +35,7 @@ interface OrderEntryProps {
   scale?: number;
   selectedOption?: OptionChainData | null;
   selectedOptionAction?: "Call" | "Put" | null;
+  removeHighlight: (key: string) => void;
 }
 
 const OrderEntry: React.FC<OrderEntryProps> = ({
@@ -44,6 +45,7 @@ const OrderEntry: React.FC<OrderEntryProps> = ({
   scale = 1,
   selectedOption,
   selectedOptionAction,
+  removeHighlight,
 }) => {
   const [orderType, setOrderType] = useState<string>("Market");
   const [limitPrice, setLimitPrice] = useState<number>(0);
@@ -113,6 +115,9 @@ const OrderEntry: React.FC<OrderEntryProps> = ({
   const handleDeleteOption = (index: number) => {
     const updatedOptions = selectedOptions.filter((_, i) => i !== index);
     onOptionsChange(updatedOptions);
+    // Remove highlight
+    const key = `${selectedOptions[index].dte}-${selectedOptions[index].strike}-${selectedOptions[index].type}`;
+    removeHighlight(key);
   };
 
   const handleOrderTypeChange = (event: SelectChangeEvent<string>) => {
@@ -121,15 +126,21 @@ const OrderEntry: React.FC<OrderEntryProps> = ({
 
   const handlePlaceOrderClick = () => {
     onPlaceOrder(selectedOptions, orderType, limitPrice);
+    selectedOptions.forEach((option) => {
+      const key = `${option.dte}-${option.strike}-${option.type}`;
+      removeHighlight(key);
+    });
     onOptionsChange([]); // Clear the orders after placing them
     setOrderType("Market");
     setLimitPrice(0);
   };
 
   const handleReset = () => {
+    selectedOptions.forEach((option) => {
+      const key = `${option.dte}-${option.strike}-${option.type}`;
+      removeHighlight(key);
+    });
     onOptionsChange([]);
-    setOrderType("Market");
-    setLimitPrice(0);
   };
 
   return (
@@ -258,14 +269,6 @@ const OrderEntry: React.FC<OrderEntryProps> = ({
           </Box>
         </>
       )}
-      <Box className="order-buttons" sx={{ marginTop: 2 }}>
-        <Button className="confirm-button buy-button" variant="contained">
-          Buy
-        </Button>
-        <Button className="confirm-button sell-button" variant="contained">
-          Sell
-        </Button>
-      </Box>
       <ChooseCommand />
     </Paper>
   );

@@ -53,6 +53,7 @@ const optionChainMock: OptionChainData[] = [
     putGamma: 0.025,
     putTheta: -0.035,
     putIv: 20,
+    putQuantity: 2,
   },
   {
     dte: "2024-08-30",
@@ -83,6 +84,7 @@ const optionChainMock: OptionChainData[] = [
     callGamma: 0.025,
     callTheta: -0.035,
     callIv: 28,
+    callQuantity: 3,
     strike: 180,
     putBid: 2.3,
     putAsk: 2.5,
@@ -286,6 +288,9 @@ const Simulator: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState<OrderEntryData[]>([]);
   const [resetHighlightedRows, setResetHighlightedRows] = useState(0);
+  const [highlightedRows, setHighlightedRows] = useState<{
+    [key: string]: boolean;
+  }>({});
 
   useEffect(() => {
     handleClickOpen();
@@ -359,6 +364,14 @@ const Simulator: React.FC = () => {
     console.log("handleRestart");
   };
 
+  const removeHighlight = (key: string) => {
+    setHighlightedRows((prev) => {
+      const updated = { ...prev };
+      delete updated[key];
+      return updated;
+    });
+  };
+
   return (
     <div className="mainDiv mainDiv-scale">
       <div className="UpDiv">
@@ -374,6 +387,9 @@ const Simulator: React.FC = () => {
           values={optionChainMock}
           onOptionSelect={handleOptionSelect}
           resetHighlightedRows={resetHighlightedRows}
+          selectedOptions={selectedOptions}
+          onOptionsChange={setSelectedOptions}
+          removeHighlight={removeHighlight}
         />
       </div>
       <div className="BottomDiv">
@@ -385,6 +401,7 @@ const Simulator: React.FC = () => {
           selectedOptions={selectedOptions}
           onOptionsChange={setSelectedOptions}
           onPlaceOrder={handlePlaceOrder}
+          removeHighlight={removeHighlight}
         />
       </div>
 
