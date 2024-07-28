@@ -4,7 +4,7 @@ from fastapi import APIRouter, Response, WebSocket, WebSocketDisconnect
 
 from server.models.option import OptionChainSnapshot
 from server.models.simulation import SimulationInset, SimulationConfig
-from server.simulation.i_market_data_observer import IMarketDataObserver
+from server.simulation.observer_interfaces import IMarketDataObserver
 from server.simulation.simulation import Simulations_Dict, Simulation
 
 router = APIRouter(prefix="/simulation", tags=["Simulation"])

@@ -30,7 +30,7 @@ class SimulationInset(BaseModel):
     end_date_time: Optional[datetime] = None
 
 
-class SimulationConfig(Document, SimulationInset):
+class SimulationConfig(SimulationInset):
     user_id: str
     simulation_type: Literal['Test', 'Practice']
     start_date_time: datetime

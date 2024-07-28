@@ -27,7 +27,11 @@ class Order(ABC):
         self.order_items = order_items
         self.time_placed = datetime.datetime.now()
         self.time_executed = None
-        self.status = "Placed"
+        self.__status = "Placed"
+
+    @property
+    def status(self):
+        return self.__status
 
     def __str__(self):
         executed_time_str = f", time_executed={self.time_executed}" if self.time_executed else ""
@@ -44,17 +48,17 @@ class Order(ABC):
     def set_filled_status(self, snapshot: OptionChainSnapshot):
         if self.status == "Placed":
             self.time_executed = datetime.datetime.now()
-            self.status = "Filled"
+            self.__status = "Filled"
             for item in self.order_items:
                 item.option_at_execution = snapshot.get_option(item.option_at_placement)
         else:
             raise Exception(f"Order cannot be executed. Status is {self.status}")
 
     def set_canceled_status(self):
-        self.status = "Cancelled"
+        self.__status = "Cancelled"
 
     def set_rejected_status(self):
-        self.status = "Rejected"
+        self.__status = "Rejected"
 
 
 class MarketOrder(Order):

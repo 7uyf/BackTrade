@@ -26,5 +26,5 @@ class OrderBook:
             self.logger.debug(f"Created order: {market_order}")
             return market_order
 
-    def export_order_history(self):
-        return [order.to_dict() for order in self._collection]
+    def get_orders_history(self) -> List[Order]:
+        return self._collection

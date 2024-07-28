@@ -1,23 +1,18 @@
 import asyncio
 import csv
-from asyncio import create_task
-from collections import defaultdict
-from datetime import timedelta, datetime
-from os import path
+from datetime import datetime
 from pathlib import Path
-
-import pandas as pd
 
 from server.models.option import OptionChainSnapshot, Option
 from server.models.simulation import SimulationConfig, DteFile
-from server.simulation.i_market_data_observer import IMarketDataSubject
+from server.simulation.observer_interfaces import IMarketDataSubject
 
 
 class MarketDataService(IMarketDataSubject):
     def __init__(self, simulation_config: SimulationConfig):
         super().__init__()
         self.simulation_config = simulation_config
-        self.timeframes: "dict[str,OptionChainSnapshot]"= {}
+        self.timeframes: "dict[str,OptionChainSnapshot]" = {}
         self.tasks = []
         self.pause_requested = False
         self.pause_condition = asyncio.Condition()
@@ -46,7 +41,7 @@ class MarketDataService(IMarketDataSubject):
 
             snapshot = self.timeframes[target_datetime]
             print("snapshot")
-            await self.notify_observers(snapshot)
+            self.notify_observers(snapshot)
             await asyncio.sleep(60 / self.simulation_config.playback_speed)
 
     async def _populate_timeframes_with_dummy_data(self):

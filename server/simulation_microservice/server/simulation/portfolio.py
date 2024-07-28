@@ -1,5 +1,3 @@
-from typing import Dict
-
 from server.models.option import OptionChainSnapshot
 
 
@@ -30,16 +28,9 @@ class Portfolio:
             "vega": vega
         }
 
-    def get_positions(self) -> Dict:
-        return self.positions
-
-    def set_positions(self, positions: dict):
-        self.positions = positions
-
     def update_positions_with_latest_market_data(self, snapshot: OptionChainSnapshot):
         for position in self.positions.values():
             for option in snapshot.options:
                 if option == position.latest_option_data:
                     position.updates_position_stats(option)
                     break
-
