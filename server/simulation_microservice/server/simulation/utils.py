@@ -1,4 +1,4 @@
-from server.simulation_microservice.server.models.option import Option
+from server.models.option import Option
 
 
 def get_dict_key(option: Option) -> str:
@@ -10,4 +10,5 @@ def get_dict_key(option: Option) -> str:
     return key
 
 
-
+def get_closest_strike(index_price, bp_size):
+    return round(index_price / bp_size) * bp_size

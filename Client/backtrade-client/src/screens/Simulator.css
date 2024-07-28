@@ -6,3 +6,41 @@
   margin: 0.5rem;
   gap: 0.4rem;
 }
+
+@media (min-width: 600px) {
+  .mainDiv-scale {
+    transform: scaleY(0.73);
+    transform-origin: top;
+  }
+}
+
+@media (min-width: 1281px) {
+  .mainDiv-scale {
+    transform: scale(1);
+  }
+}
+
+.UpDiv {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.BottomDiv {
+  display: flex;
+  flex-direction: row;
+  gap: 0.4rem;
+}
+
+.LeftDiv {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 100%;
+}
+
+body,
+html {
+  height: 100%;
+  overflow: hidden; /* Prevent scrolling on the body */
+}

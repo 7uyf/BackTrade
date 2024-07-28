@@ -1,22 +1,17 @@
 .simulator-controls {
-  /* the pattern of Simulation Controls */
   background-image: linear-gradient(
     to bottom left,
     rgb(0, 0, 0),
     rgb(15, 16, 55)
   ) !important;
   border: 1px lightgray solid;
-  /* margin-top: 5px;
-  margin-left: 15px;
-  width: 1490px; */
-  grid-area: sc;
 }
 
 .panel {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  height: 35px;
+  height: 35%;
 }
 
 .slider-container {
@@ -46,10 +41,10 @@
 button.finish-button,
 button.restart-button {
   margin: 0.5rem !important;
-  height: 20px;
-  width: 40%;
-  color: black !important;
-  font-weight: bold !important;
+  height: 15%;
+  width: 36%;
+  color: white !important;
+  font-weight: 500 !important;
 }
 
 .time-slider {
@@ -58,7 +53,7 @@ button.restart-button {
 }
 
 .finish-button {
-  background: rgb(98, 255, 123) !important;
+  background: #ca2222 !important;
 }
 
 .restart-button {

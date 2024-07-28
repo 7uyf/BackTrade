@@ -4,11 +4,7 @@
     rgb(0, 0, 0),
     rgb(15, 16, 55)
   ) !important;
-  border: 1.34px lightgray solid;
-  /* margin-top: -190px;
-  margin-left: -355px; */
-  /* width: 1480px; */
-  grid-area: p;
+  border: 1px lightgray solid;
 }
 
 .transparent-background {
@@ -26,6 +22,34 @@
 .table-container {
   max-height: 25vh;
   overflow-y: auto;
+  font-size: 10px;
+}
+
+.table-head {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.table-body {
+  text-align: center;
+}
+
+.table-body .MuiTableRow-root {
+  height: 20px;
+}
+
+.dte-row {
+  background-color: rgba(255, 255, 255, 0.1);
+  font-size: 11px;
+}
+
+.dte-row .date-text {
+  font-size: 11px;
+}
+
+.dte-row .text {
+  font-size: 10px;
 }
 
 .total-pnl {
@@ -36,9 +60,8 @@
 }
 
 .total-pnl > p {
-  padding: 3px !important;
+  padding: 5px !important;
 }
-
 .text {
   font-size: 18px;
   color: white;

@@ -5,9 +5,8 @@
     rgb(15, 16, 55)
   ) !important;
   border: 1px lightgray solid;
-  /* margin-top: -48px;
-  margin-left: 16px;
-  width: 1481px;
-  height: 310px; */
-  grid-area: i;
+}
+
+.linechart {
+  height: 175px !important;
 }

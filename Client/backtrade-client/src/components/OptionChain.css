@@ -5,29 +5,59 @@
     rgb(15, 16, 55)
   ) !important;
   border: 1px lightgray solid;
-  /* height: 350px;
-  width: 1737px;
-  margin-top: -25px;
-  margin-left: 15px; */
-  grid-area: oc;
+}
+
+.option-chain .MuiTab-root {
+  min-width: 100px !important;
+  width: auto !important;
+  flex: 1;
+}
+
+.option-chain .MuiTabs-flexContainer {
+  justify-content: space-around;
+}
+
+.table-container {
+  height: 23vh;
+  overflow: scroll;
+}
+
+.table-body-scroll {
+  height: 600px;
+  overflow-y: auto;
+}
+
+.table-body .MuiTableRow-root {
+  height: 20px;
+}
+
+.table-head .header-cell,
+.table-head .strike-header {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.table-body .value-cell,
+.table-body .strike-cell {
+  text-align: center;
+  font-size: 10px;
 }
 
 .uprow {
-  /* the upstairs row down of the dates */
-  margin-top: 50;
+  margin-top: 14px;
 }
 
 .inputlabel {
-  margin-top: -10px;
+  margin-top: -35px;
 }
 
 .symbol-select {
-  height: 50%;
+  margin-top: -25px;
 }
 
 .header-cell {
-  height: -500px;
-  font-size: 10;
+  font-size: 11px;
   justify-content: center;
 }
 

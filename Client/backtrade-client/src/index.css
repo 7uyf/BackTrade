@@ -3,7 +3,6 @@ body {
   font-family: "Calibri";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  height: 100%;
 }
 
 code {
@@ -21,7 +20,7 @@ html {
 }
 
 /* Global css between multiple components */
-.even-margin {
+/* .even-margin {
   margin: 0.5rem 1rem !important;
 }
 
@@ -32,4 +31,4 @@ html {
     rgb(15, 16, 55)
   ) !important;
   border: 1px lightgray solid;
-}
+} */

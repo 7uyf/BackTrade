@@ -12,24 +12,30 @@ const Sidebar: React.FC = () => {
 
   return (
     <div className="Sidebar-container">
-      <Link to="/main/dashboard" className="Sidebar-logo">
-        <img
-          className="Sidebar-logo-image"
-          src={require("../assets/logo.png")}
-        />
-      </Link>
-      <div className="Sidebar-header">Quick Access</div>
-      <Link to="/main/dashboard" className="Sidebar-item">
-        <FaChartLine /> Dashboard
-      </Link>
-      <Link to="/main/simulator" className="Sidebar-item">
-        <FaPlay /> Simulator
-      </Link>
-      <Link to="/main/configuration" className="Sidebar-item">
-        <FaCogs /> Configuration
-      </Link>
-      <div className="Sidebar-itemlog" onClick={handleLogoutClick}>
-        <FaSignOutAlt /> Log Out
+      <div className="class-container">
+        <Link to="/main/dashboard" className="Sidebar-logo">
+          <img
+            className="Sidebar-logo-image"
+            src={require("../assets/logo.png")}
+            alt="Company Logo"
+          />
+        </Link>
+        <div className="Sidebar-header">Quick Access</div>
+        <Link to="/main/dashboard" className="Sidebar-item">
+          <FaChartLine /> Dashboard
+        </Link>
+        <Link to="/main/simulator" className="Sidebar-item">
+          <FaPlay /> Simulator
+        </Link>
+        <Link to="/main/configuration" className="Sidebar-item">
+          <FaCogs /> Configuration
+        </Link>
+        <div
+          className="Sidebar-itemlog Sidebar-itemlog-margin"
+          onClick={handleLogoutClick}
+        >
+          <FaSignOutAlt /> Log Out
+        </div>
       </div>
     </div>
   );

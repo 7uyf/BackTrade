@@ -122,7 +122,6 @@ class Portfolio extends React.Component<PortfolioProps, PortfolioState> {
 
   renderPortfolioTab() {
     const { expandedDte } = this.state;
-    const { scale = 1 } = this.props;
     const totalPnl = this.props.data.reduce(
       (acc, data) =>
         acc + data.values.reduce((acc2, item) => acc2 + item.dailyPnl, 0),
@@ -130,10 +129,7 @@ class Portfolio extends React.Component<PortfolioProps, PortfolioState> {
     );
 
     return (
-      <Paper
-        // style={{ transform: `scale(${scale})` }}
-        className="transparent-background"
-      >
+      <Paper className="transparent-background">
         <Box
           className="margin-info"
           display="flex"
@@ -163,16 +159,16 @@ class Portfolio extends React.Component<PortfolioProps, PortfolioState> {
           >
             <TableHead className="table-head">
               <TableRow>
-                <TableCell>Aggregated Greeks</TableCell>
-                <TableCell>Daily PnL</TableCell>
-                <TableCell>Instrument</TableCell>
-                <TableCell>Position</TableCell>
-                <TableCell>Market Value</TableCell>
-                <TableCell>Delta</TableCell>
-                <TableCell>Gamma</TableCell>
-                <TableCell>Vega</TableCell>
-                <TableCell>Avg Price</TableCell>
-                <TableCell>Last</TableCell>
+                <TableCell className="header-cell">Aggregated Greeks</TableCell>
+                <TableCell className="header-cell">Daily PnL</TableCell>
+                <TableCell className="header-cell">Instrument</TableCell>
+                <TableCell className="header-cell">Position</TableCell>
+                <TableCell className="header-cell">Market Value</TableCell>
+                <TableCell className="header-cell">Delta</TableCell>
+                <TableCell className="header-cell">Gamma</TableCell>
+                <TableCell className="header-cell">Vega</TableCell>
+                <TableCell className="header-cell">Avg Price</TableCell>
+                <TableCell className="header-cell">Last</TableCell>
               </TableRow>
             </TableHead>
             <TableBody className="table-body">
@@ -220,29 +216,43 @@ class Portfolio extends React.Component<PortfolioProps, PortfolioState> {
                               <TableBody>
                                 {sortedValues.map((row, rowIndex) => (
                                   <TableRow key={rowIndex}>
-                                    <TableCell>
+                                    <TableCell className="text">
                                       Delta: {row.delta}, Gamma: {row.gamma},
                                       Vega: {row.vega}
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell className="text">
                                       {this.sytleProperty(row.dailyPnl, [
                                         "addPlus",
                                       ])}
                                     </TableCell>
-                                    <TableCell>{`${
+                                    <TableCell className="text">{`${
                                       row.instrument.symbol
                                     } ${this.formatDate(
                                       row.instrument.expirationDate
                                     )} ${row.instrument.strike} ${
                                       row.instrument.right
                                     }`}</TableCell>
-                                    <TableCell>{row.position}</TableCell>
-                                    <TableCell>{row.marketValue}</TableCell>
-                                    <TableCell>{row.delta}</TableCell>
-                                    <TableCell>{row.gamma}</TableCell>
-                                    <TableCell>{row.vega}</TableCell>
-                                    <TableCell>{row.avgPrice}</TableCell>
-                                    <TableCell>{row.last}</TableCell>
+                                    <TableCell className="text">
+                                      {row.position}
+                                    </TableCell>
+                                    <TableCell className="text">
+                                      {row.marketValue}
+                                    </TableCell>
+                                    <TableCell className="text">
+                                      {row.delta}
+                                    </TableCell>
+                                    <TableCell className="text">
+                                      {row.gamma}
+                                    </TableCell>
+                                    <TableCell className="text">
+                                      {row.vega}
+                                    </TableCell>
+                                    <TableCell className="text">
+                                      {row.avgPrice}
+                                    </TableCell>
+                                    <TableCell className="text">
+                                      {row.last}
+                                    </TableCell>
                                   </TableRow>
                                 ))}
                               </TableBody>
@@ -259,6 +269,7 @@ class Portfolio extends React.Component<PortfolioProps, PortfolioState> {
         </TableContainer>
         <Paper className="total-pnl">
           <Typography
+            fontSize={"13px"}
             fontWeight={"bold"}
             align="right"
             style={{ padding: "10px" }}
@@ -308,25 +319,27 @@ class Portfolio extends React.Component<PortfolioProps, PortfolioState> {
           <Table stickyHeader aria-label="orders table">
             <TableHead className="table-head">
               <TableRow>
-                <TableCell>Instrument</TableCell>
-                <TableCell>Expiration Date</TableCell>
-                <TableCell>Strike Price</TableCell>
-                <TableCell>Quantity</TableCell>
-                <TableCell>Type</TableCell>
-                <TableCell>Market/Limit</TableCell>
-                <TableCell>Limit Price</TableCell>
+                <TableCell className="header-cell">Instrument</TableCell>
+                <TableCell className="header-cell">Expiration Date</TableCell>
+                <TableCell className="header-cell">Strike Price</TableCell>
+                <TableCell className="header-cell">Quantity</TableCell>
+                <TableCell className="header-cell">Type</TableCell>
+                <TableCell className="header-cell">Market/Limit</TableCell>
+                <TableCell className="header-cell">Limit Price</TableCell>
               </TableRow>
             </TableHead>
             <TableBody className="table-body">
               {filteredOrders.map((order, orderIndex) => (
                 <TableRow key={orderIndex}>
-                  <TableCell>{order.instrument}</TableCell>
-                  <TableCell>{this.formatDate(order.expirationDate)}</TableCell>
-                  <TableCell>{order.strikePrice}</TableCell>
-                  <TableCell>{order.quantity}</TableCell>
-                  <TableCell>{order.type}</TableCell>
-                  <TableCell>{order.marketLimit}</TableCell>
-                  <TableCell>{order.limitPrice}</TableCell>
+                  <TableCell className="text">{order.instrument}</TableCell>
+                  <TableCell className="text">
+                    {this.formatDate(order.expirationDate)}
+                  </TableCell>
+                  <TableCell className="text">{order.strikePrice}</TableCell>
+                  <TableCell className="text">{order.quantity}</TableCell>
+                  <TableCell className="text">{order.type}</TableCell>
+                  <TableCell className="text">{order.marketLimit}</TableCell>
+                  <TableCell className="text">{order.limitPrice}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

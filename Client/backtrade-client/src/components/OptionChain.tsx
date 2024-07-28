@@ -16,7 +16,6 @@ import {
   InputLabel,
   SelectChangeEvent,
 } from "@mui/material";
-import "./SimulatorTable.css";
 import "./OptionChain.css";
 import { OptionChainData } from "../types";
 import IconText from "./IconText";

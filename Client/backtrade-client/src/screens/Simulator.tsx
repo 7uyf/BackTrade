@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import "./Simulator.css";
 import SimulationControls from "../components/SimulationControls";
 import Indicators from "../components/Indicators";
-import OrderEntry from "../components/OrderEntry";
+import OrderEntry from "../components/OrderEntry/OrderEntry";
 import SimulationBuilder from "../components/SimulationBuilder";
 import OptionChain from "../components/OptionChain";
 import {
@@ -11,7 +11,6 @@ import {
   OptionChainData,
   OrderData,
   OrderEntryData,
-  PortfolioData,
 } from "../types";
 import Portfolio from "../components/Portfolio";
 
@@ -93,6 +92,7 @@ const optionChainMock: OptionChainData[] = [
     putTheta: -0.045,
     putIv: 25,
   },
+
   // Add more data for other symbols if needed...
 ];
 
@@ -360,33 +360,33 @@ const Simulator: React.FC = () => {
   };
 
   return (
-    <div className="mainDiv">
-      <SimulationControls
-        onSpeedChange={handleSpeedChange}
-        onTimeChange={handleTimeChange}
-        onFinish={handleFinish}
-        onRestart={handleRestart}
-        scale={1}
-      />
-
-      <OptionChain
-        title="Option Chain"
-        values={optionChainMock}
-        onOptionSelect={handleOptionSelect}
-        scale={1}
-        resetHighlightedRows={resetHighlightedRows}
-      />
-
-      <Portfolio scale={1} data={portfolioMock} orders={ordersMock} />
-
-      <Indicators scale={1} />
-
-      <OrderEntry
-        selectedOptions={selectedOptions}
-        onOptionsChange={setSelectedOptions}
-        onPlaceOrder={handlePlaceOrder}
-        scale={1}
-      />
+    <div className="mainDiv mainDiv-scale">
+      <div className="UpDiv">
+        <SimulationControls
+          onSpeedChange={handleSpeedChange}
+          onTimeChange={handleTimeChange}
+          onFinish={handleFinish}
+          onRestart={handleRestart}
+        />
+        <OptionChain
+          title="Option Chain"
+          scale={1}
+          values={optionChainMock}
+          onOptionSelect={handleOptionSelect}
+          resetHighlightedRows={resetHighlightedRows}
+        />
+      </div>
+      <div className="BottomDiv">
+        <div className="LeftDiv">
+          <Portfolio data={portfolioMock} orders={ordersMock} />
+          <Indicators />
+        </div>
+        <OrderEntry
+          selectedOptions={selectedOptions}
+          onOptionsChange={setSelectedOptions}
+          onPlaceOrder={handlePlaceOrder}
+        />
+      </div>
 
       <Dialog
         open={open}
