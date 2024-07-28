@@ -4,24 +4,42 @@
     rgb(0, 0, 0),
     rgb(15, 16, 55)
   ) !important;
-  border: 1.34px lightgray solid;
-  margin-top: -190px;
-  margin-left: -355px;
-  width: 1480px;
-}
-
-.dte-row {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-.dte-row td {
-  padding: 0 !important;
+  border: 1px lightgray solid;
 }
 
 .table-container {
   max-height: 25vh;
   overflow-y: auto;
+  font-size: 10px;
 }
+
+.table-head {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.table-body {
+  text-align: center;
+}
+
+.table-body .MuiTableRow-root {
+  height: 20px;
+}
+
+.dte-row {
+  background-color: rgba(255, 255, 255, 0.1);
+  font-size: 11px;
+}
+
+.dte-row .date-text {
+  font-size: 11px;
+}
+
+.dte-row .text {
+  font-size: 10px;
+}
+
 .total-pnl {
   color: white !important;
   bottom: 0;
@@ -30,21 +48,5 @@
 }
 
 .total-pnl > p {
-  padding: 3px !important;
-}
-
-.text {
-  font-size: 18px;
-  color: white;
-  font-weight: bold;
-}
-
-/* .table-container table {
-  table-layout: fixed;
-} */
-
-.table-container th,
-.table-container td {
-  padding: 8px;
-  word-wrap: break-word;
+  padding: 5px !important;
 }

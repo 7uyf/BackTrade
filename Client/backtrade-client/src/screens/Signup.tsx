@@ -15,20 +15,6 @@ const Signup: React.FC = () => {
   
   const navigate = useNavigate();
 
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-
-  //   if (confirmPassword === user.password) {
-  //     const resp = await fetch(signupUrl, {
-  //       // sent to server the info of the user
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify(user),
-  //     });
-  //     navigate("/main");
-  //   } else alert("Diffrent password, please try again");
-  // };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     

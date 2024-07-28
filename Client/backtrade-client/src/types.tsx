@@ -13,21 +13,21 @@ export type TitlePortfolio = {
 export type OptionChainData = {
   dte: string;
   symbol: string;
-  callDelta: number;
-  callOptionOpenInterest: number;
-  callVolume: number;
-  callBidSize: string;
   callBid: number;
   callAsk: number;
-  callAskSize: string;
+  callVega: number;
+  callDelta: string;
+  callGamma: number;
+  callTheta: number;
+  callIV: string;
   strike: number;
-  putDelta: number;
-  putOptionOpenInterest: number;
-  putVolume: number;
-  putBidSize: string;
   putBid: number;
   putAsk: number;
-  putAskSize: string;
+  putVega: number;
+  putDelta: string;
+  putGamma: number;
+  putTheta: number;
+  putIV: string;
 };
 
 export type PortfolioData = {

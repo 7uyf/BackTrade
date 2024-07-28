@@ -3,184 +3,204 @@ import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import "./Simulator.css";
 import SimulationControls from "../components/SimulationControls";
 import Indicators from "../components/Indicators";
-import OrderEntry from "../components/OrderEntry";
+import OrderEntry from "../components/OrderEntry/OrderEntry";
 import SimulationBuilder from "../components/SimulationBuilder";
 import OptionChain from "../components/OptionChain";
-import { DtePortfolioData, OptionChainData, PortfolioData } from "../types";
+import { DtePortfolioData, OptionChainData } from "../types";
 import Portfolio from "../components/Portfolio";
 
 const optionChainMock: OptionChainData[] = [
   {
     dte: "2024-07-30",
-    symbol: "AAPL",
-    callDelta: 0.5,
-    callOptionOpenInterest: 100,
-    callVolume: 150,
-    callBidSize: "10",
-    callBid: 1.2,
-    callAsk: 1.3,
-    callAskSize: "15",
+    symbol: "QQQ",
+    callBid: 0.5,
+    callAsk: 100,
+    callVega: 150,
+    callDelta: "10",
+    callGamma: 1.2,
+    callTheta: 1.3,
+    callIV: "15",
     strike: 150,
-    putDelta: -0.5,
-    putOptionOpenInterest: 200,
-    putVolume: 100,
-    putBidSize: "12",
-    putBid: 1.1,
-    putAsk: 1.2,
-    putAskSize: "14",
+    putBid: -0.5,
+    putAsk: 200,
+    putVega: 100,
+    putDelta: "12",
+    putGamma: 1.1,
+    putTheta: 1.2,
+    putIV: "14",
   },
   {
     dte: "2024-07-30",
-    symbol: "AAPL",
-    callDelta: 0.6,
-    callOptionOpenInterest: 120,
-    callVolume: 160,
-    callBidSize: "11",
-    callBid: 1.3,
-    callAsk: 1.4,
-    callAskSize: "16",
-    strike: 155,
-    putDelta: -0.6,
-    putOptionOpenInterest: 220,
-    putVolume: 110,
-    putBidSize: "13",
-    putBid: 1.2,
-    putAsk: 1.3,
-    putAskSize: "15",
+    symbol: "QQQ",
+    callBid: 0.5,
+    callAsk: 100,
+    callVega: 150,
+    callDelta: "10",
+    callGamma: 1.2,
+    callTheta: 1.3,
+    callIV: "15",
+    strike: 150,
+    putBid: -0.5,
+    putAsk: 200,
+    putVega: 100,
+    putDelta: "12",
+    putGamma: 1.1,
+    putTheta: 1.2,
+    putIV: "14",
   },
   {
     dte: "2024-07-30",
-    symbol: "AAPL",
-    callDelta: 0.7,
-    callOptionOpenInterest: 130,
-    callVolume: 170,
-    callBidSize: "12",
-    callBid: 1.4,
-    callAsk: 1.5,
-    callAskSize: "17",
-    strike: 160,
-    putDelta: -0.7,
-    putOptionOpenInterest: 230,
-    putVolume: 120,
-    putBidSize: "14",
-    putBid: 1.3,
-    putAsk: 1.4,
-    putAskSize: "16",
+    symbol: "QQQ",
+    callBid: 0.5,
+    callAsk: 100,
+    callVega: 150,
+    callDelta: "10",
+    callGamma: 1.2,
+    callTheta: 1.3,
+    callIV: "15",
+    strike: 150,
+    putBid: -0.5,
+    putAsk: 200,
+    putVega: 100,
+    putDelta: "12",
+    putGamma: 1.1,
+    putTheta: 1.2,
+    putIV: "14",
+  },
+  {
+    dte: "2024-07-30",
+    symbol: "QQQ",
+    callBid: 0.5,
+    callAsk: 100,
+    callVega: 150,
+    callDelta: "10",
+    callGamma: 1.2,
+    callTheta: 1.3,
+    callIV: "15",
+    strike: 150,
+    putBid: -0.5,
+    putAsk: 200,
+    putVega: 100,
+    putDelta: "12",
+    putGamma: 1.1,
+    putTheta: 1.2,
+    putIV: "14",
+  },
+  {
+    dte: "2024-07-30",
+    symbol: "QQQ",
+    callBid: 0.5,
+    callAsk: 100,
+    callVega: 150,
+    callDelta: "10",
+    callGamma: 1.2,
+    callTheta: 1.3,
+    callIV: "15",
+    strike: 150,
+    putBid: -0.5,
+    putAsk: 200,
+    putVega: 100,
+    putDelta: "12",
+    putGamma: 1.1,
+    putTheta: 1.2,
+    putIV: "14",
+  },
+  {
+    dte: "2024-07-30",
+    symbol: "QQQ",
+    callBid: 0.4,
+    callAsk: 10,
+    callVega: 140,
+    callDelta: "90",
+    callGamma: 1.4,
+    callTheta: 1.5,
+    callIV: "13",
+    strike: 140,
+    putBid: -0.6,
+    putAsk: 200,
+    putVega: 110,
+    putDelta: "14",
+    putGamma: 1.3,
+    putTheta: 1.6,
+    putIV: "13",
+  },
+  {
+    dte: "2024-07-30",
+    symbol: "QQQ",
+    callBid: 0.7,
+    callAsk: 105,
+    callVega: 140,
+    callDelta: "9",
+    callGamma: 1.4,
+    callTheta: 1.6,
+    callIV: "14",
+    strike: 140,
+    putBid: -0.2,
+    putAsk: 180,
+    putVega: 110,
+    putDelta: "11",
+    putGamma: 1.3,
+    putTheta: 1,
+    putIV: "15",
   },
   {
     dte: "2024-08-30",
-    symbol: "AAPL",
-    callDelta: 0.4,
-    callOptionOpenInterest: 140,
-    callVolume: 180,
-    callBidSize: "13",
-    callBid: 1.5,
-    callAsk: 1.6,
-    callAskSize: "18",
-    strike: 165,
-    putDelta: -0.4,
-    putOptionOpenInterest: 240,
-    putVolume: 130,
-    putBidSize: "15",
-    putBid: 1.4,
-    putAsk: 1.5,
-    putAskSize: "17",
+    symbol: "SPY",
+    callBid: 0.9,
+    callAsk: 110,
+    callVega: 130,
+    callDelta: "9",
+    callGamma: 1.9,
+    callTheta: 1.6,
+    callIV: "14",
+    strike: 140,
+    putBid: -0.4,
+    putAsk: 190,
+    putVega: 90,
+    putDelta: "11",
+    putGamma: 1.3,
+    putTheta: 1.2,
+    putIV: "14",
   },
   {
     dte: "2024-08-30",
-    symbol: "AAPL",
-    callDelta: 0.3,
-    callOptionOpenInterest: 150,
-    callVolume: 190,
-    callBidSize: "14",
-    callBid: 1.6,
-    callAsk: 1.7,
-    callAskSize: "19",
-    strike: 170,
-    putDelta: -0.3,
-    putOptionOpenInterest: 250,
-    putVolume: 140,
-    putBidSize: "16",
-    putBid: 1.5,
-    putAsk: 1.6,
-    putAskSize: "18",
-  },
-  {
-    dte: "2024-08-30",
-    symbol: "AAPL",
-    callDelta: 0.2,
-    callOptionOpenInterest: 160,
-    callVolume: 200,
-    callBidSize: "15",
-    callBid: 1.7,
-    callAsk: 1.8,
-    callAskSize: "20",
-    strike: 175,
-    putDelta: -0.2,
-    putOptionOpenInterest: 260,
-    putVolume: 150,
-    putBidSize: "17",
-    putBid: 1.6,
-    putAsk: 1.7,
-    putAskSize: "19",
+    symbol: "QQQ",
+    callBid: 0.5,
+    callAsk: 100,
+    callVega: 150,
+    callDelta: "10",
+    callGamma: 1.2,
+    callTheta: 1.3,
+    callIV: "15",
+    strike: 150,
+    putBid: -0.5,
+    putAsk: 200,
+    putVega: 100,
+    putDelta: "12",
+    putGamma: 1.1,
+    putTheta: 1.2,
+    putIV: "14",
   },
   {
     dte: "2024-09-30",
-    symbol: "AAPL",
-    callDelta: 0.1,
-    callOptionOpenInterest: 170,
-    callVolume: 210,
-    callBidSize: "16",
-    callBid: 1.8,
-    callAsk: 1.9,
-    callAskSize: "21",
-    strike: 180,
-    putDelta: -0.1,
-    putOptionOpenInterest: 270,
-    putVolume: 160,
-    putBidSize: "18",
-    putBid: 1.7,
-    putAsk: 1.8,
-    putAskSize: "20",
+    symbol: "SPY",
+    callBid: 0.5,
+    callAsk: 100,
+    callVega: 150,
+    callDelta: "10",
+    callGamma: 1.2,
+    callTheta: 1.3,
+    callIV: "15",
+    strike: 150,
+    putBid: -0.5,
+    putAsk: 200,
+    putVega: 100,
+    putDelta: "12",
+    putGamma: 1.1,
+    putTheta: 1.2,
+    putIV: "14",
   },
-  {
-    dte: "2024-09-30",
-    symbol: "AAPL",
-    callDelta: 0.0,
-    callOptionOpenInterest: 180,
-    callVolume: 220,
-    callBidSize: "17",
-    callBid: 1.9,
-    callAsk: 2.0,
-    callAskSize: "22",
-    strike: 185,
-    putDelta: 0.0,
-    putOptionOpenInterest: 280,
-    putVolume: 170,
-    putBidSize: "19",
-    putBid: 1.8,
-    putAsk: 1.9,
-    putAskSize: "21",
-  },
-  {
-    dte: "2024-09-30",
-    symbol: "AAPL",
-    callDelta: -0.1,
-    callOptionOpenInterest: 190,
-    callVolume: 230,
-    callBidSize: "18",
-    callBid: 2.0,
-    callAsk: 2.1,
-    callAskSize: "23",
-    strike: 190,
-    putDelta: 0.1,
-    putOptionOpenInterest: 290,
-    putVolume: 180,
-    putBidSize: "20",
-    putBid: 1.9,
-    putAsk: 2.0,
-    putAskSize: "22",
-  },
+
   // Add more data for other symbols if needed...
 ];
 
@@ -400,28 +420,31 @@ const Simulator: React.FC = () => {
   };
 
   return (
-    <div className="mainDiv">
-      <SimulationControls
-        scale={0.7}
-        onSpeedChange={handleSpeedChange}
-        onTimeChange={handleTimeChange}
-        onFinish={handleFinish}
-        onRestart={handleRestart}
-      />
-      <OptionChain
-        title="Option Chain"
-        values={optionChainMock}
-        onClickCall={(event) => handleOptionSelect(event, "Call")}
-        onClickPut={(event) => handleOptionSelect(event, "Put")}
-        scale={0.6}
-      />
-      <Portfolio data={portfolioMock} scale={0.5} />
-      <Indicators scale={0.5} />
-      <OrderEntry
-        selectedOption={selectedOption}
-        selectedOptionAction={selectedOptionAction}
-        scale={0.6}
-      />
+    <div className="mainDiv mainDiv-scale">
+      <div className="UpDiv">
+        <SimulationControls
+          onSpeedChange={handleSpeedChange}
+          onTimeChange={handleTimeChange}
+          onFinish={handleFinish}
+          onRestart={handleRestart}
+        />
+        <OptionChain
+          title="Option Chain"
+          values={optionChainMock}
+          onClickCall={(event) => handleOptionSelect(event, "Call")}
+          onClickPut={(event) => handleOptionSelect(event, "Put")}
+        />
+      </div>
+      <div className="BottomDiv">
+        <div className="LeftDiv">
+          <Portfolio data={portfolioMock} />
+          <Indicators />
+        </div>
+        <OrderEntry
+          selectedOption={selectedOption}
+          selectedOptionAction={selectedOptionAction}
+        />
+      </div>
       <Dialog
         open={open}
         onClose={handleClose}

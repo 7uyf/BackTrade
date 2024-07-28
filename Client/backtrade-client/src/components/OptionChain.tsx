@@ -26,7 +26,6 @@ interface OptionChainProps {
   values: OptionChainData[];
   onClickCall: (option: OptionChainData) => void;
   onClickPut: (option: OptionChainData) => void;
-  scale: number;
 }
 
 interface OptionChainState {
@@ -38,8 +37,8 @@ interface OptionChainState {
 class OptionChain extends React.Component<OptionChainProps, OptionChainState> {
   state: OptionChainState = {
     selectedTab: 0,
-    selectedSymbol: "AAPL",
-    symbols: ["AAPL", "GOOGL", "TSLA", "BABA"], // Add your symbols here
+    selectedSymbol: "QQQ",
+    symbols: ["QQQ", "SPY"], // Add your symbols here
   };
 
   handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -92,7 +91,7 @@ class OptionChain extends React.Component<OptionChainProps, OptionChainState> {
 
   render(): React.ReactNode {
     const { selectedTab, selectedSymbol, symbols } = this.state;
-    const { onClickCall, onClickPut, scale = 1 } = this.props;
+    const { onClickCall, onClickPut } = this.props;
     const filteredData = this.props.values.filter(
       (option) => option.symbol === selectedSymbol
     );
@@ -104,11 +103,8 @@ class OptionChain extends React.Component<OptionChainProps, OptionChainState> {
     );
 
     return (
-      <Paper
-        className="option-chain"
-        style={{ transform: `scale(${scale})`, transformOrigin: "top left" }}
-      >
-        <IconText text="Option Chain" iconSize="23px" textSize="21px" />
+      <Paper className="option-chain">
+        <IconText text="Option Chain"/>
         <Box
           className="uprow"
           display="flex"
@@ -121,6 +117,27 @@ class OptionChain extends React.Component<OptionChainProps, OptionChainState> {
             aria-label="DTE Tabs"
             textColor="primary"
             indicatorColor="primary"
+            variant="scrollable"
+            scrollButtons="auto"
+            TabIndicatorProps={{
+              style: {
+                display: "flex",
+                justifyContent: "center",
+                backgroundColor: "transparent",
+              },
+            }}
+            sx={{
+              "& .MuiTabs-indicator": {
+                display: "flex",
+                justifyContent: "center",
+                backgroundColor: "transparent",
+              },
+              "& .MuiTabs-indicatorSpan": {
+                maxWidth: 40, // Adjust this value to fit the text
+                width: "100%",
+                backgroundColor: "primary",
+              },
+            }}
           >
             {currentDtes.map((dte, index) => (
               <Tab
@@ -130,7 +147,7 @@ class OptionChain extends React.Component<OptionChainProps, OptionChainState> {
               />
             ))}
           </Tabs>
-          <FormControl sx={{ minWidth: 120, marginRight: 2 }}>
+          <FormControl sx={{ minWidth: 80, marginRight: 2 }}>
             <InputLabel className="inputlabel">Symbol</InputLabel>
             <Select
               className="symbol-select"
@@ -149,9 +166,10 @@ class OptionChain extends React.Component<OptionChainProps, OptionChainState> {
         <TableContainer
           sx={{ background: "transparent !important" }}
           component={Paper}
+          className="table-container"
         >
           <Table
-            sx={{ minWidth: 650, background: "transparent !important" }}
+            sx={{ minWidth: 50, background: "transparent !important" }}
             aria-label="simple table"
           >
             <TableHead className="table-head">
@@ -189,30 +207,6 @@ class OptionChain extends React.Component<OptionChainProps, OptionChainState> {
                     className="value-cell"
                     onClick={() => onClickCall(row)}
                   >
-                    {row.callDelta}
-                  </TableCell>
-                  <TableCell
-                    className="value-cell"
-                    onClick={() => onClickCall(row)}
-                  >
-                    {row.callOptionOpenInterest}
-                  </TableCell>
-                  <TableCell
-                    className="value-cell"
-                    onClick={() => onClickCall(row)}
-                  >
-                    {row.callVolume}
-                  </TableCell>
-                  <TableCell
-                    className="value-cell"
-                    onClick={() => onClickCall(row)}
-                  >
-                    {row.callBidSize}
-                  </TableCell>
-                  <TableCell
-                    className="value-cell"
-                    onClick={() => onClickCall(row)}
-                  >
                     {row.callBid}
                   </TableCell>
                   <TableCell
@@ -225,33 +219,33 @@ class OptionChain extends React.Component<OptionChainProps, OptionChainState> {
                     className="value-cell"
                     onClick={() => onClickCall(row)}
                   >
-                    {row.callAskSize}
+                    {row.callVega}
+                  </TableCell>
+                  <TableCell
+                    className="value-cell"
+                    onClick={() => onClickCall(row)}
+                  >
+                    {row.callDelta}
+                  </TableCell>
+                  <TableCell
+                    className="value-cell"
+                    onClick={() => onClickCall(row)}
+                  >
+                    {row.callGamma}
+                  </TableCell>
+                  <TableCell
+                    className="value-cell"
+                    onClick={() => onClickCall(row)}
+                  >
+                    {row.callTheta}
+                  </TableCell>
+                  <TableCell
+                    className="value-cell"
+                    onClick={() => onClickCall(row)}
+                  >
+                    {row.callIV}
                   </TableCell>
                   <TableCell className="strike-cell">{row.strike}</TableCell>
-                  <TableCell
-                    className="value-cell"
-                    onClick={() => onClickPut(row)}
-                  >
-                    {row.putDelta}
-                  </TableCell>
-                  <TableCell
-                    className="value-cell"
-                    onClick={() => onClickPut(row)}
-                  >
-                    {row.putOptionOpenInterest}
-                  </TableCell>
-                  <TableCell
-                    className="value-cell"
-                    onClick={() => onClickPut(row)}
-                  >
-                    {row.putVolume}
-                  </TableCell>
-                  <TableCell
-                    className="value-cell"
-                    onClick={() => onClickPut(row)}
-                  >
-                    {row.putBidSize}
-                  </TableCell>
                   <TableCell
                     className="value-cell"
                     onClick={() => onClickPut(row)}
@@ -268,7 +262,31 @@ class OptionChain extends React.Component<OptionChainProps, OptionChainState> {
                     className="value-cell"
                     onClick={() => onClickPut(row)}
                   >
-                    {row.putAskSize}
+                    {row.putVega}
+                  </TableCell>
+                  <TableCell
+                    className="value-cell"
+                    onClick={() => onClickPut(row)}
+                  >
+                    {row.putDelta}
+                  </TableCell>
+                  <TableCell
+                    className="value-cell"
+                    onClick={() => onClickPut(row)}
+                  >
+                    {row.putGamma}
+                  </TableCell>
+                  <TableCell
+                    className="value-cell"
+                    onClick={() => onClickPut(row)}
+                  >
+                    {row.putTheta}
+                  </TableCell>
+                  <TableCell
+                    className="value-cell"
+                    onClick={() => onClickPut(row)}
+                  >
+                    {row.putIV}
                   </TableCell>
                 </TableRow>
               ))}
