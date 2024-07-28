@@ -6,9 +6,10 @@
     rgb(15, 16, 55)
   ) !important;
   border: 1px lightgray solid;
-  margin-top: 5px;
+  /* margin-top: 5px;
   margin-left: 15px;
-  width: 1490px;
+  width: 1490px; */
+  grid-area: sc;
 }
 
 .panel {

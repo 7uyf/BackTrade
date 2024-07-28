@@ -5,9 +5,14 @@
     rgb(15, 16, 55)
   ) !important;
   border: 1.34px lightgray solid;
-  margin-top: -190px;
-  margin-left: -355px;
-  width: 1480px;
+  /* margin-top: -190px;
+  margin-left: -355px; */
+  /* width: 1480px; */
+  grid-area: p;
+}
+
+.transparent-background {
+  background-color: transparent !important;
 }
 
 .dte-row {
@@ -22,6 +27,7 @@
   max-height: 25vh;
   overflow-y: auto;
 }
+
 .total-pnl {
   color: white !important;
   bottom: 0;
@@ -38,10 +44,6 @@
   color: white;
   font-weight: bold;
 }
-
-/* .table-container table {
-  table-layout: fixed;
-} */
 
 .table-container th,
 .table-container td {

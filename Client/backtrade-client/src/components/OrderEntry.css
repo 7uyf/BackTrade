@@ -5,10 +5,14 @@
     rgb(15, 16, 55)
   ) !important;
   border: 1px lightgray solid;
-  margin-top: -505px;
-  margin-left: 663px;
+  /* margin-top: -425px;
+  margin-left: 800px;
   width: 450px;
+  height: 500px; */
   padding: 2%;
+  display: flex;
+  flex-direction: column;
+  grid-area: oe;
 }
 
 .input-label {
@@ -56,7 +60,7 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
-  margin-top: 10rem;
+  margin-top: 1rem;
 }
 
 .buy-button {
@@ -94,4 +98,26 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .strike-title {
   color: white !important;
+}
+
+.table-head {
+  color: white !important;
+}
+
+.header-cell {
+  color: white !important;
+}
+
+.value-cell {
+  color: white !important;
+}
+
+.strike-cell {
+  color: white !important;
+}
+
+.oe-table-container {
+  flex-grow: 1;
+  overflow-y: auto;
+  max-height: 100vh !important;
 }

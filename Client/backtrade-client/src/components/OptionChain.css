@@ -5,10 +5,11 @@
     rgb(15, 16, 55)
   ) !important;
   border: 1px lightgray solid;
-  height: 350px;
+  /* height: 350px;
   width: 1737px;
   margin-top: -25px;
-  margin-left: 15px;
+  margin-left: 15px; */
+  grid-area: oc;
 }
 
 .uprow {
@@ -28,4 +29,13 @@
   height: -500px;
   font-size: 10;
   justify-content: center;
+}
+
+.value-cell.highlighted {
+  background-color: rgba(0, 225, 255, 0.3);
+  cursor: pointer;
+}
+
+.value-cell {
+  cursor: pointer;
 }

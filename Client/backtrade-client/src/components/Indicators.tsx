@@ -92,10 +92,7 @@ const Indicators: React.FC<IndicatorsProps> = ({ scale = 1 }) => {
   }, [dataIndex]);
 
   return (
-    <Paper
-      className="indicators"
-      style={{ transform: `scale(${scale})`, transformOrigin: "top left" }}
-    >
+    <Paper className="indicators" style={{ transformOrigin: "top left" }}>
       <IconText text="Indicators" iconSize="27px" textSize="25px" />
       <LineChart
         sx={{

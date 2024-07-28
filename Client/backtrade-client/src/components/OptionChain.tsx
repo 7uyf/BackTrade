@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Paper,
   Table,
@@ -24,260 +24,276 @@ import IconText from "./IconText";
 interface OptionChainProps {
   title: string;
   values: OptionChainData[];
-  onClickCall: (option: OptionChainData) => void;
-  onClickPut: (option: OptionChainData) => void;
+  onOptionSelect: (
+    option: OptionChainData | null,
+    type: "Call" | "Put" | null
+  ) => void;
   scale: number;
+  resetHighlightedRows: number;
 }
 
-interface OptionChainState {
-  selectedTab: number;
-  selectedSymbol: string;
-  symbols: string[];
-}
+const OptionChain: React.FC<OptionChainProps> = ({
+  title,
+  values,
+  onOptionSelect,
+  scale,
+  resetHighlightedRows,
+}) => {
+  const [selectedTab, setSelectedTab] = useState(0);
+  const [selectedSymbol, setSelectedSymbol] = useState("AAPL");
+  const [symbols] = useState(["AAPL", "GOOGL", "TSLA", "BABA"]);
+  const [highlightedRows, setHighlightedRows] = useState<{
+    [key: string]: boolean;
+  }>({});
 
-class OptionChain extends React.Component<OptionChainProps, OptionChainState> {
-  state: OptionChainState = {
-    selectedTab: 0,
-    selectedSymbol: "AAPL",
-    symbols: ["AAPL", "GOOGL", "TSLA", "BABA"], // Add your symbols here
+  useEffect(() => {
+    setHighlightedRows({});
+  }, [resetHighlightedRows]);
+
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    setSelectedTab(newValue);
   };
 
-  handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    this.setState({ selectedTab: newValue });
+  const handleSymbolChange = (event: SelectChangeEvent<string>) => {
+    setSelectedSymbol(event.target.value as string);
+    onOptionSelect(null, null); // Reset selections on symbol change
+    setHighlightedRows({});
   };
 
-  handleSymbolChange = (event: SelectChangeEvent<string>) => {
-    this.setState({ selectedSymbol: event.target.value as string });
-  };
-
-  sytleProperty(property: any, styles: string[] | undefined): string {
-    let finalProperty = property;
-    if (typeof property === "number") {
-      styles?.forEach((style) => {
-        if (style === "numberEnding") {
-          finalProperty = this.formatNumber(property);
-        } else if (style === "addPlus") {
-          finalProperty = this.addPlus(property);
-        }
+  const handleRowClick = (option: OptionChainData, type: "Call" | "Put") => {
+    const key = `${option.dte}-${option.strike}-${type}`;
+    onOptionSelect(option, type); // Add the row if not highlighted, Remove the row if already highlighted
+    if (highlightedRows[key]) {
+      setHighlightedRows((prev) => {
+        const updated = { ...prev };
+        delete updated[key];
+        return updated;
       });
+    } else {
+      setHighlightedRows((prev) => ({ ...prev, [key]: true }));
     }
-    return finalProperty;
-  }
+  };
 
-  formatNumber(number: number) {
-    return number.toLocaleString("en-US", {
-      maximumFractionDigits: 2,
-      notation: "compact",
-      compactDisplay: "short",
-    });
-  }
-
-  addPlus(number: number) {
-    return number > 0 ? "+" + number.toString() : number.toString();
-  }
-
-  positiveNegativeColor(number: any) {
-    if (typeof number === "number") {
-      if (number > 0) return "green";
-      else if (number === 0) return "white";
-      else return "red";
-    }
-    return "white";
-  }
-
-  formatDate(dateStr: string) {
+  const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
     return date.toLocaleDateString("en-GB").split("/").reverse().join("/");
-  }
+  };
 
-  render(): React.ReactNode {
-    const { selectedTab, selectedSymbol, symbols } = this.state;
-    const { onClickCall, onClickPut, scale = 1 } = this.props;
-    const filteredData = this.props.values.filter(
-      (option) => option.symbol === selectedSymbol
-    );
-    const currentDtes = Array.from(
-      new Set(filteredData.map((data) => data.dte))
-    );
-    const currentData = filteredData.filter(
-      (option) => option.dte === currentDtes[selectedTab]
-    );
+  const filteredData = values.filter(
+    (option) => option.symbol === selectedSymbol
+  );
+  const currentDtes = Array.from(new Set(filteredData.map((data) => data.dte)));
+  const currentData = filteredData.filter(
+    (option) => option.dte === currentDtes[selectedTab]
+  );
 
-    return (
-      <Paper
-        className="option-chain"
-        style={{ transform: `scale(${scale})`, transformOrigin: "top left" }}
+  return (
+    <Paper
+      className="option-chain"
+      style={{ transform: `scale(${scale})`, transformOrigin: "top left" }}
+    >
+      <IconText text="Option Chain" iconSize="23px" textSize="21px" />
+      <Box
+        className="uprow"
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
       >
-        <IconText text="Option Chain" iconSize="23px" textSize="21px" />
-        <Box
-          className="uprow"
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
+        <Tabs
+          value={selectedTab}
+          onChange={handleTabChange}
+          aria-label="DTE Tabs"
+          textColor="primary"
+          indicatorColor="primary"
         >
-          <Tabs
-            value={selectedTab}
-            onChange={this.handleChange}
-            aria-label="DTE Tabs"
-            textColor="primary"
-            indicatorColor="primary"
+          {currentDtes.map((dte, index) => (
+            <Tab
+              label={formatDate(dte)}
+              key={index}
+              sx={{ color: selectedTab === index ? "black" : "lightgray" }}
+            />
+          ))}
+        </Tabs>
+        <FormControl sx={{ minWidth: 120, marginRight: 2 }}>
+          <InputLabel className="inputlabel">Symbol</InputLabel>
+          <Select
+            className="symbol-select"
+            value={selectedSymbol}
+            onChange={handleSymbolChange}
+            label="Symbol"
           >
-            {currentDtes.map((dte, index) => (
-              <Tab
-                label={this.formatDate(dte)}
-                key={index}
-                sx={{ color: selectedTab === index ? "black" : "lightgray" }}
-              />
+            {symbols.map((symbol) => (
+              <MenuItem key={symbol} value={symbol}>
+                {symbol}
+              </MenuItem>
             ))}
-          </Tabs>
-          <FormControl sx={{ minWidth: 120, marginRight: 2 }}>
-            <InputLabel className="inputlabel">Symbol</InputLabel>
-            <Select
-              className="symbol-select"
-              value={selectedSymbol}
-              onChange={this.handleSymbolChange}
-              label="Symbol"
-            >
-              {symbols.map((symbol) => (
-                <MenuItem key={symbol} value={symbol}>
-                  {symbol}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box>
-        <TableContainer
-          sx={{ background: "transparent !important" }}
-          component={Paper}
+          </Select>
+        </FormControl>
+      </Box>
+      <TableContainer
+        sx={{ background: "transparent !important" }}
+        component={Paper}
+      >
+        <Table
+          sx={{ minWidth: 650, background: "transparent !important" }}
+          aria-label="simple table"
         >
-          <Table
-            sx={{ minWidth: 650, background: "transparent !important" }}
-            aria-label="simple table"
-          >
-            <TableHead className="table-head">
-              <TableRow>
-                <TableCell colSpan={7} align="center">
-                  Calls
-                </TableCell>
-                <TableCell className="table-head" align="center"></TableCell>
-                <TableCell colSpan={7} align="center">
-                  Puts
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="header-cell">Bid</TableCell>
-                <TableCell className="header-cell">Ask</TableCell>
-                <TableCell className="header-cell">Vega</TableCell>
-                <TableCell className="header-cell">Delta</TableCell>
-                <TableCell className="header-cell">Gamma</TableCell>
-                <TableCell className="header-cell">Theta</TableCell>
-                <TableCell className="header-cell">IV</TableCell>
-                <TableCell className="strike-header">Strike</TableCell>
-                <TableCell className="header-cell">Bid</TableCell>
-                <TableCell className="header-cell">Ask</TableCell>
-                <TableCell className="header-cell">Vega</TableCell>
-                <TableCell className="header-cell">Delta</TableCell>
-                <TableCell className="header-cell">Gamma</TableCell>
-                <TableCell className="header-cell">Theta</TableCell>
-                <TableCell className="header-cell">IV</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody className="table-body">
-              {currentData.map((row: OptionChainData, index) => (
+          <TableHead className="table-head">
+            <TableRow>
+              <TableCell colSpan={7} align="center">
+                Calls
+              </TableCell>
+              <TableCell className="table-head" align="center"></TableCell>
+              <TableCell colSpan={7} align="center">
+                Puts
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell className="header-cell">Bid</TableCell>
+              <TableCell className="header-cell">Ask</TableCell>
+              <TableCell className="header-cell">Vega</TableCell>
+              <TableCell className="header-cell">Delta</TableCell>
+              <TableCell className="header-cell">Gamma</TableCell>
+              <TableCell className="header-cell">Theta</TableCell>
+              <TableCell className="header-cell">IV</TableCell>
+              <TableCell className="strike-header">Strike</TableCell>
+              <TableCell className="header-cell">Bid</TableCell>
+              <TableCell className="header-cell">Ask</TableCell>
+              <TableCell className="header-cell">Vega</TableCell>
+              <TableCell className="header-cell">Delta</TableCell>
+              <TableCell className="header-cell">Gamma</TableCell>
+              <TableCell className="header-cell">Theta</TableCell>
+              <TableCell className="header-cell">IV</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody className="table-body">
+            {currentData.map((row: OptionChainData, index) => {
+              const callKey = `${row.dte}-${row.strike}-Call`;
+              const putKey = `${row.dte}-${row.strike}-Put`;
+
+              return (
                 <TableRow key={index}>
                   <TableCell
-                    className="value-cell"
-                    onClick={() => onClickCall(row)}
-                  >
-                    {row.callDelta}
-                  </TableCell>
-                  <TableCell
-                    className="value-cell"
-                    onClick={() => onClickCall(row)}
-                  >
-                    {row.callOptionOpenInterest}
-                  </TableCell>
-                  <TableCell
-                    className="value-cell"
-                    onClick={() => onClickCall(row)}
-                  >
-                    {row.callVolume}
-                  </TableCell>
-                  <TableCell
-                    className="value-cell"
-                    onClick={() => onClickCall(row)}
-                  >
-                    {row.callBidSize}
-                  </TableCell>
-                  <TableCell
-                    className="value-cell"
-                    onClick={() => onClickCall(row)}
+                    className={`value-cell ${
+                      highlightedRows[callKey] ? "highlighted" : ""
+                    }`}
+                    onClick={() => handleRowClick(row, "Call")}
                   >
                     {row.callBid}
                   </TableCell>
                   <TableCell
-                    className="value-cell"
-                    onClick={() => onClickCall(row)}
+                    className={`value-cell ${
+                      highlightedRows[callKey] ? "highlighted" : ""
+                    }`}
+                    onClick={() => handleRowClick(row, "Call")}
                   >
                     {row.callAsk}
                   </TableCell>
                   <TableCell
-                    className="value-cell"
-                    onClick={() => onClickCall(row)}
+                    className={`value-cell ${
+                      highlightedRows[callKey] ? "highlighted" : ""
+                    }`}
+                    onClick={() => handleRowClick(row, "Call")}
                   >
-                    {row.callAskSize}
+                    {row.callVega}
+                  </TableCell>
+                  <TableCell
+                    className={`value-cell ${
+                      highlightedRows[callKey] ? "highlighted" : ""
+                    }`}
+                    onClick={() => handleRowClick(row, "Call")}
+                  >
+                    {row.callDelta}
+                  </TableCell>
+                  <TableCell
+                    className={`value-cell ${
+                      highlightedRows[callKey] ? "highlighted" : ""
+                    }`}
+                    onClick={() => handleRowClick(row, "Call")}
+                  >
+                    {row.callGamma}
+                  </TableCell>
+                  <TableCell
+                    className={`value-cell ${
+                      highlightedRows[callKey] ? "highlighted" : ""
+                    }`}
+                    onClick={() => handleRowClick(row, "Call")}
+                  >
+                    {row.callTheta}
+                  </TableCell>
+                  <TableCell
+                    className={`value-cell ${
+                      highlightedRows[callKey] ? "highlighted" : ""
+                    }`}
+                    onClick={() => handleRowClick(row, "Call")}
+                  >
+                    {row.callIv}
                   </TableCell>
                   <TableCell className="strike-cell">{row.strike}</TableCell>
                   <TableCell
-                    className="value-cell"
-                    onClick={() => onClickPut(row)}
-                  >
-                    {row.putDelta}
-                  </TableCell>
-                  <TableCell
-                    className="value-cell"
-                    onClick={() => onClickPut(row)}
-                  >
-                    {row.putOptionOpenInterest}
-                  </TableCell>
-                  <TableCell
-                    className="value-cell"
-                    onClick={() => onClickPut(row)}
-                  >
-                    {row.putVolume}
-                  </TableCell>
-                  <TableCell
-                    className="value-cell"
-                    onClick={() => onClickPut(row)}
-                  >
-                    {row.putBidSize}
-                  </TableCell>
-                  <TableCell
-                    className="value-cell"
-                    onClick={() => onClickPut(row)}
+                    className={`value-cell ${
+                      highlightedRows[putKey] ? "highlighted" : ""
+                    }`}
+                    onClick={() => handleRowClick(row, "Put")}
                   >
                     {row.putBid}
                   </TableCell>
                   <TableCell
-                    className="value-cell"
-                    onClick={() => onClickPut(row)}
+                    className={`value-cell ${
+                      highlightedRows[putKey] ? "highlighted" : ""
+                    }`}
+                    onClick={() => handleRowClick(row, "Put")}
                   >
                     {row.putAsk}
                   </TableCell>
                   <TableCell
-                    className="value-cell"
-                    onClick={() => onClickPut(row)}
+                    className={`value-cell ${
+                      highlightedRows[putKey] ? "highlighted" : ""
+                    }`}
+                    onClick={() => handleRowClick(row, "Put")}
                   >
-                    {row.putAskSize}
+                    {row.putVega}
+                  </TableCell>
+                  <TableCell
+                    className={`value-cell ${
+                      highlightedRows[putKey] ? "highlighted" : ""
+                    }`}
+                    onClick={() => handleRowClick(row, "Put")}
+                  >
+                    {row.putDelta}
+                  </TableCell>
+                  <TableCell
+                    className={`value-cell ${
+                      highlightedRows[putKey] ? "highlighted" : ""
+                    }`}
+                    onClick={() => handleRowClick(row, "Put")}
+                  >
+                    {row.putGamma}
+                  </TableCell>
+                  <TableCell
+                    className={`value-cell ${
+                      highlightedRows[putKey] ? "highlighted" : ""
+                    }`}
+                    onClick={() => handleRowClick(row, "Put")}
+                  >
+                    {row.putTheta}
+                  </TableCell>
+                  <TableCell
+                    className={`value-cell ${
+                      highlightedRows[putKey] ? "highlighted" : ""
+                    }`}
+                    onClick={() => handleRowClick(row, "Put")}
+                  >
+                    {row.putIv}
                   </TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Paper>
-    );
-  }
-}
+              );
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Paper>
+  );
+};
 
 export default OptionChain;
