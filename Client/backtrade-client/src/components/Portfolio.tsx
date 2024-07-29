@@ -107,17 +107,8 @@ class Portfolio extends React.Component<PortfolioProps, PortfolioState> {
     return date.toLocaleDateString("en-GB").split("/").reverse().join("/");
   }
 
-  calculateAggregatedGreeks(values: any[]) {
-    const aggregated = values.reduce(
-      (acc, item) => {
-        acc.delta += item.delta;
-        acc.gamma += item.gamma;
-        acc.vega += item.vega;
-        return acc;
-      },
-      { delta: 0, gamma: 0, vega: 0 }
-    );
-    return aggregated;
+  calculateAggregatedGreeks(value: any) {
+    return (value.delta + value.gamma + value.vega).toFixed(2);
   }
 
   renderPortfolioTab() {
@@ -155,13 +146,15 @@ class Portfolio extends React.Component<PortfolioProps, PortfolioState> {
           <Table
             stickyHeader
             sx={{ minWidth: 650, background: "transparent !important" }}
-            aria-label="simple table"
+            aria-label="portfolio table"
           >
-            <TableHead className="table-head">
+            <TableHead className="table-head portfolio-head">
               <TableRow>
                 <TableCell className="header-cell">Aggregated Greeks</TableCell>
                 <TableCell className="header-cell">Daily PnL</TableCell>
-                <TableCell className="header-cell">Instrument</TableCell>
+                <TableCell className="header-cell instrument-column">
+                  Instrument
+                </TableCell>
                 <TableCell className="header-cell">Position</TableCell>
                 <TableCell className="header-cell">Market Value</TableCell>
                 <TableCell className="header-cell">Delta</TableCell>
@@ -176,8 +169,6 @@ class Portfolio extends React.Component<PortfolioProps, PortfolioState> {
                 const sortedValues = [...data.values].sort(
                   (a, b) => a.instrument.strike - b.instrument.strike
                 );
-                const aggregatedGreeks =
-                  this.calculateAggregatedGreeks(sortedValues);
 
                 return (
                   <React.Fragment key={dteIndex}>
@@ -213,19 +204,18 @@ class Portfolio extends React.Component<PortfolioProps, PortfolioState> {
                         >
                           <Box margin={1}>
                             <Table size="small" aria-label="purchases">
-                              <TableBody>
+                              <TableBody className="portfolio-body">
                                 {sortedValues.map((row, rowIndex) => (
                                   <TableRow key={rowIndex}>
                                     <TableCell className="text">
-                                      Delta: {row.delta}, Gamma: {row.gamma},
-                                      Vega: {row.vega}
+                                      {this.calculateAggregatedGreeks(row)}
                                     </TableCell>
                                     <TableCell className="text">
                                       {this.sytleProperty(row.dailyPnl, [
                                         "addPlus",
                                       ])}
                                     </TableCell>
-                                    <TableCell className="text">{`${
+                                    <TableCell className="text instrument-column">{`${
                                       row.instrument.symbol
                                     } ${this.formatDate(
                                       row.instrument.expirationDate
@@ -304,6 +294,7 @@ class Portfolio extends React.Component<PortfolioProps, PortfolioState> {
             variant="outlined"
             size="small"
             style={{ width: "150px" }}
+            className="white-border-input"
           >
             <MenuItem value="all">All</MenuItem>
             <MenuItem value="filled">Filled</MenuItem>
@@ -331,7 +322,9 @@ class Portfolio extends React.Component<PortfolioProps, PortfolioState> {
             <TableBody className="table-body">
               {filteredOrders.map((order, orderIndex) => (
                 <TableRow key={orderIndex}>
-                  <TableCell className="text">{order.instrument}</TableCell>
+                  <TableCell className="text instrument-column">
+                    {order.instrument}
+                  </TableCell>
                   <TableCell className="text">
                     {this.formatDate(order.expirationDate)}
                   </TableCell>

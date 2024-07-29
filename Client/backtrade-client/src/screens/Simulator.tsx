@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import "./Simulator.css";
 import SimulationControls from "../components/SimulationControls";
 import Indicators from "../components/Indicators";
 import OrderEntry from "../components/OrderEntry/OrderEntry";
 import SimulationBuilder from "../components/SimulationBuilder";
-import OptionChain from "../components/OptionChain";
+import OptionChain, { OptionChainRef } from "../components/OptionChain";
 import {
   DtePortfolioData,
   OptionChainData,
@@ -288,9 +288,7 @@ const Simulator: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState<OrderEntryData[]>([]);
   const [resetHighlightedRows, setResetHighlightedRows] = useState(0);
-  const [highlightedRows, setHighlightedRows] = useState<{
-    [key: string]: boolean;
-  }>({});
+  const optionChainRef = useRef<OptionChainRef>(null);
 
   useEffect(() => {
     handleClickOpen();
@@ -364,14 +362,6 @@ const Simulator: React.FC = () => {
     console.log("handleRestart");
   };
 
-  const removeHighlight = (key: string) => {
-    setHighlightedRows((prev) => {
-      const updated = { ...prev };
-      delete updated[key];
-      return updated;
-    });
-  };
-
   return (
     <div className="mainDiv mainDiv-scale">
       <div className="UpDiv">
@@ -382,6 +372,7 @@ const Simulator: React.FC = () => {
           onRestart={handleRestart}
         />
         <OptionChain
+          ref={optionChainRef}
           title="Option Chain"
           scale={1}
           values={optionChainMock}
@@ -389,7 +380,6 @@ const Simulator: React.FC = () => {
           resetHighlightedRows={resetHighlightedRows}
           selectedOptions={selectedOptions}
           onOptionsChange={setSelectedOptions}
-          removeHighlight={removeHighlight}
         />
       </div>
       <div className="BottomDiv">
@@ -401,7 +391,7 @@ const Simulator: React.FC = () => {
           selectedOptions={selectedOptions}
           onOptionsChange={setSelectedOptions}
           onPlaceOrder={handlePlaceOrder}
-          removeHighlight={removeHighlight}
+          optionChainRef={optionChainRef}
         />
       </div>
 

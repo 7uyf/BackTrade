@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Paper,
   Box,
@@ -23,6 +23,7 @@ import "./OrderEntry.css";
 import ChooseCommand from "./ChooseCommand";
 import IconText from "../IconText";
 import { OptionChainData, OrderEntryData } from "../../types";
+import { OptionChainRef } from "../OptionChain";
 
 interface OrderEntryProps {
   selectedOptions: OrderEntryData[];
@@ -35,7 +36,7 @@ interface OrderEntryProps {
   scale?: number;
   selectedOption?: OptionChainData | null;
   selectedOptionAction?: "Call" | "Put" | null;
-  removeHighlight: (key: string) => void;
+  optionChainRef: React.RefObject<OptionChainRef>;
 }
 
 const OrderEntry: React.FC<OrderEntryProps> = ({
@@ -45,7 +46,7 @@ const OrderEntry: React.FC<OrderEntryProps> = ({
   scale = 1,
   selectedOption,
   selectedOptionAction,
-  removeHighlight,
+  optionChainRef,
 }) => {
   const [orderType, setOrderType] = useState<string>("Market");
   const [limitPrice, setLimitPrice] = useState<number>(0);
@@ -117,7 +118,9 @@ const OrderEntry: React.FC<OrderEntryProps> = ({
     onOptionsChange(updatedOptions);
     // Remove highlight
     const key = `${selectedOptions[index].dte}-${selectedOptions[index].strike}-${selectedOptions[index].type}`;
-    removeHighlight(key);
+    if (optionChainRef.current) {
+      optionChainRef.current.removeHighlight(key);
+    }
   };
 
   const handleOrderTypeChange = (event: SelectChangeEvent<string>) => {
@@ -128,7 +131,9 @@ const OrderEntry: React.FC<OrderEntryProps> = ({
     onPlaceOrder(selectedOptions, orderType, limitPrice);
     selectedOptions.forEach((option) => {
       const key = `${option.dte}-${option.strike}-${option.type}`;
-      removeHighlight(key);
+      if (optionChainRef.current) {
+        optionChainRef.current.removeHighlight(key);
+      }
     });
     onOptionsChange([]); // Clear the orders after placing them
     setOrderType("Market");
@@ -136,10 +141,9 @@ const OrderEntry: React.FC<OrderEntryProps> = ({
   };
 
   const handleReset = () => {
-    selectedOptions.forEach((option) => {
-      const key = `${option.dte}-${option.strike}-${option.type}`;
-      removeHighlight(key);
-    });
+    if (optionChainRef.current) {
+      optionChainRef.current.removeAllHighlights();
+    }
     onOptionsChange([]);
   };
 
