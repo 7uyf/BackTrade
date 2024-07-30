@@ -1,8 +1,14 @@
+import asyncio
+from typing import List, Dict, Any
 
-from server.simulation_microservice.server.models.simulation import SimulationConfig
-from server.simulation_microservice.server.simulation.margin_account_service import MarginAccountService
-from server.simulation_microservice.server.simulation.market_data_service import MarketDataService
-from server.simulation_microservice.server.simulation.order_management_service import OrderManagementService
+from server.models.account import AccountSnapshot
+from server.models.option import OptionChainSnapshot
+from server.models.order import Order
+from server.models.simulation import SimulationConfig
+from server.simulation.margin_account_service import MarginAccountService
+from server.simulation.market_data_service import MarketDataService
+from server.simulation.observer_interfaces import IAccountDataObserver, IMarketDataObserver, IOrderManagementObserver
+from server.simulation.order_management_service import OrderManagementService
 
 
 class Simulation:
@@ -13,9 +19,9 @@ class Simulation:
         self.account_service = MarginAccountService(simulation_config.initial_capital)
         self.order_management_service = OrderManagementService(self.account_service)
 
-        self.market_data_service.register_observer(self.order_management_service)
+        # do not switch the order
         self.market_data_service.register_observer(self.account_service)
-        self.market_data_service.init()
+        self.market_data_service.register_observer(self.order_management_service)
 
 
 Simulations_Dict: "dict[str, MarketDataService]" = {}

@@ -1,0 +1,17 @@
+.iconTextContainer {
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.icon {
+  margin-right: 6px;
+  margin-left: 3px;
+}
+
+.text {
+  font-size: 16px;
+  color: white;
+  font-weight: 600;
+}

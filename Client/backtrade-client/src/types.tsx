@@ -13,21 +13,36 @@ export type TitlePortfolio = {
 export type OptionChainData = {
   dte: string;
   symbol: string;
-  callDelta: number;
-  callOptionOpenInterest: number;
-  callVolume: number;
-  callBidSize: string;
   callBid: number;
   callAsk: number;
-  callAskSize: string;
+  callVega: number;
+  callDelta: number;
+  callGamma: number;
+  callTheta: number;
+  callIv: number;
+  callQuantity?: number;
   strike: number;
-  putDelta: number;
-  putOptionOpenInterest: number;
-  putVolume: number;
-  putBidSize: string;
   putBid: number;
   putAsk: number;
-  putAskSize: string;
+  putVega: number;
+  putDelta: number;
+  putGamma: number;
+  putTheta: number;
+  putIv: number;
+  putQuantity?: number;
+};
+
+export type OrderEntryData = {
+  dte: string;
+  symbol: string;
+  action: "Buy" | "Sell";
+  quantity: number;
+  strike: number;
+  type: "Call" | "Put";
+  vega: number;
+  delta: number;
+  gamma: number;
+  theta: number;
 };
 
 export type PortfolioData = {
@@ -50,4 +65,15 @@ export type PortfolioData = {
 export type DtePortfolioData = {
   dte: string;
   values: PortfolioData[];
+};
+
+export type OrderData = {
+  instrument: string;
+  expirationDate: string;
+  strikePrice: number;
+  quantity: number;
+  type: "Call" | "Put";
+  marketLimit: "Market" | "Limit";
+  limitPrice: number;
+  status: "filled" | "canceled" | "pending";
 };

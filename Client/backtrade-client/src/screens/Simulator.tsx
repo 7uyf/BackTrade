@@ -1,189 +1,105 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import "./Simulator.css";
 import SimulationControls from "../components/SimulationControls";
-import UnderlyingIndex from "../components/UnderlyingIndex";
-import OrderEntry from "../components/OrderEntry";
+import Indicators from "../components/Indicators";
+import OrderEntry from "../components/OrderEntry/OrderEntry";
 import SimulationBuilder from "../components/SimulationBuilder";
-import OptionChain from "../components/OptionChain";
-import { DtePortfolioData, OptionChainData, PortfolioData } from "../types";
+import OptionChain, { OptionChainRef } from "../components/OptionChain";
+import {
+  DtePortfolioData,
+  OptionChainData,
+  OrderData,
+  OrderEntryData,
+} from "../types";
 import Portfolio from "../components/Portfolio";
 import useWebSocket from "react-use-websocket";
 
-// const optionChainMock: OptionChainData[] = [
-//   {
-//     dte: "2024-07-30",
-//     symbol: "AAPL",
-//     callDelta: 0.5,
-//     callOptionOpenInterest: 100,
-//     callVolume: 150,
-//     callBidSize: "10",
-//     callBid: 1.2,
-//     callAsk: 1.3,
-//     callAskSize: "15",
-//     strike: 150,
-//     putDelta: -0.5,
-//     putOptionOpenInterest: 200,
-//     putVolume: 100,
-//     putBidSize: "12",
-//     putBid: 1.1,
-//     putAsk: 1.2,
-//     putAskSize: "14",
-//   },
-//   {
-//     dte: "2024-07-30",
-//     symbol: "AAPL",
-//     callDelta: 0.6,
-//     callOptionOpenInterest: 120,
-//     callVolume: 160,
-//     callBidSize: "11",
-//     callBid: 1.3,
-//     callAsk: 1.4,
-//     callAskSize: "16",
-//     strike: 155,
-//     putDelta: -0.6,
-//     putOptionOpenInterest: 220,
-//     putVolume: 110,
-//     putBidSize: "13",
-//     putBid: 1.2,
-//     putAsk: 1.3,
-//     putAskSize: "15",
-//   },
-//   {
-//     dte: "2024-07-30",
-//     symbol: "AAPL",
-//     callDelta: 0.7,
-//     callOptionOpenInterest: 130,
-//     callVolume: 170,
-//     callBidSize: "12",
-//     callBid: 1.4,
-//     callAsk: 1.5,
-//     callAskSize: "17",
-//     strike: 160,
-//     putDelta: -0.7,
-//     putOptionOpenInterest: 230,
-//     putVolume: 120,
-//     putBidSize: "14",
-//     putBid: 1.3,
-//     putAsk: 1.4,
-//     putAskSize: "16",
-//   },
-//   {
-//     dte: "2024-08-30",
-//     symbol: "AAPL",
-//     callDelta: 0.4,
-//     callOptionOpenInterest: 140,
-//     callVolume: 180,
-//     callBidSize: "13",
-//     callBid: 1.5,
-//     callAsk: 1.6,
-//     callAskSize: "18",
-//     strike: 165,
-//     putDelta: -0.4,
-//     putOptionOpenInterest: 240,
-//     putVolume: 130,
-//     putBidSize: "15",
-//     putBid: 1.4,
-//     putAsk: 1.5,
-//     putAskSize: "17",
-//   },
-//   {
-//     dte: "2024-08-30",
-//     symbol: "AAPL",
-//     callDelta: 0.3,
-//     callOptionOpenInterest: 150,
-//     callVolume: 190,
-//     callBidSize: "14",
-//     callBid: 1.6,
-//     callAsk: 1.7,
-//     callAskSize: "19",
-//     strike: 170,
-//     putDelta: -0.3,
-//     putOptionOpenInterest: 250,
-//     putVolume: 140,
-//     putBidSize: "16",
-//     putBid: 1.5,
-//     putAsk: 1.6,
-//     putAskSize: "18",
-//   },
-//   {
-//     dte: "2024-08-30",
-//     symbol: "AAPL",
-//     callDelta: 0.2,
-//     callOptionOpenInterest: 160,
-//     callVolume: 200,
-//     callBidSize: "15",
-//     callBid: 1.7,
-//     callAsk: 1.8,
-//     callAskSize: "20",
-//     strike: 175,
-//     putDelta: -0.2,
-//     putOptionOpenInterest: 260,
-//     putVolume: 150,
-//     putBidSize: "17",
-//     putBid: 1.6,
-//     putAsk: 1.7,
-//     putAskSize: "19",
-//   },
-//   {
-//     dte: "2024-09-30",
-//     symbol: "AAPL",
-//     callDelta: 0.1,
-//     callOptionOpenInterest: 170,
-//     callVolume: 210,
-//     callBidSize: "16",
-//     callBid: 1.8,
-//     callAsk: 1.9,
-//     callAskSize: "21",
-//     strike: 180,
-//     putDelta: -0.1,
-//     putOptionOpenInterest: 270,
-//     putVolume: 160,
-//     putBidSize: "18",
-//     putBid: 1.7,
-//     putAsk: 1.8,
-//     putAskSize: "20",
-//   },
-//   {
-//     dte: "2024-09-30",
-//     symbol: "AAPL",
-//     callDelta: 0.0,
-//     callOptionOpenInterest: 180,
-//     callVolume: 220,
-//     callBidSize: "17",
-//     callBid: 1.9,
-//     callAsk: 2.0,
-//     callAskSize: "22",
-//     strike: 185,
-//     putDelta: 0.0,
-//     putOptionOpenInterest: 280,
-//     putVolume: 170,
-//     putBidSize: "19",
-//     putBid: 1.8,
-//     putAsk: 1.9,
-//     putAskSize: "21",
-//   },
-//   {
-//     dte: "2024-09-30",
-//     symbol: "AAPL",
-//     callDelta: -0.1,
-//     callOptionOpenInterest: 190,
-//     callVolume: 230,
-//     callBidSize: "18",
-//     callBid: 2.0,
-//     callAsk: 2.1,
-//     callAskSize: "23",
-//     strike: 190,
-//     putDelta: 0.1,
-//     putOptionOpenInterest: 290,
-//     putVolume: 180,
-//     putBidSize: "20",
-//     putBid: 1.9,
-//     putAsk: 2.0,
-//     putAskSize: "22",
-//   },
-//   // Add more data for other symbols if needed...
-// ];
+
+const optionChainMock: OptionChainData[] = [
+  // AAPL options
+  {
+    dte: "2024-07-30",
+    symbol: "AAPL",
+    callBid: 1.2,
+    callAsk: 1.3,
+    callVega: 0.3,
+    callDelta: 0.5,
+    callGamma: 0.01,
+    callTheta: -0.02,
+    callIv: 20,
+    strike: 150,
+    putBid: 1.1,
+    putAsk: 1.2,
+    putVega: 0.25,
+    putDelta: -0.5,
+    putGamma: 0.02,
+    putTheta: -0.03,
+    putIv: 18,
+  },
+  {
+    dte: "2024-07-30",
+    symbol: "AAPL",
+    callBid: 1.5,
+    callAsk: 1.6,
+    callVega: 0.35,
+    callDelta: 0.55,
+    callGamma: 0.015,
+    callTheta: -0.025,
+    callIv: 22,
+    strike: 160,
+    putBid: 1.3,
+    putAsk: 1.4,
+    putVega: 0.27,
+    putDelta: -0.55,
+    putGamma: 0.025,
+    putTheta: -0.035,
+    putIv: 20,
+    putQuantity: 2,
+  },
+  {
+    dte: "2024-08-30",
+    symbol: "AAPL",
+    callBid: 2.0,
+    callAsk: 2.2,
+    callVega: 0.4,
+    callDelta: 0.6,
+    callGamma: 0.02,
+    callTheta: -0.03,
+    callIv: 25,
+    strike: 170,
+    putBid: 1.8,
+    putAsk: 2.0,
+    putVega: 0.3,
+    putDelta: -0.6,
+    putGamma: 0.03,
+    putTheta: -0.04,
+    putIv: 22,
+  },
+  {
+    dte: "2024-08-30",
+    symbol: "AAPL",
+    callBid: 2.5,
+    callAsk: 2.7,
+    callVega: 0.45,
+    callDelta: 0.65,
+    callGamma: 0.025,
+    callTheta: -0.035,
+    callIv: 28,
+    callQuantity: 3,
+    strike: 180,
+    putBid: 2.3,
+    putAsk: 2.5,
+    putVega: 0.35,
+    putDelta: -0.65,
+    putGamma: 0.035,
+    putTheta: -0.045,
+    putIv: 25,
+  },
+
+  // Add more data for other symbols if needed...
+];
+
 
 const portfolioMock: DtePortfolioData[] = [
   {
@@ -347,8 +263,33 @@ const portfolioMock: DtePortfolioData[] = [
   },
 ];
 
+const ordersMock: OrderData[] = [
+  {
+    instrument: "AAPL",
+    expirationDate: "2024-07-30",
+    strikePrice: 150,
+    quantity: 10,
+    type: "Call",
+    marketLimit: "Limit",
+    limitPrice: 1.25,
+    status: "filled",
+  },
+  {
+    instrument: "GOOGL",
+    expirationDate: "2024-08-30",
+    strikePrice: 2500,
+    quantity: 5,
+    type: "Put",
+    marketLimit: "Market",
+    limitPrice: 1.5,
+    status: "pending",
+  },
+  // Add more orders if needed...
+];
+
 const Simulator: React.FC = () => {
   const [open, setOpen] = useState(false);
+
   const [optionChain, setOptionChain] = useState<OptionChainData[]>([]);
   const [websocketUrl, setWebsocketUrl] = useState<string | null>(null);
   const [wsMsgId, setWsMsgId] = useState<number>(1);
@@ -372,9 +313,11 @@ const Simulator: React.FC = () => {
     setOpen(false);
   };
 
+
   const handleSimulationStart = (simulationId: string) => {
     setWebsocketUrl(`ws://localhost:8000/simulation/${simulationId}/ws`)
     setOpen(false); // Close the dialog when simulation starts
+
   };
 
   useEffect(() => {
@@ -388,31 +331,59 @@ const Simulator: React.FC = () => {
   }, [lastMessage])
 
   const handleOptionSelect = (
-    option: OptionChainData,
-    actionType: "Call" | "Put"
+    option: OptionChainData | null,
+    type: "Call" | "Put" | null
   ) => {
-    setSelectedOption(option);
-    setSelectedOptionAction(actionType);
+    if (option && type) {
+      const existingIndex = selectedOptions.findIndex(
+        (o) =>
+          o.dte === option.dte && o.strike === option.strike && o.type === type
+      );
+      if (existingIndex !== -1) {
+        const updatedOptions = [...selectedOptions];
+        updatedOptions.splice(existingIndex, 1);
+        setSelectedOptions(updatedOptions);
+      } else {
+        const newOrder: OrderEntryData = {
+          quantity: 1,
+          action: "Buy",
+          dte: option.dte,
+          strike: option.strike,
+          type,
+          vega: type === "Call" ? option.callVega : option.putVega,
+          delta: type === "Call" ? option.callDelta : option.putDelta,
+          gamma: type === "Call" ? option.callGamma : option.putGamma,
+          theta: type === "Call" ? option.callTheta : option.putTheta,
+          symbol: option.symbol,
+        };
+        setSelectedOptions([...selectedOptions, newOrder]);
+      }
+    }
+  };
+
+  const handlePlaceOrder = (
+    orders: OrderEntryData[],
+    orderType: string,
+    limitPrice: number
+  ) => {
+    console.log("Placing order with options:", orders, orderType, limitPrice);
+    setResetHighlightedRows((prev) => prev + 1);
   };
 
   const handleSpeedChange = (speed: number) => {
     console.log("handleSpeedChange", speed);
-    // TODO: Connect to backend to change the simulation speed
   };
 
   const handleTimeChange = (timeIndex: number) => {
     console.log("handleTimeChange", timeIndex);
-    // TODO: Connect to backend to change the current simulation time
   };
 
   const handleFinish = () => {
     console.log("handleFinish");
-    // TODO: Connect to backend to finish the simulation
   };
 
   const handleRestart = () => {
     console.log("handleRestart");
-    // TODO: Connect to backend to restart the simulation
   };
 
   const handleResume = () => {
@@ -425,6 +396,7 @@ const Simulator: React.FC = () => {
     setWsMsgId((id) => id + 1)
   }
   return (
+
     <div>
       <SimulationControls
         onSpeedChange={handleSpeedChange}
@@ -444,12 +416,16 @@ const Simulator: React.FC = () => {
         <div>
           <Portfolio data={portfolioMock} />
           <UnderlyingIndex />
+
         </div>
         <OrderEntry
-          selectedOption={selectedOption}
-          selectedOptionAction={selectedOptionAction}
+          selectedOptions={selectedOptions}
+          onOptionsChange={setSelectedOptions}
+          onPlaceOrder={handlePlaceOrder}
+          optionChainRef={optionChainRef}
         />
       </div>
+
       <Dialog
         open={open}
         onClose={handleClose}

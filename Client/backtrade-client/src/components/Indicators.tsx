@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Paper } from "@mui/material";
 import { LineChart } from "@mui/x-charts";
+import IconText from "./IconText";
+import "./Indicators.css";
 
 // Extended mock data points (every 5 minutes)
 const generateMockData = (start: number, length: number): number[] =>
@@ -51,7 +53,9 @@ const pct90Line: number[] = generateStraightLine(6300, 4800, xLabels.length);
 
 const minValue = Math.min(...pct10Line, ...pct50Line, ...pct90Line);
 
-const UnderlyingIndex: React.FC = () => {
+interface IndicatorsProps {}
+
+const Indicators: React.FC<IndicatorsProps> = () => {
   const [uData, setUData] = useState<number[]>([]);
   const [pData, setPData] = useState<number[]>([]);
   const [dataIndex, setDataIndex] = useState<number>(0);
@@ -86,74 +90,76 @@ const UnderlyingIndex: React.FC = () => {
   }, [dataIndex]);
 
   return (
-    <Paper className="box-background even-margin">
-      <LineChart
-        sx={{
-          // Change left yAxis label styles
-          "& .MuiChartsAxis-left .MuiChartsAxis-tickLabel": {
-            strokeWidth: "0.4",
-            fill: "white",
-          },
-          // Change bottom label styles
-          "& .MuiChartsAxis-bottom .MuiChartsAxis-tickLabel": {
-            strokeWidth: "0.5",
-            fill: "white",
-          },
-          // BottomAxis line styles
-          "& .MuiChartsAxis-bottom .MuiChartsAxis-line": {
-            stroke: "white",
-            strokeWidth: 0.4,
-          },
-          // LeftAxis line styles
-          "& .MuiChartsAxis-left .MuiChartsAxis-line": {
-            stroke: "white",
-            strokeWidth: 0.4,
-          },
-          "& .MuiChartsAxis-left .MuiChartsAxis-tick, & .MuiChartsAxis-bottom .MuiChartsAxis-tick":
-            {
-              stroke: "white",
+    <Paper className="indicators">
+      <IconText text="Indicators" />
+      <div className="linechart">
+        <LineChart
+          sx={{
+            // Change left yAxis label styles
+            "& .MuiChartsAxis-left .MuiChartsAxis-tickLabel": {
+              strokeWidth: "0.4",
+              fill: "white",
             },
-          "& .MuiChartsLegend-series text tspan": {
-            fill: "white",
-          },
-        }}
-        width={1000}
-        height={300}
-        series={[
-          {
-            data: pData,
-            label: "Premium",
-            color: "blue",
-            curve: "linear",
-            showMark: false,
-          },
-          {
-            data: pct10Line,
-            label: "Pct10",
-            color: "red",
-            curve: "linear",
-            showMark: false,
-          },
-          {
-            data: pct50Line,
-            label: "Pct50",
-            color: "yellow",
-            curve: "linear",
-            showMark: false,
-          },
-          {
-            data: pct90Line,
-            label: "Pct90",
-            color: "green",
-            curve: "linear",
-            showMark: false,
-          },
-        ]}
-        xAxis={[{ scaleType: "point", data: xLabels }]}
-        yAxis={[{ min: minValue }]}
-      />
+            // Change bottom label styles
+            "& .MuiChartsAxis-bottom .MuiChartsAxis-tickLabel": {
+              strokeWidth: "0.5",
+              fill: "white",
+            },
+            // BottomAxis line styles
+            "& .MuiChartsAxis-bottom .MuiChartsAxis-line": {
+              stroke: "white",
+              strokeWidth: 0.4,
+            },
+            // LeftAxis line styles
+            "& .MuiChartsAxis-left .MuiChartsAxis-line": {
+              stroke: "white",
+              strokeWidth: 0.4,
+            },
+            "& .MuiChartsAxis-left .MuiChartsAxis-tick, & .MuiChartsAxis-bottom .MuiChartsAxis-tick":
+              {
+                stroke: "white",
+              },
+            "& .MuiChartsLegend-series text tspan": {
+              fill: "white",
+            },
+          }}
+          height={200}
+          series={[
+            {
+              data: pData,
+              label: "Premium",
+              color: "blue",
+              curve: "linear",
+              showMark: false,
+            },
+            {
+              data: pct10Line,
+              label: "Pct10",
+              color: "red",
+              curve: "linear",
+              showMark: false,
+            },
+            {
+              data: pct50Line,
+              label: "Pct50",
+              color: "yellow",
+              curve: "linear",
+              showMark: false,
+            },
+            {
+              data: pct90Line,
+              label: "Pct90",
+              color: "green",
+              curve: "linear",
+              showMark: false,
+            },
+          ]}
+          xAxis={[{ scaleType: "point", data: xLabels }]}
+          yAxis={[{ min: minValue }]}
+        />
+      </div>
     </Paper>
   );
 };
 
-export default UnderlyingIndex;
+export default Indicators;

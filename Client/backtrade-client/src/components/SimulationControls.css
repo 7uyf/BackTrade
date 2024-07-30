@@ -1,5 +1,9 @@
-.controls-card {
-  background: rgb(0, 1, 46) !important;
+.simulator-controls {
+  background-image: linear-gradient(
+    to bottom left,
+    rgb(0, 0, 0),
+    rgb(15, 16, 55)
+  ) !important;
   border: 1px lightgray solid;
 }
 
@@ -7,6 +11,7 @@
   display: flex;
   align-items: center;
   justify-content: space-evenly;
+  height: 35%;
 }
 
 .slider-container {
@@ -29,17 +34,70 @@
   color: rgb(0, 67, 255) !important;
 }
 
+.slider-container {
+  width: 33%;
+}
+
 button.finish-button,
 button.restart-button {
   margin: 0.5rem !important;
-  color: black !important;
-  font-weight: bold !important;
+  height: 15%;
+  width: 36%;
+  color: white !important;
+  font-weight: 500 !important;
+}
+
+.time-slider {
+  width: 95%;
+  margin: auto;
 }
 
 .finish-button {
-  background: rgb(98, 255, 123) !important;
+  background: #ca2222 !important;
 }
 
 .restart-button {
   background: rgb(0, 67, 255) !important;
+}
+
+.clock-display {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+
+.clock-display:hover {
+  opacity: 0.7;
+}
+
+.clock-time {
+  font-size: 24px;
+  color: white;
+  font-weight: bold;
+}
+
+.popover-content {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
+.popover-content span {
+  margin: 0 5px;
+}
+
+.popover-content .colon {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.popover-content .invalid-input fieldset {
+  border-color: red;
+}
+
+.popover-content .change-button {
+  background-color: transparent;
 }

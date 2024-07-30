@@ -1,5 +1,18 @@
+.portfolio {
+  background-image: linear-gradient(
+    to bottom left,
+    rgb(0, 0, 0),
+    rgb(15, 16, 55)
+  ) !important;
+  border: 1px lightgray solid;
+}
+
+.transparent-background {
+  background-color: transparent !important;
+}
+
 .dte-row {
-  background-color: rgba(255, 255, 255, 0.1); /* Slight white tint */
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .dte-row td {
@@ -9,9 +22,44 @@
 .table-container {
   max-height: 25vh;
   overflow-y: auto;
+  font-size: 10px;
 }
+
+.table-head {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.portfolio-head > tr,
+.portfolio-body > tr {
+  display: grid;
+  grid-template-columns: 2fr 1fr 3fr repeat(7, 1fr);
+  height: auto !important;
+}
+
+.table-body {
+  text-align: center;
+}
+
+.table-body .MuiTableRow-root {
+  height: 20px;
+}
+
+.dte-row {
+  background-color: rgba(255, 255, 255, 0.1);
+  font-size: 11px;
+}
+
+.dte-row .date-text {
+  font-size: 11px;
+}
+
+.dte-row .text {
+  font-size: 10px;
+}
+
 .total-pnl {
-  position: sticky;
   color: white !important;
   bottom: 0;
   background-color: transparent !important;
@@ -19,5 +67,49 @@
 }
 
 .total-pnl > p {
-  padding: 3px !important;
+  padding: 5px !important;
+}
+
+.text {
+  font-size: 18px;
+  color: white;
+  font-weight: bold;
+}
+
+.table-container th,
+.table-container td {
+  padding: 8px;
+  word-wrap: break-word;
+}
+
+.header-cell,
+.text {
+  text-align: center !important;
+}
+
+/* Instrument column specific styling .instrument-column {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+} */
+
+.white-border-input .MuiOutlinedInput-root {
+  border-color: white;
+}
+
+.white-border-input .MuiOutlinedInput-input {
+  color: white;
+}
+
+.white-border-input .MuiOutlinedInput-notchedOutline {
+  border-color: white;
+}
+
+.white-border-input .MuiInputLabel-root {
+  color: white;
+}
+
+.white-border-input .MuiSelect-icon {
+  color: white;
 }

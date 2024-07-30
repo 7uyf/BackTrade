@@ -1,0 +1,76 @@
+.option-chain {
+  background-image: linear-gradient(
+    to bottom left,
+    rgb(0, 0, 0),
+    rgb(15, 16, 55)
+  ) !important;
+  border: 1px lightgray solid;
+}
+
+.option-chain .MuiTab-root {
+  min-width: 100px !important;
+  width: auto !important;
+  flex: 1;
+}
+
+.option-chain .MuiTabs-flexContainer {
+  justify-content: space-around;
+}
+
+.table-container {
+  height: 23vh;
+  overflow: scroll;
+}
+
+.table-body-scroll {
+  height: 600px;
+  overflow-y: auto;
+}
+
+.table-body .MuiTableRow-root {
+  height: 20px;
+}
+
+.table-head .header-cell,
+.table-head .strike-header {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.table-body .value-cell,
+.table-body .strike-cell {
+  text-align: center;
+  font-size: 10px;
+}
+
+.uprow {
+  margin-top: 14px;
+}
+
+.inputlabel {
+  margin-top: -35px;
+}
+
+.symbol-select {
+  margin-top: -25px;
+}
+
+.header-cell {
+  font-size: 11px;
+  justify-content: center;
+}
+
+.value-cell.highlighted {
+  background-color: rgba(0, 225, 255, 0.3);
+  cursor: pointer;
+}
+
+.value-cell {
+  cursor: pointer;
+}
+
+.quantity-cell {
+  width: 50px;
+  text-align: center;
+}

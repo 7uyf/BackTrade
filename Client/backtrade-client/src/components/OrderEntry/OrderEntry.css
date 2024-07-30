@@ -1,0 +1,134 @@
+.order-entry {
+  background-image: linear-gradient(
+    to bottom left,
+    rgb(0, 0, 0),
+    rgb(15, 16, 55)
+  ) !important;
+  border: 1px lightgray solid;
+}
+
+@media (min-width: 600px) {
+  .order-entry {
+    transform: scaleY(0.882);
+    transform-origin: top;
+  }
+}
+
+@media (min-width: 1281px) {
+  .order-entry {
+    transform: scale(1);
+  }
+}
+
+.mainorder {
+  margin: 4px;
+}
+
+.input-label {
+  color: white !important;
+  font-size: 0.7rem;
+  font-weight: 550;
+}
+
+.select-input,
+.date-input {
+  background-color: rgb(10, 10, 50);
+  color: white !important;
+  border-radius: 5px;
+}
+
+.select-input div {
+  border: none !important;
+}
+
+.date-input div {
+  color: white !important;
+}
+
+.number-input {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgb(10, 10, 50);
+  border-radius: 5px;
+  padding: 0.5rem;
+}
+
+.number-textfield {
+  width: 87px;
+  border: white solid 2px !important;
+  border-radius: 5px;
+}
+
+.icon-button {
+  color: white !important;
+}
+
+.order-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.buy-button {
+  background-color: rgb(0, 67, 255) !important;
+}
+
+.sell-button {
+  background-color: #da1e1e !important;
+}
+
+.number-textfield input {
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.icon-button {
+  width: 20px;
+}
+
+button.confirm-button {
+  margin: 0.5rem !important;
+  color: white !important;
+  font-weight: bold !important;
+  width: 48%;
+}
+
+label {
+  color: white !important;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
+.strike-title {
+  color: white !important;
+  font-weight: 400;
+  margin-left: 10px;
+  font-size: 0.9rem !important;
+}
+
+.table-head {
+  color: white !important;
+}
+
+.header-cell {
+  color: white !important;
+}
+
+.value-cell {
+  color: white !important;
+}
+
+.strike-cell {
+  color: white !important;
+}
+
+.oe-table-container {
+  flex-grow: 1;
+  overflow-y: auto;
+  max-height: 100vh !important;
+}

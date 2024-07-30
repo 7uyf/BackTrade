@@ -1,9 +1,10 @@
 import datetime
-from typing import List, Literal
+from collections import deque
+from typing import List, Literal, Optional, Dict
 
 from pydantic import BaseModel
 
-from server.simulation_microservice.server.models.simulation import DteFile
+from server.models.simulation import DteFile
 
 
 class Option(BaseModel):
@@ -31,22 +32,11 @@ class Option(BaseModel):
             )
         return False
 
-    def to_dict(self):
-        return {
-            "t_date": self.t_date.isoformat(),
-            "stock_symbol": self.stock_symbol,
-            "expiration_date": self.expiration_date.isoformat(),
-            "strike": self.strike,
-            "underlying_price": self.underlying_price,
-            "call_put": self.call_put,
-            "price_bid": self.price_bid,
-            "price_ask": self.price_ask,
-            "iv": self.iv,
-            "delta": self.delta,
-            "gamma": self.gamma,
-            "theta": self.theta,
-            "vega": self.vega,
-        }
+    def __hash__(self):
+        return hash((self.stock_symbol, self.expiration_date, self.strike, self.call_put))
+
+    def __str__(self):
+        return f"Option(symbol={self.stock_symbol}, dte={self.expiration_date.strftime('%Y-%m-%d')}, strike={self.strike}, right={self.call_put})"
 
     @classmethod
     def from_csv_row(cls, row: dict):
@@ -77,15 +67,28 @@ class OptionChainSnapshot(BaseModel):
                 return o
         return None
 
-    def to_dict(self):
-        return {
-            "dte_file": {
-                "file_url": self.dte_file.file_url,
-                "today_date": self.dte_file.today_date.isoformat(),
-                "stock_symbol": self.dte_file.stock_symbol,
-                "expiration_date": self.dte_file.expiration_date.isoformat(),
-                "dte": self.dte_file.dte,
-            },
-            "options": [option.to_dict() for option in self.options],
-        }
-    # validate all options rows have the same t_date
+
+class OptionChainSnapshotTimeSeries(BaseModel):
+    snapshots: deque[OptionChainSnapshot]
+
+    def __init__(self, window_size: int):
+        super().__init__(snapshots=deque(maxlen=window_size))
+
+    def add_snapshot(self, snapshot: OptionChainSnapshot):
+        self.snapshots.append(snapshot)
+
+    def get_latest_snapshot(self) -> Optional[OptionChainSnapshot]:
+        if not self.snapshots:
+            return None
+        return max(self.snapshots, key=lambda s: s.dte_file.today_date)
+
+    def get_options_over_time(self, option: Option) -> List[Dict]:
+        option_data = []
+        for snapshot in self.snapshots:
+            opt = snapshot.get_option(option)
+            if opt:
+                option_data.append({
+                    "date": snapshot.dte_file.today_date,
+                    "option_data": opt.__dict__,
+                })
+        return option_data
