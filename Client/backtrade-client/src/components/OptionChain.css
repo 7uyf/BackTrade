@@ -60,3 +60,17 @@
   font-size: 11px;
   justify-content: center;
 }
+
+.value-cell.highlighted {
+  background-color: rgba(0, 225, 255, 0.3);
+  cursor: pointer;
+}
+
+.value-cell {
+  cursor: pointer;
+}
+
+.quantity-cell {
+  width: 50px;
+  text-align: center;
+}

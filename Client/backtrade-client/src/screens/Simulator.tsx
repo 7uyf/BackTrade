@@ -1,204 +1,98 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import "./Simulator.css";
 import SimulationControls from "../components/SimulationControls";
 import Indicators from "../components/Indicators";
 import OrderEntry from "../components/OrderEntry/OrderEntry";
 import SimulationBuilder from "../components/SimulationBuilder";
-import OptionChain from "../components/OptionChain";
-import { DtePortfolioData, OptionChainData } from "../types";
+import OptionChain, { OptionChainRef } from "../components/OptionChain";
+import {
+  DtePortfolioData,
+  OptionChainData,
+  OrderData,
+  OrderEntryData,
+} from "../types";
 import Portfolio from "../components/Portfolio";
 
 const optionChainMock: OptionChainData[] = [
+  // AAPL options
   {
     dte: "2024-07-30",
-    symbol: "QQQ",
-    callBid: 0.5,
-    callAsk: 100,
-    callVega: 150,
-    callDelta: "10",
-    callGamma: 1.2,
-    callTheta: 1.3,
-    callIV: "15",
+    symbol: "AAPL",
+    callBid: 1.2,
+    callAsk: 1.3,
+    callVega: 0.3,
+    callDelta: 0.5,
+    callGamma: 0.01,
+    callTheta: -0.02,
+    callIv: 20,
     strike: 150,
-    putBid: -0.5,
-    putAsk: 200,
-    putVega: 100,
-    putDelta: "12",
-    putGamma: 1.1,
-    putTheta: 1.2,
-    putIV: "14",
+    putBid: 1.1,
+    putAsk: 1.2,
+    putVega: 0.25,
+    putDelta: -0.5,
+    putGamma: 0.02,
+    putTheta: -0.03,
+    putIv: 18,
   },
   {
     dte: "2024-07-30",
-    symbol: "QQQ",
-    callBid: 0.5,
-    callAsk: 100,
-    callVega: 150,
-    callDelta: "10",
-    callGamma: 1.2,
-    callTheta: 1.3,
-    callIV: "15",
-    strike: 150,
-    putBid: -0.5,
-    putAsk: 200,
-    putVega: 100,
-    putDelta: "12",
-    putGamma: 1.1,
-    putTheta: 1.2,
-    putIV: "14",
-  },
-  {
-    dte: "2024-07-30",
-    symbol: "QQQ",
-    callBid: 0.5,
-    callAsk: 100,
-    callVega: 150,
-    callDelta: "10",
-    callGamma: 1.2,
-    callTheta: 1.3,
-    callIV: "15",
-    strike: 150,
-    putBid: -0.5,
-    putAsk: 200,
-    putVega: 100,
-    putDelta: "12",
-    putGamma: 1.1,
-    putTheta: 1.2,
-    putIV: "14",
-  },
-  {
-    dte: "2024-07-30",
-    symbol: "QQQ",
-    callBid: 0.5,
-    callAsk: 100,
-    callVega: 150,
-    callDelta: "10",
-    callGamma: 1.2,
-    callTheta: 1.3,
-    callIV: "15",
-    strike: 150,
-    putBid: -0.5,
-    putAsk: 200,
-    putVega: 100,
-    putDelta: "12",
-    putGamma: 1.1,
-    putTheta: 1.2,
-    putIV: "14",
-  },
-  {
-    dte: "2024-07-30",
-    symbol: "QQQ",
-    callBid: 0.5,
-    callAsk: 100,
-    callVega: 150,
-    callDelta: "10",
-    callGamma: 1.2,
-    callTheta: 1.3,
-    callIV: "15",
-    strike: 150,
-    putBid: -0.5,
-    putAsk: 200,
-    putVega: 100,
-    putDelta: "12",
-    putGamma: 1.1,
-    putTheta: 1.2,
-    putIV: "14",
-  },
-  {
-    dte: "2024-07-30",
-    symbol: "QQQ",
-    callBid: 0.4,
-    callAsk: 10,
-    callVega: 140,
-    callDelta: "90",
-    callGamma: 1.4,
-    callTheta: 1.5,
-    callIV: "13",
-    strike: 140,
-    putBid: -0.6,
-    putAsk: 200,
-    putVega: 110,
-    putDelta: "14",
-    putGamma: 1.3,
-    putTheta: 1.6,
-    putIV: "13",
-  },
-  {
-    dte: "2024-07-30",
-    symbol: "QQQ",
-    callBid: 0.7,
-    callAsk: 105,
-    callVega: 140,
-    callDelta: "9",
-    callGamma: 1.4,
-    callTheta: 1.6,
-    callIV: "14",
-    strike: 140,
-    putBid: -0.2,
-    putAsk: 180,
-    putVega: 110,
-    putDelta: "11",
-    putGamma: 1.3,
-    putTheta: 1,
-    putIV: "15",
+    symbol: "AAPL",
+    callBid: 1.5,
+    callAsk: 1.6,
+    callVega: 0.35,
+    callDelta: 0.55,
+    callGamma: 0.015,
+    callTheta: -0.025,
+    callIv: 22,
+    strike: 160,
+    putBid: 1.3,
+    putAsk: 1.4,
+    putVega: 0.27,
+    putDelta: -0.55,
+    putGamma: 0.025,
+    putTheta: -0.035,
+    putIv: 20,
+    putQuantity: 2,
   },
   {
     dte: "2024-08-30",
-    symbol: "SPY",
-    callBid: 0.9,
-    callAsk: 110,
-    callVega: 130,
-    callDelta: "9",
-    callGamma: 1.9,
-    callTheta: 1.6,
-    callIV: "14",
-    strike: 140,
-    putBid: -0.4,
-    putAsk: 190,
-    putVega: 90,
-    putDelta: "11",
-    putGamma: 1.3,
-    putTheta: 1.2,
-    putIV: "14",
+    symbol: "AAPL",
+    callBid: 2.0,
+    callAsk: 2.2,
+    callVega: 0.4,
+    callDelta: 0.6,
+    callGamma: 0.02,
+    callTheta: -0.03,
+    callIv: 25,
+    strike: 170,
+    putBid: 1.8,
+    putAsk: 2.0,
+    putVega: 0.3,
+    putDelta: -0.6,
+    putGamma: 0.03,
+    putTheta: -0.04,
+    putIv: 22,
   },
   {
     dte: "2024-08-30",
-    symbol: "QQQ",
-    callBid: 0.5,
-    callAsk: 100,
-    callVega: 150,
-    callDelta: "10",
-    callGamma: 1.2,
-    callTheta: 1.3,
-    callIV: "15",
-    strike: 150,
-    putBid: -0.5,
-    putAsk: 200,
-    putVega: 100,
-    putDelta: "12",
-    putGamma: 1.1,
-    putTheta: 1.2,
-    putIV: "14",
-  },
-  {
-    dte: "2024-09-30",
-    symbol: "SPY",
-    callBid: 0.5,
-    callAsk: 100,
-    callVega: 150,
-    callDelta: "10",
-    callGamma: 1.2,
-    callTheta: 1.3,
-    callIV: "15",
-    strike: 150,
-    putBid: -0.5,
-    putAsk: 200,
-    putVega: 100,
-    putDelta: "12",
-    putGamma: 1.1,
-    putTheta: 1.2,
-    putIV: "14",
+    symbol: "AAPL",
+    callBid: 2.5,
+    callAsk: 2.7,
+    callVega: 0.45,
+    callDelta: 0.65,
+    callGamma: 0.025,
+    callTheta: -0.035,
+    callIv: 28,
+    callQuantity: 3,
+    strike: 180,
+    putBid: 2.3,
+    putAsk: 2.5,
+    putVega: 0.35,
+    putDelta: -0.65,
+    putGamma: 0.035,
+    putTheta: -0.045,
+    putIv: 25,
   },
 
   // Add more data for other symbols if needed...
@@ -366,14 +260,35 @@ const portfolioMock: DtePortfolioData[] = [
   },
 ];
 
+const ordersMock: OrderData[] = [
+  {
+    instrument: "AAPL",
+    expirationDate: "2024-07-30",
+    strikePrice: 150,
+    quantity: 10,
+    type: "Call",
+    marketLimit: "Limit",
+    limitPrice: 1.25,
+    status: "filled",
+  },
+  {
+    instrument: "GOOGL",
+    expirationDate: "2024-08-30",
+    strikePrice: 2500,
+    quantity: 5,
+    type: "Put",
+    marketLimit: "Market",
+    limitPrice: 1.5,
+    status: "pending",
+  },
+  // Add more orders if needed...
+];
+
 const Simulator: React.FC = () => {
   const [open, setOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<OptionChainData | null>(
-    null
-  );
-  const [selectedOptionAction, setSelectedOptionAction] = useState<
-    "Call" | "Put" | null
-  >(null);
+  const [selectedOptions, setSelectedOptions] = useState<OrderEntryData[]>([]);
+  const [resetHighlightedRows, setResetHighlightedRows] = useState(0);
+  const optionChainRef = useRef<OptionChainRef>(null);
 
   useEffect(() => {
     handleClickOpen();
@@ -388,35 +303,63 @@ const Simulator: React.FC = () => {
   };
 
   const handleSimulationStart = () => {
-    setOpen(false); // Close the dialog when simulation starts
+    setOpen(false);
   };
 
   const handleOptionSelect = (
-    option: OptionChainData,
-    actionType: "Call" | "Put"
+    option: OptionChainData | null,
+    type: "Call" | "Put" | null
   ) => {
-    setSelectedOption(option);
-    setSelectedOptionAction(actionType);
+    if (option && type) {
+      const existingIndex = selectedOptions.findIndex(
+        (o) =>
+          o.dte === option.dte && o.strike === option.strike && o.type === type
+      );
+      if (existingIndex !== -1) {
+        const updatedOptions = [...selectedOptions];
+        updatedOptions.splice(existingIndex, 1);
+        setSelectedOptions(updatedOptions);
+      } else {
+        const newOrder: OrderEntryData = {
+          quantity: 1,
+          action: "Buy",
+          dte: option.dte,
+          strike: option.strike,
+          type,
+          vega: type === "Call" ? option.callVega : option.putVega,
+          delta: type === "Call" ? option.callDelta : option.putDelta,
+          gamma: type === "Call" ? option.callGamma : option.putGamma,
+          theta: type === "Call" ? option.callTheta : option.putTheta,
+          symbol: option.symbol,
+        };
+        setSelectedOptions([...selectedOptions, newOrder]);
+      }
+    }
+  };
+
+  const handlePlaceOrder = (
+    orders: OrderEntryData[],
+    orderType: string,
+    limitPrice: number
+  ) => {
+    console.log("Placing order with options:", orders, orderType, limitPrice);
+    setResetHighlightedRows((prev) => prev + 1);
   };
 
   const handleSpeedChange = (speed: number) => {
     console.log("handleSpeedChange", speed);
-    // TODO: Connect to backend to change the simulation speed
   };
 
   const handleTimeChange = (timeIndex: number) => {
     console.log("handleTimeChange", timeIndex);
-    // TODO: Connect to backend to change the current simulation time
   };
 
   const handleFinish = () => {
     console.log("handleFinish");
-    // TODO: Connect to backend to finish the simulation
   };
 
   const handleRestart = () => {
     console.log("handleRestart");
-    // TODO: Connect to backend to restart the simulation
   };
 
   return (
@@ -429,22 +372,29 @@ const Simulator: React.FC = () => {
           onRestart={handleRestart}
         />
         <OptionChain
+          ref={optionChainRef}
           title="Option Chain"
+          scale={1}
           values={optionChainMock}
-          onClickCall={(event) => handleOptionSelect(event, "Call")}
-          onClickPut={(event) => handleOptionSelect(event, "Put")}
+          onOptionSelect={handleOptionSelect}
+          resetHighlightedRows={resetHighlightedRows}
+          selectedOptions={selectedOptions}
+          onOptionsChange={setSelectedOptions}
         />
       </div>
       <div className="BottomDiv">
         <div className="LeftDiv">
-          <Portfolio data={portfolioMock} />
+          <Portfolio data={portfolioMock} orders={ordersMock} />
           <Indicators />
         </div>
         <OrderEntry
-          selectedOption={selectedOption}
-          selectedOptionAction={selectedOptionAction}
+          selectedOptions={selectedOptions}
+          onOptionsChange={setSelectedOptions}
+          onPlaceOrder={handlePlaceOrder}
+          optionChainRef={optionChainRef}
         />
       </div>
+
       <Dialog
         open={open}
         onClose={handleClose}
