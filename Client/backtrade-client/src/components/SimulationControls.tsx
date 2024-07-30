@@ -22,6 +22,8 @@ interface SimulationControlsProps {
   onTimeChange: (timeIndex: number) => void;
   onFinish: () => void;
   onRestart: () => void;
+  onPause: () => void;
+  onResume: () => void;
 }
 
 interface SimulationControlsState {
@@ -132,7 +134,11 @@ class SimulationControls extends React.Component<
   handlePlayPause = () => {
     const isPlaying = !this.state.isPlaying;
     this.setState({ isPlaying });
-    this.props.onSpeedChange(isPlaying ? this.state.speed : 0);
+    if (isPlaying) {
+      this.props.onResume()
+    } else {
+      this.props.onPause()
+    }
   };
 
   handleClockClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -374,7 +380,10 @@ class SimulationControls extends React.Component<
         </div>
       </Paper>
     );
+
   }
 }
+
+
 
 export default SimulationControls;

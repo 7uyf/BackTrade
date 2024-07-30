@@ -13,6 +13,8 @@ import {
   OrderEntryData,
 } from "../types";
 import Portfolio from "../components/Portfolio";
+import useWebSocket from "react-use-websocket";
+
 
 const optionChainMock: OptionChainData[] = [
   // AAPL options
@@ -97,6 +99,7 @@ const optionChainMock: OptionChainData[] = [
 
   // Add more data for other symbols if needed...
 ];
+
 
 const portfolioMock: DtePortfolioData[] = [
   {
@@ -286,9 +289,17 @@ const ordersMock: OrderData[] = [
 
 const Simulator: React.FC = () => {
   const [open, setOpen] = useState(false);
-  const [selectedOptions, setSelectedOptions] = useState<OrderEntryData[]>([]);
-  const [resetHighlightedRows, setResetHighlightedRows] = useState(0);
-  const optionChainRef = useRef<OptionChainRef>(null);
+
+  const [optionChain, setOptionChain] = useState<OptionChainData[]>([]);
+  const [websocketUrl, setWebsocketUrl] = useState<string | null>(null);
+  const [wsMsgId, setWsMsgId] = useState<number>(1);
+  const { sendJsonMessage, lastMessage, readyState } = useWebSocket(websocketUrl);
+  const [selectedOption, setSelectedOption] = useState<OptionChainData | null>(
+    null
+  );
+  const [selectedOptionAction, setSelectedOptionAction] = useState<
+    "Call" | "Put" | null
+  >(null);
 
   useEffect(() => {
     handleClickOpen();
@@ -302,9 +313,22 @@ const Simulator: React.FC = () => {
     setOpen(false);
   };
 
-  const handleSimulationStart = () => {
-    setOpen(false);
+
+  const handleSimulationStart = (simulationId: string) => {
+    setWebsocketUrl(`ws://localhost:8000/simulation/${simulationId}/ws`)
+    setOpen(false); // Close the dialog when simulation starts
+
   };
+
+  useEffect(() => {
+    if (lastMessage === null) {
+      setOptionChain([])
+      return
+    } else if (lastMessage?.data.complete !== null) {
+      return
+    }
+    setOptionChain(JSON.parse(JSON.parse(lastMessage?.data)).options)
+  }, [lastMessage])
 
   const handleOptionSelect = (
     option: OptionChainData | null,
@@ -362,30 +386,37 @@ const Simulator: React.FC = () => {
     console.log("handleRestart");
   };
 
+  const handleResume = () => {
+    sendJsonMessage({ command: 'resumeSimulation', id: wsMsgId })
+    setWsMsgId((id) => id + 1)
+  }
+
+  const handlePause = () => {
+    sendJsonMessage({ command: 'pauseSimulation', id: wsMsgId })
+    setWsMsgId((id) => id + 1)
+  }
   return (
-    <div className="mainDiv mainDiv-scale">
-      <div className="UpDiv">
-        <SimulationControls
-          onSpeedChange={handleSpeedChange}
-          onTimeChange={handleTimeChange}
-          onFinish={handleFinish}
-          onRestart={handleRestart}
-        />
-        <OptionChain
-          ref={optionChainRef}
-          title="Option Chain"
-          scale={1}
-          values={optionChainMock}
-          onOptionSelect={handleOptionSelect}
-          resetHighlightedRows={resetHighlightedRows}
-          selectedOptions={selectedOptions}
-          onOptionsChange={setSelectedOptions}
-        />
-      </div>
-      <div className="BottomDiv">
-        <div className="LeftDiv">
-          <Portfolio data={portfolioMock} orders={ordersMock} />
-          <Indicators />
+
+    <div>
+      <SimulationControls
+        onSpeedChange={handleSpeedChange}
+        onTimeChange={handleTimeChange}
+        onFinish={handleFinish}
+        onRestart={handleRestart}
+        onResume={handleResume}
+        onPause={handlePause}
+      />
+      <OptionChain
+        title="Option Chain"
+        values={optionChain}
+        onClickCall={(event) => handleOptionSelect(event, "Call")}
+        onClickPut={(event) => handleOptionSelect(event, "Put")}
+      />
+      <div className="horizontal-container">
+        <div>
+          <Portfolio data={portfolioMock} />
+          <UnderlyingIndex />
+
         </div>
         <OrderEntry
           selectedOptions={selectedOptions}

@@ -17,7 +17,9 @@ import axios from "axios";
 import "./SimulationBuilder.css";
 
 interface SimulationBuilderProps {
-  onSimulationStart: () => void; // Define prop for handling simulation start
+
+    onSimulationStart: (simulationId: string) => void; // Define prop for handling simulation start
+
 }
 
 const pattern = /\/(-?\d+)dte\//;
@@ -58,9 +60,30 @@ const SimulationBuilder: React.FC<SimulationBuilderProps> = ({
     }
   };
 
-  const extractDates = (filePaths: string[]): string[] => {
-    const datePattern = /\d{4}-\d{2}-\d{2}/; // Pattern to match dates in the format YYYY-MM-DD
-    const datesSet = new Set<string>();
+    const handleStartSimulating = async () => {
+        try {
+            const response = await axios.post('http://localhost:8000/simulation', {
+                user_id: 'user123',
+                simulation_type: 'Practice',
+                start_date_time: new Date(2016, 1, 12, 9, 30).toISOString(),
+                initial_capital: 100000.0,
+                universe_selection: [
+                    {
+                        file_url: 'ivol/all_dte_raw_data/0dte/2016-01-12.csv',
+                        today_date: new Date(2016, 1, 12).toISOString(),
+                        stock_symbol: 'SPX',
+                        expiration_date: new Date(2016, 1, 22).toISOString(),
+                        dte: 10
+                    }
+                ]
+            });
+            console.log('Simulation created:', response.data);
+            onSimulationStart(response.data['_id'])
+        } catch (error) {
+            console.error('Error creating simulation:', error);
+        }
+    };
+
 
     filePaths.forEach((path) => {
       const match = path.match(datePattern);

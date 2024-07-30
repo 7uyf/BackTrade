@@ -10,7 +10,7 @@ from server.simulation.simulation import Simulations_Dict, Simulation
 router = APIRouter(prefix="/simulation", tags=["Simulation"])
 
 
-@router.post("/")
+@router.post("")
 async def createSimulation(simulationInset: SimulationInset) -> SimulationConfig:
     """Create a simulation"""
     simulationConfig =  SimulationConfig(user_id= simulationInset.user_id, simulation_type= simulationInset.simulation_type,start_date_time = simulationInset.start_date_time,initial_capital = simulationInset.initial_capital,universe_selection = simulationInset.universe_selection,indicator_type_selection = [""] )
@@ -39,7 +39,12 @@ async def simulation_ws(websocket: WebSocket, simulation_id:PydanticObjectId):
         while True:
             data = await websocket.receive_text()
             print(data)
-            await websocket.send_text(data)
+            if (data.get("command") == "pauseSimulation"):
+                await simulation.market_data_generator.pause()
+            elif  (data.get("command") == "resumeSimulation"): 
+                  await simulation.market_data_generator.resume()
+
+            await websocket.send_json({"complete": data.get('id')})
     except WebSocketDisconnect:
         # disconnect  simulation, even closeit if it has no listeners
         simulation.market_data_generator.remove_observer(simulationWebSocket)
