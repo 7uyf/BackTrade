@@ -98,8 +98,10 @@ class SimulationControls extends React.Component<
 
   handleSliderChange = (event: Event, newValue: number | number[]): void => {
     const timeIndex = newValue as number;
-    const [hour, minute] = this.state.times[timeIndex].split(":").map(Number);
-    this.setState({ currentTimeIndex: timeIndex, hour, minute });
+    if (timeIndex >= this.state.currentTimeIndex) {
+      const [hour, minute] = this.state.times[timeIndex].split(":").map(Number);
+      this.setState({ currentTimeIndex: timeIndex, hour, minute });
+    }
   };
 
   handleSliderChangeCommitted = (
@@ -107,9 +109,11 @@ class SimulationControls extends React.Component<
     newValue: number | number[]
   ): void => {
     const timeIndex = newValue as number;
-    const [hour, minute] = this.state.times[timeIndex].split(":").map(Number);
-    this.setState({ currentTimeIndex: timeIndex, hour, minute });
-    this.props.onTimeChange(timeIndex);
+    if (timeIndex >= this.state.currentTimeIndex) {
+      const [hour, minute] = this.state.times[timeIndex].split(":").map(Number);
+      this.setState({ currentTimeIndex: timeIndex, hour, minute });
+      this.props.onTimeChange(timeIndex);
+    }
   };
 
   handleSpeedChange = (event: Event, newValue: number | number[]): void => {
@@ -176,7 +180,14 @@ class SimulationControls extends React.Component<
   };
 
   validateTime = () => {
-    const { inputHour, inputMinute, minHour, maxHour, times } = this.state;
+    const {
+      inputHour,
+      inputMinute,
+      minHour,
+      maxHour,
+      times,
+      currentTimeIndex,
+    } = this.state;
     const timeString = `${String(inputHour).padStart(2, "0")}:${String(
       inputMinute
     ).padStart(2, "0")}:00`;
@@ -185,7 +196,8 @@ class SimulationControls extends React.Component<
       inputHour >= minHour &&
       inputHour <= maxHour &&
       inputMinute >= 0 &&
-      inputMinute <= 59;
+      inputMinute <= 59 &&
+      times.indexOf(timeString) >= currentTimeIndex;
     this.setState({ isValidTime });
   };
 
@@ -298,7 +310,7 @@ class SimulationControls extends React.Component<
               </div>
             </Popover>
             <div>
-              <IconButton
+              {/* <IconButton
                 className="speed-control-button"
                 onClick={() => this.handleSkip(-60)}
               >
@@ -309,7 +321,7 @@ class SimulationControls extends React.Component<
                 onClick={() => this.handleSkip(-5)}
               >
                 <KeyboardArrowLeft className="speed-control-icon" />
-              </IconButton>
+              </IconButton> */}
               <IconButton
                 className="speed-control-button"
                 onClick={this.handlePlayPause}
