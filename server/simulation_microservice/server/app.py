@@ -4,9 +4,9 @@ from fastapi import FastAPI
 from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
 from starlette.middleware.cors import CORSMiddleware
-from  models.simulation import SimulationConfig
+from server.models.simulation import SimulationConfig
 
-from config import CONFIG
+from server.config import CONFIG
 
 
 DESCRIPTION = """
@@ -28,7 +28,7 @@ async def lifespan(app: FastAPI):  # type: ignore
     print("Shutdown complete")
 
 
-app = FastAPI(
+App = FastAPI(
     title="My Server",
     description=DESCRIPTION,
     version="0.1.0",
@@ -45,7 +45,7 @@ app = FastAPI(
 )
 
 
-app.add_middleware(
+App.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_credentials=True,

@@ -61,7 +61,7 @@ class OptionChainSnapshot(BaseModel):
     dte_file: DteFile
     options: List[Option] = []  # replace with df?
 
-    def get_option(self, option: Option) -> Option | None:
+    def get_option(self, option: Option) -> Option :
         for o in self.options:
             if o == option:
                 return o
@@ -69,7 +69,7 @@ class OptionChainSnapshot(BaseModel):
 
 
 class OptionChainSnapshotTimeSeries(BaseModel):
-    snapshots: deque[OptionChainSnapshot]
+    snapshots: "deque[OptionChainSnapshot]"
 
     def __init__(self, window_size: int):
         super().__init__(snapshots=deque(maxlen=window_size))

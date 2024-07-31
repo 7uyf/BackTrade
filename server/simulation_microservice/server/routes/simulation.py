@@ -4,13 +4,13 @@ from fastapi import APIRouter, Response, WebSocket, WebSocketDisconnect
 
 from server.models.option import OptionChainSnapshot
 from server.models.simulation import SimulationInset, SimulationConfig
-from server.simulation.i_market_data_observer import IMarketDataObserver
+from server.simulation.observer_interfaces import IMarketDataObserver
 from server.simulation.simulation import Simulations_Dict, Simulation
 
-router = APIRouter(prefix="/simulation", tags=["Simulation"])
+Router = APIRouter(prefix="/simulation", tags=["Simulation"])
 
 
-@router.post("/")
+@Router.post("/")
 async def createSimulation(simulationInset: SimulationInset) -> SimulationConfig:
     """Create a simulation"""
     simulationConfig =  SimulationConfig(user_id= simulationInset.user_id, simulation_type= simulationInset.simulation_type,start_date_time = simulationInset.start_date_time,initial_capital = simulationInset.initial_capital,universe_selection = simulationInset.universe_selection,indicator_type_selection = [""] )
@@ -18,7 +18,7 @@ async def createSimulation(simulationInset: SimulationInset) -> SimulationConfig
 
     return simulationConfig
 
-@router.websocket('/{simulation_id}/ws')
+@Router.websocket('/{simulation_id}/ws')
 async def simulation_ws(websocket: WebSocket, simulation_id:PydanticObjectId):
     """Get WS for simulation"""
     simulation_config  = await SimulationConfig.get(simulation_id)
@@ -28,21 +28,22 @@ async def simulation_ws(websocket: WebSocket, simulation_id:PydanticObjectId):
     simulation = Simulations_Dict.get(simulation_id)
     if simulation is None:
          simulation = Simulation(simulation_config)
-         await simulation.market_data_generator.init()
-         asyncio.create_task(simulation.market_data_generator.run())
+         await simulation.market_data_service.init()
+         asyncio.create_task(simulation.market_data_service.run())
+         Simulations_Dict[simulation_config.id] =  simulation
 
 
     await websocket.accept()
     simulationWebSocket = SimulationWebsocket(websocket)
-    simulation.market_data_generator.register_observer(simulationWebSocket)
+    simulation.market_data_service.register_observer(simulationWebSocket)
     try:
         while True:
-            data = await websocket.receive_text()
+            data = await websocket.receive_json()
             print(data)
-            await websocket.send_text(data)
+            await simulation.actionsMap[data['command']](data['payload'])
     except WebSocketDisconnect:
         # disconnect  simulation, even closeit if it has no listeners
-        simulation.market_data_generator.remove_observer(simulationWebSocket)
+        simulation.market_data_service.remove_observer(simulationWebSocket)
         print("closed connection")
 
 
@@ -51,5 +52,11 @@ class SimulationWebsocket(IMarketDataObserver):
         self.websocket: WebSocket = websocket
 
     async def on_market_data_update(self, snapshot: OptionChainSnapshot):
-         print(snapshot)
-         await self.websocket.send_json(snapshot.model_dump_json())
+         await self.websocket.send_json({"event": "OptionChainData","data": snapshot.model_dump_json()})
+
+
+class SimulationWebsocketInteraction():
+    
+    def __init__(self, simulation: Simulation) -> None:
+         self.simulation = simulation
+         pass

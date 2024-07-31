@@ -89,36 +89,36 @@ sample_option_chain_snapshot2 = OptionChainSnapshot(dte_file=dummy_dte_file, opt
 async def main():
     dummy_simulation = Simulation(dummy_simulation_config)
 
-    await dummy_simulation.account_service.on_market_data_update(sample_option_chain_snapshot1)
-    await dummy_simulation.order_management_service.on_market_data_update(sample_option_chain_snapshot1)
+    dummy_simulation.account_service.on_market_data_update(sample_option_chain_snapshot1)
+    dummy_simulation.order_management_service.on_market_data_update(sample_option_chain_snapshot1)
 
-    print(dummy_simulation.account_service.get_account_snapshot())
+    print(dummy_simulation.account_service.account_snapshot)
 
     # long call position
     dummy_simulation.order_management_service.create_order_saga([(1, sample_option1)])
-    print(dummy_simulation.account_service.get_account_snapshot())
+    print(dummy_simulation.account_service.account_snapshot)
 
     # close the long call position
     dummy_simulation.order_management_service.create_order_saga([(-1, sample_option1)])
-    print(dummy_simulation.account_service.get_account_snapshot())
+    print(dummy_simulation.account_service.account_snapshot)
 
     # short put position with insufficient margin requirement
     dummy_simulation.order_management_service.create_order_saga([(-3, sample_option2)])
-    print(dummy_simulation.account_service.get_account_snapshot())
+    print(dummy_simulation.account_service.account_snapshot)
 
     # short put position with sufficient margin requirement
     dummy_simulation.order_management_service.create_order_saga([(-1, sample_option2)])
-    print(dummy_simulation.account_service.get_account_snapshot())
+    print(dummy_simulation.account_service.account_snapshot)
 
     # limit order:
     dummy_simulation.order_management_service.create_order_saga([(1, sample_option1)], limit=1)
-    print(dummy_simulation.account_service.get_account_snapshot())
+    print(dummy_simulation.account_service.account_snapshot)
 
     # the update triggers the limit order to be filled
-    await dummy_simulation.account_service.on_market_data_update(sample_option_chain_snapshot2)
-    await dummy_simulation.order_management_service.on_market_data_update(sample_option_chain_snapshot2)
+    dummy_simulation.account_service.on_market_data_update(sample_option_chain_snapshot2)
+    dummy_simulation.order_management_service.on_market_data_update(sample_option_chain_snapshot2)
 
-    print(dummy_simulation.order_management_service.order_book.export_order_history())
+    print(dummy_simulation.order_management_service.order_history)
 
 
 if __name__ == "__main__":

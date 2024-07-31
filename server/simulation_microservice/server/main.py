@@ -1,6 +1,6 @@
-from app import app
 
-from routes.simulation import router as simulationRouter
+from server.app import App
+from server.routes.simulation import Router
 
 
-app.include_router(simulationRouter)
+App.include_router(Router)
