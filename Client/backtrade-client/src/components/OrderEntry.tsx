@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import {
   Paper,
   Box,
@@ -20,10 +20,8 @@ import {
 } from "@mui/material";
 import { Delete } from "@mui/icons-material";
 import "./OrderEntry.css";
-import ChooseCommand from "./ChooseCommand";
-import IconText from "../IconText";
-import { OptionChainData, OrderEntryData } from "../../types";
-import { OptionChainRef } from "../OptionChain";
+import { OrderEntryData } from "../types";
+import IconText from "./IconText";
 
 interface OrderEntryProps {
   selectedOptions: OrderEntryData[];
@@ -34,9 +32,6 @@ interface OrderEntryProps {
     limitPrice: number
   ) => void;
   scale?: number;
-  selectedOption?: OptionChainData | null;
-  selectedOptionAction?: "Call" | "Put" | null;
-  optionChainRef: React.RefObject<OptionChainRef>;
 }
 
 const OrderEntry: React.FC<OrderEntryProps> = ({
@@ -44,56 +39,9 @@ const OrderEntry: React.FC<OrderEntryProps> = ({
   onOptionsChange,
   onPlaceOrder,
   scale = 1,
-  selectedOption,
-  selectedOptionAction,
-  optionChainRef,
 }) => {
-  const [orderType, setOrderType] = useState<string>("Market");
-  const [limitPrice, setLimitPrice] = useState<number>(0);
-  const [strikePrice, setStrikePrice] = useState<number>(0);
-  const [quantity, setQuantity] = useState<number>(1000);
-  const [type, setType] = useState<string>("");
-  const [symbol, setSymbol] = useState<string>("");
-  const [expirationDate, setExpirationDate] = useState<string>("");
-
-  useEffect(() => {
-    if (selectedOption && selectedOptionAction) {
-      setStrikePrice(selectedOption.strike);
-      setType(selectedOptionAction);
-      setSymbol(selectedOption.symbol);
-      setExpirationDate(selectedOption.dte);
-    }
-  }, [selectedOption, selectedOptionAction]);
-
-  const handleIncrementStrikePrice = () => {
-    setStrikePrice((prev) => prev + 1);
-  };
-
-  const handleDecrementStrikePrice = () => {
-    setStrikePrice((prev) => prev - 1);
-  };
-
-  const handleIncrementQuantity = () => {
-    setQuantity((prev) => prev + 1);
-  };
-
-  const handleDecrementQuantity = () => {
-    setQuantity((prev) => (prev > 0 ? prev - 1 : 0));
-  };
-
-  const handleTypeChange = (event: SelectChangeEvent) => {
-    setType(event.target.value);
-  };
-
-  const handleSymbolChange = (event: SelectChangeEvent) => {
-    setSymbol(event.target.value);
-  };
-
-  const handleExpirationChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setExpirationDate(event.target.value);
-  };
+  const [orderType, setOrderType] = React.useState<string>("Market");
+  const [limitPrice, setLimitPrice] = React.useState<number>(0);
 
   const handleQuantityChange = (
     index: number,
@@ -116,11 +64,6 @@ const OrderEntry: React.FC<OrderEntryProps> = ({
   const handleDeleteOption = (index: number) => {
     const updatedOptions = selectedOptions.filter((_, i) => i !== index);
     onOptionsChange(updatedOptions);
-    // Remove highlight
-    const key = `${selectedOptions[index].dte}-${selectedOptions[index].strike}-${selectedOptions[index].type}`;
-    if (optionChainRef.current) {
-      optionChainRef.current.removeHighlight(key);
-    }
   };
 
   const handleOrderTypeChange = (event: SelectChangeEvent<string>) => {
@@ -129,22 +72,15 @@ const OrderEntry: React.FC<OrderEntryProps> = ({
 
   const handlePlaceOrderClick = () => {
     onPlaceOrder(selectedOptions, orderType, limitPrice);
-    selectedOptions.forEach((option) => {
-      const key = `${option.dte}-${option.strike}-${option.type}`;
-      if (optionChainRef.current) {
-        optionChainRef.current.removeHighlight(key);
-      }
-    });
     onOptionsChange([]); // Clear the orders after placing them
     setOrderType("Market");
     setLimitPrice(0);
   };
 
   const handleReset = () => {
-    if (optionChainRef.current) {
-      optionChainRef.current.removeAllHighlights();
-    }
     onOptionsChange([]);
+    setOrderType("Market");
+    setLimitPrice(0);
   };
 
   return (
@@ -273,7 +209,6 @@ const OrderEntry: React.FC<OrderEntryProps> = ({
           </Box>
         </>
       )}
-      <ChooseCommand />
     </Paper>
   );
 };

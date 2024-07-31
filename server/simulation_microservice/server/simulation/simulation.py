@@ -1,6 +1,9 @@
 import asyncio
 from typing import List, Dict, Any
 
+from server.models.account import AccountSnapshot
+from server.models.option import OptionChainSnapshot
+from server.models.order import Order
 from server.models.simulation import SimulationConfig
 from server.simulation.margin_account_service import MarginAccountService
 from server.simulation.market_data_service import MarketDataService
@@ -24,6 +27,7 @@ class Simulation():
         self.actionsMap['simulationResume'] = self.market_data_service.resume
         self.register()
         self.market_data_service.register_observer(self.order_management_service)
+
         
     async def  simulationSpeed (self,speed):
         if not self.market_data_service.pause_requested and speed == 0:
